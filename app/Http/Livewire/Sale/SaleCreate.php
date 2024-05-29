@@ -10,6 +10,7 @@ use Livewire\Component;
 use App\Models\Sale;
 use App\Models\Bonus;
 use App\Models\Employee;
+use App\Models\LabourDetail;
 use App\Models\Promoter;
 use App\Models\SaleDetail;
 use App\Models\Service;
@@ -38,14 +39,22 @@ class SaleCreate extends Component
     public $description;
     public $warehouses;
     public $warehouse_id;
-    public $employees;
-    public $employee_id;
-    public $services;
-    public $service_id;
+
     public $service_price;
 
     public $cart;
     public $cart_session_ = [];
+
+    public $services;
+    public $service_id;
+    public $selected_service;
+    public $employees;
+    public $employee_id;
+    public $selected_employee;
+    public $additional_percent_employe = 0;
+    public $additional_service_price = 1;
+    public $additional_service_quantity = 1;
+    public $labours = [];
 
     public function mount()
     {
@@ -53,9 +62,6 @@ class SaleCreate extends Component
         $this->warehouses = Warehouse::all()->where('state', 'ACTIVE');
         $this->employees = Employee::all()->where('state', 'ACTIVE');
         $this->services = Service::all()->where('state', 'ACTIVE');
-        $this->cart = new Cart();
-        //Limpiando carrito
-        session()->forget('cart');
 
         //Seleccionando primer almacen
         if ($this->warehouses[0]) {
@@ -66,7 +72,6 @@ class SaleCreate extends Component
 
     public function render()
     {
-        $this->cart_session_ = session()->get('cart');
         return view('livewire.sale.sale-create');
     }
 
@@ -172,18 +177,15 @@ class SaleCreate extends Component
         }
     }
 
-    //Funcion para limpiar imputs
     public function cleanInputs()
     {
         $this->total = "";
     }
 
-    //Escuchadores para botones de alertas
     protected $listeners = [
         'confirmed',
     ];
 
-    //Funcion que llama la alerta para redigir al dashboar
     public function confirmed()
     {
         return redirect()->route('sale.dashboard');
@@ -192,8 +194,6 @@ class SaleCreate extends Component
     public function showInfoCustomer()
     {
         $this->customer = Customer::find($this->customer_id);
-        //Limpiando carrito
-        session()->forget('cart');
     }
 
     public function showInfoBatch()
@@ -204,7 +204,6 @@ class SaleCreate extends Component
     public function updatePrice($id)
     {
         session()->put('cart', $this->cart_session_);
-
         foreach ($this->cart_session_ as $id_ => $item) {
             if ($id_ == $id) {
                 $this->updateQuantity($id);
@@ -212,25 +211,15 @@ class SaleCreate extends Component
         }
     }
 
-    private function showErrorMessage($message){
-        $this->alert('error', $message, [
-            'position' => 'top-end',
-            'timer' => 3000,
-            'toast' => true,
-            'text' => '',
-            'confirmButtonText' => 'Ok',
-        ]);
-    }
-
     //Funciones para carrito de compras
     public function addItemCart()
     {
         if (!$this->customer) {
-            $this->showErrorMessage('Seleccione un cliente.');
+            $this->toastError('Seleccione un cliente.');
             return;
         }
         if (!$this->service_price) {
-            $this->showErrorMessage('Seleccione un servicio.');
+            $this->toastError('Seleccione un servicio.');
             return;
         }
         $this->cart->addProductCart($this->batch_id, 1, $this->batch->final_price, $this->service_price);
@@ -258,13 +247,23 @@ class SaleCreate extends Component
     public function onChangeSelectWarehouse()
     {
         $this->batchs = Batch::where('state', 'ACTIVE')->where('warehouse_id', $this->warehouse_id)->where('stock', '>', '0')->with('product')->get();
+        $this->batch = null;
         $this->onChangeSelect();
     }
 
     public function onChangeSelectService()
     {
         if ($this->service_id > 0) {
-            $this->service_price = Service::find($this->service_id)->price;
+            $this->selected_service = Service::find($this->service_id);
+            $this->additional_service_price = $this->selected_service->price;
+        }
+        $this->onChangeSelect();
+    }
+
+    public function onChangeSelectEmployee()
+    {
+        if ($this->employee_id > 0) {
+            $this->selected_employee = Employee::find($this->service_id);
         }
         $this->onChangeSelect();
     }
@@ -288,8 +287,29 @@ class SaleCreate extends Component
 
     public function toastAddProduct()
     {
-
         $this->alert('success', 'Producto agregado correctamente.', [
+            'position' => 'top-end',
+            'timer' => 3000,
+            'toast' => true,
+            'text' => '',
+            'confirmButtonText' => 'Ok',
+        ]);
+    }
+
+    public function toastSuccess($message)
+    {
+        $this->alert('success', $message, [
+            'position' => 'top-end',
+            'timer' => 3000,
+            'toast' => true,
+            'text' => '',
+            'confirmButtonText' => 'Ok',
+        ]);
+    }
+
+    private function toastError($message)
+    {
+        $this->alert('error', $message, [
             'position' => 'top-end',
             'timer' => 3000,
             'toast' => true,
@@ -307,5 +327,42 @@ class SaleCreate extends Component
     function addBatch()
     {
         return redirect()->route('batch.create');
+    }
+
+    function addLabour()
+    {
+        if ($this->selected_employee != null && $this->selected_service != null) {
+            $uuid = (string) Str::uuid();
+            $labour = [
+                'uuid' => $uuid,
+                'employee_percentage' => $this->additional_percent_employe,
+                'price' => $this->additional_service_price,
+                'quantity' => $this->additional_service_quantity,
+                'subtotal' => $this->additional_service_quantity * $this->additional_service_price,
+                'employee_id' => $this->employee_id,
+                'employee' => $this->selected_employee->person->name,
+                'service_id' => $this->service_id,
+                'service' => $this->selected_service->name,
+            ];
+            $this->labours[$uuid] = $labour;
+            $this->toastSuccess('Item agregado.');
+        }else{
+            $this->toastError('Seleccione los datos correctamente.');
+        }
+    }
+
+    function updateLabour($uuid)
+    {
+        $price = $this->labours[$uuid]['price'];
+        $quantity = $this->labours[$uuid]['quantity'];
+        $this->labours[$uuid]['subtotal'] = $price * $quantity;
+    }
+
+    function removeLabour($uuid)
+    {
+        if (isset($this->labours[$uuid])) {
+            unset($this->labours[$uuid]);
+            $this->toastSuccess('Item removido.');
+        }
     }
 }
