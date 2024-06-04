@@ -10,6 +10,7 @@ use Livewire\Component;
 use App\Models\Sale;
 use App\Models\Bonus;
 use App\Models\Employee;
+use App\Models\ExtraItem;
 use App\Models\LabourDetail;
 use App\Models\Promoter;
 use App\Models\SaleDetail;
@@ -22,20 +23,9 @@ class SaleCreate extends Component
 {
     use LivewireAlert;
 
-    public $total;
-    public $slug;
-
-
-    public $customers;
-    public $customer_id;
-    public $customer;
-
-
 
     public $payment_type = 'CONTADO';
-    public $price_type = 'FINAL';
     public $description;
-
 
     public $services;
     public $service_id;
@@ -44,9 +34,10 @@ class SaleCreate extends Component
     public $employee_id;
     public $selected_employee;
     public $additional_percent_employe = 0;
-    public $additional_service_price = 1;
+    public $additional_service_price = 0;
     public $additional_service_quantity = 1;
     public $labours = [];
+    public $labours_total = 0;
 
     public $warehouses;
     public $warehouse_id;
@@ -54,6 +45,20 @@ class SaleCreate extends Component
     public $batch_id;
     public $selected_batch;
     public $sale_details = [];
+    public $sale_details_total = 0;
+
+    public $additional_extra_item;
+    public $additional_extra_item_cost = 0;
+    public $additional_extra_item_price = 0;
+    public $additional_extra_item_quantity = 1;
+    public $extra_items = [];
+    public $extra_items_total = 0;
+
+    public $customers;
+    public $customer_id;
+    public $selected_customer;
+
+    public $total;
 
     public function mount()
     {
@@ -77,45 +82,56 @@ class SaleCreate extends Component
     //reglas para validacion
     protected $rules = [
         'customer_id' => 'required',
-        'warehouse_id' => 'required',
-        'employee_id' => 'required',
-        'service_id' => 'required',
     ];
 
-    //Metodo que llama el formulario
-    public function submit()
+    public function saveSale()
     {
-        //Funcion para validar mediante las reglas
         $this->validate();
         if ($this->checkStock()) {
-
             $sale = Sale::create([
-                'description' => $this->description,
-                'total' => $this->cart->total + $this->service_price,
-                'must' => $this->cart->total,
+                'description' => $this->description || '',
+                'total' => $this->total,
+                'must' => $this->total,
                 'slug' => Str::uuid(),
                 'customer_id' => $this->customer_id,
                 'user_id' => Auth::user()->id,
                 'state' => 'ACTIVE',
-                'payment_type' => $this->payment_type,
-                'warehouse_id' => $this->warehouse_id,
-                'employee_id' => $this->employee_id,
-                'service_id' => $this->service_id
+                'payment_type' => $this->payment_type
             ]);
-
-            // foreach ($cart_session_ as $id_ => $item) {
-            //     $price_type = array_search($item['price'], $item['prices']);
-            //     SaleDetail::create([
-            //         'quantity' => $item['quantity'],
-            //         'price' => $item['price'],
-            //         'discount' => $item['discount'],
-            //         'subtotal' => $item['subtotal'],
-            //         'batch_id' => $id_,
-            //         'sale_id' => $sale->id,
-            //         'price_type' => $price_type
-            //     ]);
-            // }
-            $this->cleanInputs();
+            foreach ($this->labours as $item) {
+                LabourDetail::create([
+                    'uuid' => $item['uuid'],
+                    'employee_percentage' => $item['employee_percentage'],
+                    'price' => $item['price'],
+                    'quantity' => $item['quantity'],
+                    'subtotal' => $item['subtotal'],
+                    'employee_id' => $item['employee_id'],
+                    'service_id' => $item['service_id'],
+                    'sale_id' => $sale->id
+                ]);
+            }
+            foreach ($this->sale_details as $item) {
+                SaleDetail::create([
+                    'quantity' => $item['quantity'],
+                    'price' => $item['price'],
+                    'discount' => $item['discount'],
+                    'subtotal' => $item['subtotal'],
+                    'batch_id' => $item['id'],
+                    'sale_id' => $sale->id
+                ]);
+            }
+            $this->updateStock();
+            foreach ($this->extra_items as $item) {
+                ExtraItem::create([
+                    'uuid' => $item['uuid'],
+                    'item' => $item['item'],
+                    'cost' => $item['cost'],
+                    'price' => $item['price'],
+                    'quantity' => $item['quantity'],
+                    'subtotal' => $item['subtotal'],
+                    'sale_id' => $sale->id,
+                ]);
+            }
 
             $this->confirm('Registro creado correctamente', [
                 'icon' => 'success',
@@ -127,18 +143,16 @@ class SaleCreate extends Component
                 'confirmButtonText' => 'Aceptar',
                 'onConfirmed' => 'confirmed',
             ]);
-            $this->updateStock();
+
         }
     }
 
     //Funcion comparar
     public function checkStock()
     {
-        $cart_session_ = session()->get('cart');
         try {
-            foreach ($cart_session_ as $id_ => $item) {
-
-                $batch = Batch::find($id_);
+            foreach ($this->sale_details as $item) {
+                $batch = Batch::find($item['id']);
                 if ($item['quantity'] > $batch->stock) {
                     /*Mostrando mensaje */
                     $this->alert('error', 'La cantidad <span class=" text-red-500 font-bold text-xl">' . $item['quantity'] . '</span> es superior al stok disponible.', [
@@ -166,19 +180,13 @@ class SaleCreate extends Component
 
     public function updateStock()
     {
-        $cart_session_ = session()->get('cart');
-        foreach ($cart_session_ as $id_ => $item) {
-            $batch = Batch::find($id_);
+        foreach ($this->sale_details as $item) {
+            $batch = Batch::find($item['id']);
             $batch->stock = $batch->stock - $item['quantity'];
             $batch->update([
                 'stock' => $batch->stock,
             ]);
         }
-    }
-
-    public function cleanInputs()
-    {
-        $this->total = "";
     }
 
     protected $listeners = [
@@ -190,82 +198,9 @@ class SaleCreate extends Component
         return redirect()->route('sale.dashboard');
     }
 
-    public function showInfoCustomer()
-    {
-        $this->customer = Customer::find($this->customer_id);
-    }
-
-
-    public function updatePrice($id)
-    {
-        session()->put('cart', $this->cart_session_);
-        foreach ($this->cart_session_ as $id_ => $item) {
-            if ($id_ == $id) {
-                $this->updateQuantity($id);
-            }
-        }
-    }
-
-    public function addItemCart()
-    {
-        if (!$this->customer) {
-            $this->toastError('Seleccione un cliente.');
-            return;
-        }
-        if (!$this->service_price) {
-            $this->toastError('Seleccione un servicio.');
-            return;
-        }
-        $this->cart->addProductCart($this->batch_id, 1, $this->batch->final_price, $this->service_price);
-        $this->toastAddProduct();
-    }
-
-    public function updateQuantity($id)
-    {
-        foreach ($this->cart_session_ as $id_ => $item) {
-            if ($id_ == $id) {
-                $this->cart->updateProductCart($id, $item['quantity'], $this->service_price);
-            }
-        }
-    }
-
-    public function updateDiscount($id)
-    {
-        foreach ($this->cart_session_ as $id_ => $item) {
-            if ($id_ == $id) {
-                $this->cart->updateProductCartDiscount($id, $item['discount'], $this->service_price);
-            }
-        }
-    }
-
-
-
     public function onChangeSelect()
     {
         $this->emit('refreshSelects', $this->batchs);
-    }
-
-    public function deleteProductCart($id)
-    {
-        $this->cart->deleteProductCart($id, $this->service_price);
-        $this->alert('info', 'Producto quitado correctamente.', [
-            'position' => 'top-end',
-            'timer' => 3000,
-            'toast' => true,
-            'text' => '',
-            'confirmButtonText' => 'Ok',
-        ]);
-    }
-
-    public function toastAddProduct()
-    {
-        $this->alert('success', 'Producto agregado correctamente.', [
-            'position' => 'top-end',
-            'timer' => 3000,
-            'toast' => true,
-            'text' => '',
-            'confirmButtonText' => 'Ok',
-        ]);
     }
 
     public function toastSuccess($message)
@@ -295,6 +230,29 @@ class SaleCreate extends Component
         return redirect()->route('batch.create');
     }
 
+
+    public function onChangeSelectService()
+    {
+        if ($this->service_id > 0) {
+            $this->selected_service = Service::find($this->service_id);
+            $this->additional_service_price = $this->selected_service->price;
+        }
+    }
+
+    public function onChangeSelectEmployee()
+    {
+        if ($this->employee_id > 0) {
+            $this->selected_employee = Employee::find($this->service_id);
+        }
+    }
+
+    public function onChangeSelectCustomer()
+    {
+        if ($this->customer_id > 0) {
+            $this->selected_customer = Customer::find($this->customer_id);
+        }
+    }
+
     public function onChangeSelectWarehouse()
     {
         $this->batchs = Batch::where('state', 'ACTIVE')->where('warehouse_id', $this->warehouse_id)->where('stock', '>', '0')->with('product')->get();
@@ -307,24 +265,6 @@ class SaleCreate extends Component
         if ($this->batch_id > 0) {
             $this->selected_batch = Batch::find($this->batch_id);
         }
-        $this->onChangeSelect();
-    }
-
-    public function onChangeSelectService()
-    {
-        if ($this->service_id > 0) {
-            $this->selected_service = Service::find($this->service_id);
-            $this->additional_service_price = $this->selected_service->price;
-        }
-        $this->onChangeSelect();
-    }
-
-    public function onChangeSelectEmployee()
-    {
-        if ($this->employee_id > 0) {
-            $this->selected_employee = Employee::find($this->service_id);
-        }
-        $this->onChangeSelect();
     }
 
     function addLabour()
@@ -343,6 +283,7 @@ class SaleCreate extends Component
                 'service' => $this->selected_service->name,
             ];
             $this->labours[$uuid] = $item;
+            $this->calcLaboursTotal();
             $this->toastSuccess('Item agregado.');
         } else {
             $this->toastError('Seleccione los datos correctamente.');
@@ -354,15 +295,28 @@ class SaleCreate extends Component
         $price = $this->labours[$uuid]['price'];
         $quantity = $this->labours[$uuid]['quantity'];
         $this->labours[$uuid]['subtotal'] = $price * $quantity;
+        $this->calcLaboursTotal();
     }
 
     function removeLabour($uuid)
     {
         if (isset($this->labours[$uuid])) {
             unset($this->labours[$uuid]);
+            $this->calcLaboursTotal();
             $this->toastSuccess('Item removido.');
         }
     }
+
+    function calcLaboursTotal()
+    {
+        $this->labours_total = 0;
+        foreach ($this->labours as $item) {
+            $this->labours_total += $item['subtotal'];
+        }
+        $this->calcTotal();
+    }
+
+
     function addBatch()
     {
         if ($this->selected_batch != null) {
@@ -381,6 +335,7 @@ class SaleCreate extends Component
                     'subtotal' => $this->selected_batch->wholesale_price * 1
                 ];
                 $this->sale_details[$id] = $item;
+                $this->calcSaleDetailsTotal();
             }
             $this->toastSuccess('Item agregado.');
         } else {
@@ -396,13 +351,75 @@ class SaleCreate extends Component
         $subtotal =  $price * $quantity;
         $subtotal =  $subtotal - ($subtotal * ($discount / 100));
         $this->sale_details[$id]['subtotal'] = $subtotal;
+        $this->calcSaleDetailsTotal();
     }
 
     function removeSaleDetail($id)
     {
         if (isset($this->sale_details[$id])) {
             unset($this->sale_details[$id]);
+            $this->calcSaleDetailsTotal();
             $this->toastSuccess('Item removido.');
         }
+    }
+
+    function calcSaleDetailsTotal()
+    {
+        $this->sale_details_total = 0;
+        foreach ($this->sale_details as $item) {
+            $this->sale_details_total += $item['subtotal'];
+        }
+        $this->calcTotal();
+    }
+
+    function addExtraItem()
+    {
+        if ($this->additional_extra_item != null) {
+            $uuid = (string) Str::uuid();
+            $item = [
+                'uuid' => $uuid,
+                'item' => $this->additional_extra_item,
+                'cost' => $this->additional_extra_item_cost,
+                'price' => $this->additional_extra_item_price,
+                'quantity' => $this->additional_extra_item_quantity,
+                'subtotal' => $this->additional_extra_item_quantity * $this->additional_extra_item_price
+            ];
+            $this->extra_items[$uuid] = $item;
+            $this->calcExtraItemsTotal();
+            $this->toastSuccess('Item agregado.');
+        } else {
+            $this->toastError('Seleccione los datos correctamente.');
+        }
+    }
+
+    function updateExtraItem($uuid)
+    {
+        $price = $this->extra_items[$uuid]['price'];
+        $quantity = $this->extra_items[$uuid]['quantity'];
+        $this->extra_items[$uuid]['subtotal'] = $price * $quantity;
+        $this->calcExtraItemsTotal();
+    }
+
+    function removeExtraItem($uuid)
+    {
+        if (isset($this->extra_items[$uuid])) {
+            unset($this->extra_items[$uuid]);
+            $this->calcExtraItemsTotal();
+            $this->toastSuccess('Item removido.');
+        }
+    }
+
+    function calcExtraItemsTotal()
+    {
+        $this->extra_items_total = 0;
+        foreach ($this->extra_items as $item) {
+            $this->extra_items_total += $item['subtotal'];
+        }
+        $this->calcTotal();
+    }
+
+    function calcTotal()
+    {
+        $this->total = $this->labours_total + $this->sale_details_total + $this->extra_items_total;
     }
 }

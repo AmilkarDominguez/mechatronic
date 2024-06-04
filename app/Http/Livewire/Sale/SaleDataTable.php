@@ -23,9 +23,6 @@ class SaleDataTable extends LivewireDatatable
     public function builder()
     {
         return (Sale::query()
-            ->join('warehouses', function ($join) {
-                $join->on('sales.warehouse_id', '=', 'warehouses.id');
-            })
             ->join('customers', function ($join) {
                 $join->on('sales.customer_id', '=', 'customers.id');
             })
@@ -56,10 +53,6 @@ class SaleDataTable extends LivewireDatatable
                 ->searchable()
                 ->label('Cliente'),
 
-            Column::name('warehouses.name')
-                ->searchable()
-                ->label('Almacén'),
-
             Column::name('sale_customer.ci')
                 ->searchable()
                 ->label('CI'),
@@ -80,9 +73,6 @@ class SaleDataTable extends LivewireDatatable
                 ->searchable()
                 ->label('Total'),
 
-//            Column::name('sale_user.name')
-//                ->searchable()
-//                ->label('Registrado por'),
 
             Column::callback(['sale_user.name'], function ($name) {
                 return $name;
