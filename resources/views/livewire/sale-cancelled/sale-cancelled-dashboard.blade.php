@@ -8,7 +8,7 @@
         <div class="w-full flex justify-end space-x-2">
         </div>
         <div class="m-5">
-            <livewire:sale-cancelled.sale-cancelled-data-table />
+            <livewire:service_order-cancelled.service_order-cancelled-data-table />
         </div>
     </div>
 

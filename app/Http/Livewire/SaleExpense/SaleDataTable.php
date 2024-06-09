@@ -3,8 +3,8 @@
 namespace App\Http\Livewire\SaleExpense;
 
 use App\Models\Expense;
-use App\Models\Sale;
-use App\Models\SaleDetail;
+use App\Models\ServiceOrder;
+use App\Models\ServiceOrderBatch;
 use App\Models\Batch;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\DateColumn;
@@ -36,7 +36,7 @@ class SaleDataTable extends LivewireDatatable
 
     public function builder()
     {
-        return (Sale::query()
+        return (ServiceOrder::query()
             ->whereBetween('sales.created_at', [$this->start_date, $this->end_date])
             ->join('customers', function ($join) {
                 $join->on('sales.customer_id', '=', 'customers.id');

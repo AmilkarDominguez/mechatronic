@@ -5,8 +5,8 @@ namespace App\Http\Livewire\ReportProduct;
 use App\Models\Batch;
 use App\Models\Expense;
 use App\Models\Industry;
-use App\Models\Sale;
-use App\Models\SaleDetail;
+use App\Models\ServiceOrder;
+use App\Models\ServiceOrderBatch;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -58,7 +58,7 @@ class ReportProductDashboard extends Component
             ->where('expenses.state', 'ACTIVE')
             ->sum('expenses.purchase');
 
-        $this->sales_total = Sale::select('*')
+        $this->sales_total = ServiceOrder::select('*')
             ->whereBetween('sales.created_at', [$this->start_date, $this->end_date])
             ->where('sales.state', 'ACTIVE')
             ->sum('sales.have');

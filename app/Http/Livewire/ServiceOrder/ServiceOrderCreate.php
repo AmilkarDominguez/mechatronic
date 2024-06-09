@@ -1,25 +1,25 @@
 <?php
 
-namespace App\Http\Livewire\Sale;
+namespace App\Http\Livewire\ServiceOrder;
 
 use App\Models\Batch;
 use App\Models\Cart;
 use App\Models\Customer;
 use App\Models\Warehouse;
 use Livewire\Component;
-use App\Models\Sale;
+use App\Models\ServiceOrder;
 use App\Models\Bonus;
 use App\Models\Employee;
 use App\Models\ExtraItem;
 use App\Models\LabourDetail;
 use App\Models\Promoter;
-use App\Models\SaleDetail;
+use App\Models\ServiceOrderBatch;
 use App\Models\Service;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
-class SaleCreate extends Component
+class ServiceOrderCreate extends Component
 {
     use LivewireAlert;
 
@@ -41,7 +41,7 @@ class SaleCreate extends Component
 
     public $warehouses;
     public $warehouse_id;
-    public $batchs;
+    public $batches;
     public $batch_id;
     public $selected_batch;
     public $sale_details = [];
@@ -70,13 +70,13 @@ class SaleCreate extends Component
         //Seleccionando primer almacen
         if ($this->warehouses[0]) {
             $this->warehouse_id = $this->warehouses[0]->id;
-            $this->batchs = Batch::where('state', 'ACTIVE')->where('warehouse_id', $this->warehouse_id)->where('stock', '>', '0')->with('product')->get();
+            $this->batches = Batch::where('state', 'ACTIVE')->where('warehouse_id', $this->warehouse_id)->where('stock', '>', '0')->with('product')->get();
         }
     }
 
     public function render()
     {
-        return view('livewire.sale.sale-create');
+        return view('livewire.service-order.service-order-create');
     }
 
     //reglas para validacion
@@ -88,7 +88,7 @@ class SaleCreate extends Component
     {
         $this->validate();
         if ($this->checkStock()) {
-            $sale = Sale::create([
+            $service_order = ServiceOrder::create([
                 'description' => $this->description || '',
                 'total' => $this->total,
                 'must' => $this->total,
@@ -107,17 +107,18 @@ class SaleCreate extends Component
                     'subtotal' => $item['subtotal'],
                     'employee_id' => $item['employee_id'],
                     'service_id' => $item['service_id'],
-                    'sale_id' => $sale->id
+                    'service_order_id' => $service_order->id
                 ]);
             }
             foreach ($this->sale_details as $item) {
-                SaleDetail::create([
+                ServiceOrderBatch::create([
+                    'uuid' => Str::uuid(),
                     'quantity' => $item['quantity'],
                     'price' => $item['price'],
                     'discount' => $item['discount'],
                     'subtotal' => $item['subtotal'],
                     'batch_id' => $item['id'],
-                    'sale_id' => $sale->id
+                    'service_order_id' => $service_order->id
                 ]);
             }
             $this->updateStock();
@@ -129,7 +130,7 @@ class SaleCreate extends Component
                     'price' => $item['price'],
                     'quantity' => $item['quantity'],
                     'subtotal' => $item['subtotal'],
-                    'sale_id' => $sale->id,
+                    'service_order_id' => $service_order->id,
                 ]);
             }
 
@@ -195,12 +196,12 @@ class SaleCreate extends Component
 
     public function confirmed()
     {
-        return redirect()->route('sale.dashboard');
+        return redirect()->route('service-order.dashboard');
     }
 
     public function onChangeSelect()
     {
-        $this->emit('refreshSelects', $this->batchs);
+        $this->emit('refreshSelects', $this->batches);
     }
 
     public function toastSuccess($message)
@@ -255,7 +256,7 @@ class SaleCreate extends Component
 
     public function onChangeSelectWarehouse()
     {
-        $this->batchs = Batch::where('state', 'ACTIVE')->where('warehouse_id', $this->warehouse_id)->where('stock', '>', '0')->with('product')->get();
+        $this->batches = Batch::where('state', 'ACTIVE')->where('warehouse_id', $this->warehouse_id)->where('stock', '>', '0')->with('product')->get();
         $this->selected_batch = null;
         $this->onChangeSelect();
     }

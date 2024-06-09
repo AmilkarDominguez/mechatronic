@@ -18,8 +18,8 @@ class CreatePaymentsTable extends Migration
             $table->decimal('amount', 8, 2)->nullable();
             $table->string('slug')->inique();
             $table->enum('state', ['ACTIVE', 'INACTIVE', 'DELETED'])->default('ACTIVE');
-            $table->unsignedBigInteger('sale_id');
-            $table->foreign('sale_id')->references('id')->on('sales')->onDedelete('cascade');
+            $table->unsignedBigInteger('service_order_id');
+            $table->foreign('service_order_id')->references('id')->on('service_orders')->onDedelete('cascade');
             $table->timestamps();
         });
     }

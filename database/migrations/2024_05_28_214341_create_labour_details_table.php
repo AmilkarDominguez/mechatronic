@@ -22,10 +22,10 @@ return new class extends Migration
             $table->decimal('subtotal', 8, 2)->nullable();
             $table->unsignedBigInteger('employee_id')->nullable();
             $table->unsignedBigInteger('service_id')->nullable();
-            $table->unsignedBigInteger('sale_id')->nullable();
+            $table->unsignedBigInteger('service_order_id')->nullable();
             $table->foreign('employee_id')->references('id')->on('employees')->onDedelete('cascade');
             $table->foreign('service_id')->references('id')->on('services')->onDedelete('cascade');
-            $table->foreign('sale_id')->references('id')->on('sales')->onDedelete('cascade');
+            $table->foreign('service_order_id')->references('id')->on('service_orders')->onDedelete('cascade');
             $table->timestamps();
         });
     }

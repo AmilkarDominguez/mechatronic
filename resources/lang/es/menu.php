@@ -5,7 +5,7 @@ return [
     'category' => 'Categorías',
     'subcategory' => 'Subategorías',
     'product' => 'Productos',
-    'sale' => 'Ventas',
+    'service_order' => 'Ventas',
     'language' => 'Idioma',
 
     'profile' => 'Perfil',

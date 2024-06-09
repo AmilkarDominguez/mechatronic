@@ -3,8 +3,8 @@
 
 namespace App\Http\Livewire\SaleCancelled;
 
-use App\Models\Sale;
-use App\Models\SaleDetail;
+use App\Models\ServiceOrder;
+use App\Models\ServiceOrderBatch;
 use App\Models\Batch;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\DateColumn;
@@ -12,14 +12,14 @@ use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 
 class SaleCancelledDataTable extends LivewireDatatable
 {
-    public $model = Sale::class;
+    public $model = ServiceOrder::class;
     public $saledetails;
     public $batch;
     public $hideable = 'select';
 
     public function builder()
     {
-        return (Sale::query()
+        return (ServiceOrder::query()
             ->join('customers', function ($join) {
                 $join->on('sales.customer_id', '=', 'customers.id');
             })
@@ -55,7 +55,7 @@ class SaleCancelledDataTable extends LivewireDatatable
                 ->filterable(),
 
             Column::callback(['id', 'slug'], function ($id, $slug) {
-                return view('livewire.sale-cancelled.sale-cancelled-table-actions', ['id' => $id, 'slug' => $slug]);
+                return view('livewire.service_order-cancelled.service_order-cancelled-table-actions', ['id' => $id, 'slug' => $slug]);
             })->label('Opciones')
                 ->excludeFromExport()
 

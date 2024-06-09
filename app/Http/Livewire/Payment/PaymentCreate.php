@@ -4,7 +4,7 @@ namespace App\Http\Livewire\Payment;
 
 use Livewire\Component;
 use App\Models\Payment;
-use App\Models\Sale;
+use App\Models\ServiceOrder;
 use Illuminate\Support\Str;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
@@ -15,10 +15,10 @@ class PaymentCreate extends Component
     public $slug;
     public $state = "ACTIVE";
 
-    public $sale;
+    public $service_order;
     public function mount($slug)
     {
-        $this->sale = Sale::where('slug', $slug)->firstOrFail();
+        $this->service_order = ServiceOrder::where('slug', $slug)->firstOrFail();
     }
     public function render()
     {
@@ -41,12 +41,12 @@ class PaymentCreate extends Component
                 'amount' => $this->amount,
                 //encriptando slug
                 'slug' => Str::uuid(),
-                'sale_id' =>  $this->sale->id,
+                'service_order_id' =>  $this->service_order->id,
                 'state' => $this->state,
             ]);
-            $this->sale->update([
-                'have' => $this->sale->have + $this->amount,
-                'must' => $this->sale->must - $this->amount,
+            $this->service_order->update([
+                'have' => $this->service_order->have + $this->amount,
+                'must' => $this->service_order->must - $this->amount,
             ]);
             $this->cleanInputs();
     
@@ -75,7 +75,7 @@ class PaymentCreate extends Component
     //Funcion para limpiar imputs
     public function checkMust($amount)
     {
-        if ($this->sale->must < $amount) {
+        if ($this->service_order->must < $amount) {
             return false;
         }
         else {
@@ -97,6 +97,6 @@ class PaymentCreate extends Component
     //Funcion que llama la alerta para redigir al dashboar
     public function confirmed()
     {
-        return redirect()->route('payment.dashboard', [$this->sale->slug]);
+        return redirect()->route('payment.dashboard', [$this->service_order->slug]);
     }
 }

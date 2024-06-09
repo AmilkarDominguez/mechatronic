@@ -1,7 +1,7 @@
 <div>
     <x-slot name="header">
         <div class="font-semibold text-xl text-gray-800 leading-tight">
-            Registrar venta
+            Registrar orden servicio
         </div>
     </x-slot>
 
@@ -172,9 +172,9 @@
                     <div class="font-bold mb-2">
                         Lote
                     </div>
-                    <select id="select-batchs" required>
+                    <select id="select-batches" required>
                         <option selected>(Seleccionar)</option>
-                        @forelse ($batchs as $item)
+                        @forelse ($batches as $item)
                             <option value="{{ $item->id }}">{{ $item->product->description }}
                             </option>
                         @empty
@@ -623,12 +623,12 @@
         }
 
         function initBatchSelect2() {
-            $('#select-batchs').select2();
+            $('#select-batches').select2();
             $(".select2-container").css("width", "100%");
         }
 
         function setEventBatchSelect() {
-            $('#select-batchs').on('change', function() {
+            $('#select-batches').on('change', function() {
                 @this.set('batch_id', this.value);
                 @this.onChangeSelectBatch();
             });
@@ -668,7 +668,7 @@
         });
 
         Livewire.on('refreshSelects', batches => {
-            const selectElement = $('#select-batchs');
+            const selectElement = $('#select-batches');
             selectElement.html('')
             $.each(batches, function(key, value) {
                 selectElement.append(

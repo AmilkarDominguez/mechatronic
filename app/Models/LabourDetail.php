@@ -16,7 +16,7 @@ class LabourDetail extends Model
         'subtotal',
         'employee_id',
         'service_id',
-        'sale_id'
+        'service_order_id'
     ];
 
     public $incrementing = false;
@@ -31,8 +31,8 @@ class LabourDetail extends Model
         return $this->belongsTo(Service::class);
     }
 
-    public function sale()
+    public function service_order()
     {
-        return $this->belongsTo(Sale::class);
+        return $this->belongsTo(ServiceOrder::class);
     }
 }

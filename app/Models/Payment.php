@@ -10,12 +10,12 @@ class Payment extends Model
     use HasFactory;
     protected $fillable = [
         'amount',
-        'sale_id',
+        'service_order_id',
         'slug',
         'state',
     ];
-    public function sale()
+    public function service_order()
     {
-        return $this->belongsTo(Sale::class);
+        return $this->belongsTo(ServiceOrder::class);
     }
 }

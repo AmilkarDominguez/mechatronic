@@ -5,7 +5,7 @@ namespace App\Http\Livewire\ReportProduct;
 use App\Models\ExpenseType;
 use App\Models\Expense;
 use App\Models\Product;
-use App\Models\SaleDetail;
+use App\Models\ServiceOrderBatch;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
@@ -81,7 +81,7 @@ class ReportProductDataTable extends LivewireDatatable
 //        );
 
         //this works
-        return (SaleDetail::query()
+        return (ServiceOrderBatch::query()
             ->join('batches', function ($join) {
                 $join->on('sale_details.batch_id', '=', 'batches.id');
             })
@@ -103,7 +103,7 @@ class ReportProductDataTable extends LivewireDatatable
 
 
             Column::callback(['id', 'batches.id', 'products.id'], function ($id, $batch_id, $product_id) {
-                $details = SaleDetail::query()
+                $details = ServiceOrderBatch::query()
                     ->join('batches', function ($join) {
                         $join->on('sale_details.batch_id', '=', 'batches.id');
                     })

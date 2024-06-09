@@ -57,13 +57,13 @@
             <div class="text-2xl font-bold mb-4 text-red-500">
                 EGRESOS
             </div>
-            <livewire:sale-expense.expense-data-table/>
+            <livewire:service_order-expense.expense-data-table/>
             <br>
             <br>
             <div class="text-2xl font-bold mb-4 text-green-500">
                 INGRESOS
             </div>
-            <livewire:sale-expense.sale-data-table/>
+            <livewire:service_order-expense.service_order-data-table/>
         </div>
     </div>
 

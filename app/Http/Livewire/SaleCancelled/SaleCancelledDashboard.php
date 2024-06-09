@@ -8,6 +8,6 @@ class SaleCancelledDashboard extends Component
 {
     public function render()
     {
-        return view('livewire.sale-cancelled.sale-cancelled-dashboard');
+        return view('livewire.service-order-cancelled.service-order-cancelled-dashboard');
     }
 }

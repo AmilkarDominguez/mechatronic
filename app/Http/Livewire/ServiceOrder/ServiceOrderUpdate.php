@@ -1,19 +1,22 @@
 <?php
 
-namespace App\Http\Livewire\PreSale;
+namespace App\Http\Livewire\ServiceOrder;
 
 use App\Models\Batch;
 use App\Models\Cart;
+use App\Models\ServiceOrder;
 use App\Models\Customer;
+use App\Models\Employee;
+use App\Models\Person;
+use App\Models\ServiceOrderBatch;
+use App\Models\Service;
 use App\Models\Warehouse;
-use Livewire\Component;
-use App\Models\PreSale;
-use App\Models\PreSaleDetail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Livewire\Component;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
-class PreSaleCreate extends Component
+class ServiceOrderUpdate extends Component
 {
     use LivewireAlert;
 
@@ -25,7 +28,7 @@ class PreSaleCreate extends Component
     public $customer_id;
     public $customer;
 
-    public $batchs;
+    public $batches;
     public $batch_id;
     public $batch;
 
@@ -34,51 +37,76 @@ class PreSaleCreate extends Component
     public $description;
     public $warehouses;
     public $warehouse_id;
+    public $employees;
+    public $employee_id;
+    public $services;
+    public $service_id;
 
     public $cart;
     public $cart_session_ = [];
 
-
-    public function mount()
+    public function mount($slug)
     {
         $this->customers = Customer::all()->where('state', 'ACTIVE');
-        $this->batchs = Batch::where('state', 'ACTIVE')->where('stock','>', '0')->with('product')->get();
+        $this->batches = Batch::where('state', 'ACTIVE')->where('stock','>', '0')->with('product')->get();
         $this->warehouses = Warehouse::all()->where('state', 'ACTIVE');
+        $this->employees = Employee::all()->where('state', 'ACTIVE');
+        $this->services = Service::all()->where('state', 'ACTIVE');
         $this->cart = new Cart();
-        //Limpiando carrito
         session()->forget('cart');
-        //$this->cart_session_ = session()->get('cart');
+        $this->service_order = ServiceOrder::where('slug', $slug)->firstOrFail();
+
+        if ($this->service_order) {
+            $this->customer = Customer::where('id', $this->service_order->customer_id)->firstOrFail();
+            $this->person = Person::where('id', $this->customer->person_id)->firstOrFail();
+            $this->name = $this->person->name;
+            $this->ci = $this->person->ci;
+            $this->expedition_ci = $this->person->expedition_ci;
+            $this->code_ci = $this->person->code_ci;
+            $this->address = $this->person->address;
+            $this->total = $this->service_order->total;
+            $this->payment_type = $this->service_order->payment_type;
+            $this->warehouse_id = $this->service_order->warehouse_id;
+            $this->description = $this->service_order->description;
+
+            $this->customer_id = $this->service_order->customer_id;
+
+            $this->saledetails = ServiceOrderBatch::all()->where('service_order_id', $this->service_order->id);
+            $this->addItemsToCart();
+
+        }
     }
 
-    public function render()
+    public function addItemsToCart()
+    {
+        foreach ($this->saledetails as $detail){
+            $this->cart->addProductCart($detail->id, $detail->quantity, $detail->price);
+        }
+    }
+
+     public function render()
     {
         $this->cart_session_ = session()->get('cart');
-        return view('livewire.pre-sale.pre-sale-create');
+        return view('livewire.service-order.service-order-update');
     }
-
     public function onChangeSelectWarehouse()
     {
         $this->warehouses = Warehouse::all()->where('state', 'ACTIVE');
     }
-
-    //reglas para validacion
     protected $rules = [
         'customer_id' => 'required',
         'warehouse_id' => 'required',
     ];
-
-    //Metodo que llama el formulario
     public function submit()
     {
-
         //Funcion para validar mediante las reglas
         $this->validate();
         if ($this->checkStock()) {
 
-            $presale = PreSale::create([
+            $service_order = ServiceOrder::update([
                 'description' => $this->description,
                 'total' => $this->cart->total,
-                'slug' => Str::uuid(),
+                'must' => $this->cart->total,
                 'customer_id' => $this->customer_id,
                 'user_id' => Auth::user()->id,
                 'state' => 'ACTIVE',
@@ -88,13 +116,13 @@ class PreSaleCreate extends Component
             $cart_session_ = session()->get('cart');
             foreach ($cart_session_ as $id_ => $item) {
                 $price_type = array_search($item['price'], $item['prices']);
-                PreSaleDetail::create([
+                ServiceOrderBatch::create([
                     'quantity' => $item['quantity'],
                     'price' => $item['price'],
                     'discount' => $item['discount'],
                     'subtotal' => $item['subtotal'],
                     'batch_id' => $id_,
-                    'pre_sale_id' => $presale->id,
+                    'service_order_id' => $service_order->id,
                     'price_type' => $price_type
                 ]);
             }
@@ -110,6 +138,7 @@ class PreSaleCreate extends Component
                 'confirmButtonText' => 'Aceptar',
                 'onConfirmed' => 'confirmed',
             ]);
+            $this->updateStock();
         }
     }
 
@@ -146,6 +175,18 @@ class PreSaleCreate extends Component
         }
     }
 
+    public function updateStock()
+    {
+        $cart_session_ = session()->get('cart');
+        foreach ($cart_session_ as $id_ => $item) {
+            $batch = Batch::find($id_);
+            $batch->stock = $batch->stock - $item['quantity'];
+            $batch->update([
+                'stock' => $batch->stock,
+            ]);
+        }
+    }
+
     //Funcion para limpiar imputs
     public function cleanInputs()
     {
@@ -160,7 +201,7 @@ class PreSaleCreate extends Component
     //Funcion que llama la alerta para redigir al dashboar
     public function confirmed()
     {
-        return redirect()->route('pre-sale.dashboard');
+        return redirect()->route('service-order.dashboard');
     }
 
     public function showInfoCustomer()
@@ -238,16 +279,18 @@ class PreSaleCreate extends Component
     {
 
         $this->alert('success', 'Producto agregado correctamente.', [
-            'position' =>  'top-end',
-            'timer' =>  3000,
-            'toast' =>  true,
-            'text' =>  '',
-            'confirmButtonText' =>  'Ok',
+            'position' => 'top-end',
+            'timer' => 3000,
+            'toast' => true,
+            'text' => '',
+            'confirmButtonText' => 'Ok',
         ]);
     }
 
     function viewCart()
     {
+        dd($this->cart, session()->get('cart'));
         dd(session()->get('cart'));
     }
+
 }

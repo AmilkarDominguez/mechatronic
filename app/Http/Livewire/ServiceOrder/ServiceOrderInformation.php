@@ -1,16 +1,18 @@
 <?php
 
-namespace App\Http\Livewire\PreSale;
+namespace App\Http\Livewire\ServiceOrder;
 
-use App\Models\PreSale;
+use App\Models\ServiceOrder;
 use App\Models\Customer;
 use App\Models\Person;
-use App\Models\PresaleDetail;
+use App\Models\ServiceOrderBatch;
 use Livewire\Component;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 
-class PreSaleInformation extends Component
+class ServiceOrderInformation extends Component
 {
-    //Presale
+    use LivewireAlert;
+    //ServiceOrder
     public $total;
     //Person
     public $ci;
@@ -18,30 +20,29 @@ class PreSaleInformation extends Component
     public $code_ci;
     public $name;
     public $address;
-    //presaledetails
-    public $presaledetails;
+    //saledetails
+    public $saledetails;
     public $slug;
-    public $presale;
 
 
     public function mount($slug)
     {
-        $this->presale = PreSale::where('slug', $slug)->firstOrFail();
-        if ($this->presale) {
-            $this->customer = Customer::where('id', $this->presale->customer_id)->firstOrFail();
+        $this->service_order = ServiceOrder::where('slug', $slug)->firstOrFail();
+        if ($this->service_order) {
+            $this->customer = Customer::where('id', $this->service_order->customer_id)->firstOrFail();
             $this->person = Person::where('id', $this->customer->person_id)->firstOrFail();
-            $this->presaledetails = PreSaleDetail::all()->where('pre_sale_id', $this->presale->id);
+            $this->saledetails = ServiceOrderBatch::all()->where('service_order_id', $this->service_order->id);
             $this->name = $this->person->name;
             $this->ci = $this->person->ci;
             $this->expedition_ci = $this->person->expedition_ci;
             $this->code_ci = $this->person->code_ci;
             $this->address = $this->person->address;
-            $this->total = $this->presale->total;
+            $this->total = $this->service_order->total;
         }
     }
     public function render()
     {
-        return view('livewire.pre-sale.pre-sale-information');
+        return view('livewire.service-order.service-order-information');
     }
     protected $rules = [
         'total' => 'required',
@@ -54,7 +55,7 @@ class PreSaleInformation extends Component
         $this->validate();
 
         //Creando registro
-        $this->presale->update([
+        $this->service_order->update([
             'total' => $this->total,
             'state' => $this->state,
         ]);

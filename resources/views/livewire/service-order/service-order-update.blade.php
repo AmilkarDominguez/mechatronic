@@ -58,11 +58,11 @@
                 <div class="">
                     Lote
                 </div>
-                <select id="select-batchs" wire:model="batch_id"
+                <select id="select-batches" wire:model="batch_id"
                         class="border-gray-300 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 shadow-sm mt-1 block w-full rounded-md"
                         required>
                     <option selected>(Seleccionar)</option>
-                    @forelse ($batchs as $item)
+                    @forelse ($batches as $item)
                         <option value="{{ $item->id }}">{{ $item->product->name }}
                         </option>
                     @empty
@@ -131,7 +131,7 @@
                 @endif
             </div>
             {{-- end info batch --}}
-            {{-- detial sale --}}
+            {{-- detial service_order --}}
             <div class="container m-auto">
                 <div class="mt-4">
                     Detalle de pre venta
@@ -282,7 +282,7 @@
 
                 </div>
             </div>
-            {{-- end detial sale --}}
+            {{-- end detial service_order --}}
 
             {{-- all errors --}}
             @if ($errors->any())
@@ -295,7 +295,7 @@
                 </div>
             @endif
             {{-- end all errors --}}
-            {{-- Info sale--}}
+            {{-- Info service_order--}}
             <div class="mt-2 text-sm border rounded-md p-4 flex flex-col gap-8">
                 {{-- payment_type --}}
                 <div class="mt-2">
@@ -358,7 +358,7 @@
                 </div>
                 {{-- end description --}}
             </div>
-            {{-- end Info sale--}}
+            {{-- end Info service_order--}}
 
             @if (session('cart'))
                 <x-jet-button type="submit" class="h-12 mt-4 w-full rounded-md flex items-center justify-center">
@@ -379,8 +379,8 @@
                 showInfoCustomer()
             });
 
-            $('#select-batchs').select2();
-            $('#select-batchs').on('change', function () {
+            $('#select-batches').select2();
+            $('#select-batches').on('change', function () {
                 @this.
                 set('batch_id', this.value);
                 @this.

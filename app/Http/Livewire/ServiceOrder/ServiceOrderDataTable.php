@@ -1,44 +1,44 @@
 <?php
 
-namespace App\Http\Livewire\Sale;
+namespace App\Http\Livewire\ServiceOrder;
 
-use App\Models\Sale;
-use App\Models\SaleDetail;
+use App\Models\ServiceOrder;
+use App\Models\ServiceOrderBatch;
 use App\Models\Batch;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\DateColumn;
 use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
-class SaleDataTable extends LivewireDatatable
+class ServiceOrderDataTable extends LivewireDatatable
 {
     use LivewireAlert;
 
     public $exportable = true;
-    public $model = Sale::class;
+    public $model = ServiceOrder::class;
     public $saledetails;
     public $batch;
     public $hideable = 'select';
 
     public function builder()
     {
-        return (Sale::query()
+        return (ServiceOrder::query()
             ->join('customers', function ($join) {
-                $join->on('sales.customer_id', '=', 'customers.id');
+                $join->on('service_orders.customer_id', '=', 'customers.id');
             })
-            ->join('people as sale_customer', function ($join) {
-                $join->on('sale_customer.id', '=', 'customers.person_id');
+            ->join('people as service_order_customer', function ($join) {
+                $join->on('service_order_customer.id', '=', 'customers.person_id');
             })
             ->join('customer_types', function ($join) {
                 $join->on('customers.customer_type_id', '=', 'customer_types.id');
             })
             ->join('users', function ($join) {
-                $join->on('sales.user_id', '=', 'users.id');
+                $join->on('service_orders.user_id', '=', 'users.id');
             })
-            ->join('people as sale_user', function ($join) {
-                $join->on('sale_user.id', '=', 'users.person_id');
+            ->join('people as service_order_user', function ($join) {
+                $join->on('service_order_user.id', '=', 'users.person_id');
             })
-            ->where('sales.state', 'ACTIVE')
+            ->where('service_orders.state', 'ACTIVE')
         );
     }
 
@@ -49,11 +49,11 @@ class SaleDataTable extends LivewireDatatable
                 ->searchable()
                 ->label('Código'),
 
-            Column::name('sale_customer.name')
+            Column::name('service_order_customer.name')
                 ->searchable()
                 ->label('Cliente'),
 
-            Column::name('sale_customer.ci')
+            Column::name('service_order_customer.ci')
                 ->searchable()
                 ->label('CI'),
 
@@ -74,7 +74,7 @@ class SaleDataTable extends LivewireDatatable
                 ->label('Total'),
 
 
-            Column::callback(['sale_user.name'], function ($name) {
+            Column::callback(['service_order_user.name'], function ($name) {
                 return $name;
             })->exportCallback(function ($name) {
                 return (string)$name;
@@ -100,7 +100,7 @@ class SaleDataTable extends LivewireDatatable
                 ->filterable(),
 
             Column::callback(['id', 'slug'], function ($id, $slug) {
-                return view('livewire.sale.sale-table-actions', ['id' => $id, 'slug' => $slug]);
+                return view('livewire.service-order.service-order-table-actions', ['id' => $id, 'slug' => $slug]);
             })->label('Opciones')
                 ->excludeFromExport()
 
@@ -109,7 +109,7 @@ class SaleDataTable extends LivewireDatatable
 
     public function cancelsale($id)
     {
-        $this->saledetails = SaleDetail::all()->where('sale_id', $id);
+        $this->saledetails = ServiceOrderBatch::all()->where('service_order_id', $id);
         foreach ($this->saledetails as $id_ => $item) {
             $this->batch = Batch::where('id', $item['batch_id'])->firstOrFail();
             $this->batch->update([
@@ -142,10 +142,10 @@ class SaleDataTable extends LivewireDatatable
     public function confirmed()
     {
         if ($this->idDelet) {
-            $Sale = Sale::find($this->idDelet);
+            $ServiceOrder = ServiceOrder::find($this->idDelet);
             $this->cancelsale($this->idDelet);
-            $Sale->state = "DELETED";
-            $Sale->update();
+            $ServiceOrder->state = "DELETED";
+            $ServiceOrder->update();
         }
     }
 }

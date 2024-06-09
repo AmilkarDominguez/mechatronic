@@ -1,17 +1,19 @@
 <div>
     <x-slot name="header">
         <div class="font-semibold text-xl text-gray-800 leading-tight">
-            Detalle pre-venta
+            Detalle venta
         </div>
     </x-slot>
     <div class="container m-auto bg-white mt-5 rounded-md">
         <div class="w-full flex justify-start space-x-2 container bg-white">
             <div class="my-2 mx-4">
                 <h1 class="text-lg opacity-50">Información de venta</h1>
-                <h1 class="text-2xl">Pre-venta: {{ $presale->id }}</h1>
-                <h2 class="text-lg">Fecha: {{ $presale->created_at }}</h2>
-                <h2 class="text-xl font-bold">Total: {{ $presale->total }}</h2>
-                <h2 class="text-base">Registrado por: {{ $presale->user->person->name }}</h2>
+                <h1 class="text-2xl">Venta: {{ $service_order->id }}</h1>
+                <h2 class="text-lg">Fecha: {{ $service_order->created_at }}</h2>
+                <h2 class="text-lg opacity-75 text-red-500">Debe: {{ $service_order->must }}</h2>
+                <h2 class="text-lg opacity-75 text-green-500">Haber: {{ $service_order->have }}</h2>
+                <h2 class="text-xl font-bold">Total: {{ $service_order->total }}</h2>
+                <h2 class="text-base">Registrado por: {{ $service_order->user->person->name }}</h2>
             </div>
         </div>
     </div>
@@ -59,8 +61,8 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                        @if ($presaledetails)
-                            @foreach ($presaledetails as $item)
+                        @if ($saledetails)
+                            @foreach ($saledetails as $item)
                                 <tr>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         @if ($item->batch->product->photo)

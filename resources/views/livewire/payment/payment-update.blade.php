@@ -8,11 +8,11 @@
         <div class="w-full flex justify-start space-x-2 container bg-white">
             <div class="my-2 mx-4">
                 <h1 class="text-lg opacity-50">Información de venta</h1>
-                <h1 class="text-2xl">Venta: {{ $sale->id }}</h1>
-                <h2 class="text-lg">Fecha: {{ $sale->created_at }}</h2>
-                <h2 class="text-lg opacity-75 text-red-500">Debe: {{ $sale->must }}</h2>
-                <h2 class="text-lg opacity-75 text-green-500">Haber: {{ $sale->have }}</h2>
-                <h2 class="text-xl font-bold">Total: {{ $sale->total }}</h2>
+                <h1 class="text-2xl">Venta: {{ $service_order->id }}</h1>
+                <h2 class="text-lg">Fecha: {{ $service_order->created_at }}</h2>
+                <h2 class="text-lg opacity-75 text-red-500">Debe: {{ $service_order->must }}</h2>
+                <h2 class="text-lg opacity-75 text-green-500">Haber: {{ $service_order->have }}</h2>
+                <h2 class="text-xl font-bold">Total: {{ $service_order->total }}</h2>
             </div>
         </div>
     </div>

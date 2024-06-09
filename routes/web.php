@@ -32,10 +32,6 @@ use App\Http\Livewire\Industry\IndustryUpdate;
 use App\Http\Livewire\Payment\PaymentCreate;
 use App\Http\Livewire\Payment\PaymentDashboard;
 use App\Http\Livewire\Payment\PaymentUpdate;
-use App\Http\Livewire\PreSale\PreSaleCreate;
-use App\Http\Livewire\PreSale\PreSaleDashboard;
-use App\Http\Livewire\PreSale\PreSaleInformation;
-use App\Http\Livewire\PreSale\PreSalePrint;
 use App\Http\Livewire\Product\ProductCreate;
 use App\Http\Livewire\Product\ProductDashboard;
 use App\Http\Livewire\Product\ProductImport;
@@ -49,11 +45,11 @@ use App\Http\Livewire\ProductPresentation\ProductPresentationDashboard;
 use App\Http\Livewire\ProductPresentation\ProductPresentationImport;
 use App\Http\Livewire\ProductPresentation\ProductPresentationUpdate;
 use App\Http\Livewire\ReportProduct\ReportProductDashboard;
-use App\Http\Livewire\Sale\SaleCreate;
-use App\Http\Livewire\Sale\SaleDashboard;
-use App\Http\Livewire\Sale\SaleInformation;
-use App\Http\Livewire\Sale\SalePrint;
-use App\Http\Livewire\Sale\SaleUpdate;
+use App\Http\Livewire\ServiceOrder\ServiceOrderCreate;
+use App\Http\Livewire\ServiceOrder\ServiceOrderDashboard;
+use App\Http\Livewire\ServiceOrder\ServiceOrderInformation;
+use App\Http\Livewire\ServiceOrder\ServiceOrderPrint;
+use App\Http\Livewire\ServiceOrder\ServiceOrderUpdate;
 use App\Http\Livewire\SaleCancelled\SaleCancelledDashboard;
 use App\Http\Livewire\SaleExpense\SaleExpenseDashboard;
 use App\Http\Livewire\Service\ServiceCreate;
@@ -126,24 +122,18 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::get('user-create', UserCreate::class)->name('user.create')->middleware('auth', 'role:admin');
     Route::get('user-update/{slug}', UserUpdate::class)->name('user.update')->middleware('auth', 'role:admin');
 
-    //Admin Sale
-    Route::get('sale', SaleDashboard::class)->name('sale.dashboard')->middleware('auth', 'role:admin|sales');
-    Route::get('sale-create', SaleCreate::class)->name('sale.create')->middleware('auth', 'role:admin|sales');
-    Route::get('sale-update/{slug}', SaleUpdate::class)->name('sale.update')->middleware('auth', 'role:admin|sales');
-    Route::get('sale-information/{slug}', SaleInformation::class)->name('sale.information')->middleware('auth', 'role:admin|sales');
-    Route::get('sale-print/{slug}', SalePrint::class)->name('sale.print')->middleware('auth', 'role:admin|sales');
-    Route::get('sale-cancelled', SaleCancelledDashboard::class)->name('sale-cancelled.dashboard')->middleware('auth', 'role:admin');
+    //Admin ServiceOrder
+    Route::get('service-order', ServiceOrderDashboard::class)->name('service-order.dashboard')->middleware('auth', 'role:admin|sales');
+    Route::get('service-order-create', ServiceOrderCreate::class)->name('service-order.create')->middleware('auth', 'role:admin|sales');
+    Route::get('service-order-update/{slug}', ServiceOrderUpdate::class)->name('service-order.update')->middleware('auth', 'role:admin|sales');
+    Route::get('service-order-information/{slug}', ServiceOrderInformation::class)->name('service-order.information')->middleware('auth', 'role:admin|sales');
+    Route::get('service-order-print/{slug}', ServiceOrderPrint::class)->name('service-order.print')->middleware('auth', 'role:admin|sales');
+    Route::get('service-order-cancelled', SaleCancelledDashboard::class)->name('service-order-cancelled.dashboard')->middleware('auth', 'role:admin');
 
     //Admin Payment
     Route::get('payment/{slug}', PaymentDashboard::class)->name('payment.dashboard')->middleware('auth', 'role:admin|sales');
     Route::get('payment-create/{slug}', PaymentCreate::class)->name('payment.create')->middleware('auth', 'role:admin|sales');
     Route::get('payment-update/{slug}', PaymentUpdate::class)->name('payment.update')->middleware('auth', 'role:admin|sales');
-
-    //Admin Presale
-    Route::get('pre-sale', PreSaleDashboard::class)->name('pre-sale.dashboard')->middleware('auth', 'role:admin|sales');
-    Route::get('pre-sale-create', PreSaleCreate::class)->name('pre-sale.create')->middleware('auth', 'role:admin|sales');
-    Route::get('pre-sale-information/{slug}', PreSaleInformation::class)->name('pre-sale.information')->middleware('auth', 'role:admin|sales');
-    Route::get('pre-sale-print/{slug}', PreSalePrint::class)->name('pre-sale.print')->middleware('auth', 'role:admin|sales');
 
     //Admin IdentityDocumentType
     Route::get('indentity-document-type', IdentityDocumentTypeDashboard::class)->name('identity-document-type.dashboard')->middleware('auth', 'role:admin');
@@ -198,8 +188,8 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::get('expense-create', ExpenseCreate::class)->name('expense.create')->middleware('auth', 'role:admin|sales');
     Route::get('expense-update/{slug}', ExpenseUpdate::class)->name('expense.update')->middleware('auth', 'role:admin|sales');
 
-    //sale-expense
-    Route::get('sale-expense', SaleExpenseDashboard::class)->name('sale-expense.dashboard')->middleware('auth', 'role:admin');
-    //sale-expense
+    //service-order-expense
+    Route::get('service-order-expense', SaleExpenseDashboard::class)->name('service-order-expense.dashboard')->middleware('auth', 'role:admin');
+    //service_order-expense
     Route::get('report-product', ReportProductDashboard::class)->name('report-product.dashboard')->middleware('auth', 'role:admin');
 });

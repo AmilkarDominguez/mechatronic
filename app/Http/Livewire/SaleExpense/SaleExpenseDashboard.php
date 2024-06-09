@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\SaleExpense;
 
 use App\Models\Expense;
-use App\Models\Sale;
+use App\Models\ServiceOrder;
 use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -32,7 +32,7 @@ class SaleExpenseDashboard extends Component
 
         $this->calcTotals();
 
-        return view('livewire.sale-expense.sale-expense-dashboard', [
+        return view('livewire.service_order-expense.service_order-expense-dashboard', [
             'expenses_total' => $this->expenses_total,
             'sales_total' => $this->sales_total,
         ]);
@@ -50,7 +50,7 @@ class SaleExpenseDashboard extends Component
             ->where('expenses.state', 'ACTIVE')
             ->sum('expenses.purchase');
 
-        $this->sales_total = Sale::select('*')
+        $this->sales_total = ServiceOrder::select('*')
             ->whereBetween('sales.created_at', [$this->start_date, $this->end_date])
             ->where('sales.state', 'ACTIVE')
             ->sum('sales.have');

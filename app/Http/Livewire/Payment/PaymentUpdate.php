@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Payment;
 
 use App\Models\Payment;
-use App\Models\Sale;
+use App\Models\ServiceOrder;
 use Livewire\Component;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
@@ -13,13 +13,13 @@ class PaymentUpdate extends Component
     public $amount;
     public $slug;
 
-    public $sale;
+    public $service_order;
     public function mount($slug)
     {
         $this->payment = Payment::where('slug', $slug)->firstOrFail();
         if ($this->payment) {
             $this->amount = $this->payment->amount;
-            $this->sale = Sale::where('id', $this->payment->sale_id)->firstOrFail();
+            $this->service_order = ServiceOrder::where('id', $this->payment->service_order_id)->firstOrFail();
         }
     }
     public function render()

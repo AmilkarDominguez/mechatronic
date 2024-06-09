@@ -1,6 +1,6 @@
 <div class="flex space-x-1 justify-around">
     {{-- view --}}
-    <a href="{{ route('sale.information', $slug) }}"
+    <a href="{{ route('service-order.information', $slug) }}"
         class="p-1 text-blue-600 hover:bg-blue-600 hover:text-white rounded-full">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
             <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />

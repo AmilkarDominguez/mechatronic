@@ -15,13 +15,13 @@ class ExtraItem extends Model
         'price',
         'quantity',
         'subtotal',
-        'sale_id'
+        'service_order_id'
     ];
 
     public $incrementing = false;
 
-    public function sale()
+    public function service_order()
     {
-        return $this->belongsTo(Sale::class);
+        return $this->belongsTo(ServiceOrder::class);
     }
 }

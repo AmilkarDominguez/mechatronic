@@ -5,7 +5,7 @@ namespace App\Http\Livewire\Dashboard;
 use App\Models\Batch;
 use App\Models\Customer;
 use App\Models\Product;
-use App\Models\Sale;
+use App\Models\ServiceOrder;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -32,7 +32,7 @@ class Dashboard extends Component
         $this->current_year = now()->year;
         $this->current_month = now()->month;
         $this->current_day = now()->day;
-        $this->total_sales = Sale::all()->count();
+        $this->total_sales = ServiceOrder::all()->count();
         $this->total_products = Product::all()->count();
         $this->total_customers = Customer::all()->count();
         $this->calcSalesChar();
@@ -61,16 +61,16 @@ class Dashboard extends Component
 
         for ($month = 1; $month <= $this->current_month; $month++) {
 
-            $data_month = Sale::select('*')
+            $data_month = ServiceOrder::select('*')
                 ->whereMonth('created_at', $month)
                 ->whereYear('created_at', $this->current_year)
-                ->where('sales.state', 'ACTIVE')
+                ->where('service_orders.state', 'ACTIVE')
                 ->count();
 
-            $total = DB::table("sales")
+            $total = DB::table("service_orders")
                 ->whereMonth('created_at', $month)
                 ->whereYear('created_at', $this->current_year)
-                ->where('sales.state', 'ACTIVE')
+                ->where('service_orders.state', 'ACTIVE')
                 ->get()->sum("have");
 
             $this->chart_data_months[$month] = $data_month;

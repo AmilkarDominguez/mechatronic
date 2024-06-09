@@ -21,8 +21,8 @@ return new class extends Migration
             $table->decimal('price', 8, 2)->nullable();
             $table->integer('quantity')->nullable();
             $table->decimal('subtotal', 8, 2)->nullable();
-            $table->unsignedBigInteger('sale_id')->nullable();
-            $table->foreign('sale_id')->references('id')->on('sales')->onDedelete('cascade');
+            $table->unsignedBigInteger('service_order_id')->nullable();
+            $table->foreign('service_order_id')->references('id')->on('service_orders')->onDedelete('cascade');
             $table->timestamps();
         });
     }

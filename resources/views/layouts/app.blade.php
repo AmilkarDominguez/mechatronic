@@ -81,8 +81,8 @@
                 {{-- @if (Auth::user()->hasRole('admin'))
             @endif --}}
 
-                {{-- <x-a-sidenav href="{{ route('sale.table') }}" :active="request()->routeIs('sale.table')">
-                {{ __('menu.sale') }}
+                {{-- <x-a-sidenav href="{{ route('service-order.table') }}" :active="request()->routeIs('service-order.table')">
+                {{ __('menu.service_order') }}
             </x-a-sidenav> --}}
 
                 {{-- <x-a-sidenav href="{{ route('setting.update', 'setting') }}"
@@ -278,9 +278,9 @@
                             <div class="w-full flex justify-between ">
                                 <div class="flex space-x-2 ">
                                     <div class="flex h-full items-center">
-                                        <span class="inline-block align-middle"><i
-                                                class="fa-solid fa-boxes-packing"></i>
-                                            Ventas</span>
+                                        <span class="inline-block align-middle">
+                                            <i class="fas fa-clipboard-list"></i>
+                                            Ordenes de servicio</span>
                                     </div>
                                 </div>
                                 <div class="flex space-x-2 ">
@@ -304,18 +304,25 @@
                             x-transition:leave-end="transform opacity-0 scale-95"
                             class=" right-0 w-full mt-2 origin-top-right rounded-md shadow-lg">
                             <div class="px-2 py-2 bg-white rounded-md shadow dark-mode:bg-primary-800">
-                                {{-- <x-a-sidenav href="{{ route('pre-sale.dashboard') }}" :active="request()->routeIs('pre-sale.dashboard') ||
-                                    request()->routeIs('pre-sale.create')">
+                                {{-- <x-a-sidenav href="{{ route('pre-service-order.dashboard') }}" :active="request()->routeIs('pre-service-order.dashboard') ||
+                                    request()->routeIs('pre-service-order.create')">
                                 <i class="far fa-clipboard"></i> Pre Ventas
                             </x-a-sidenav> --}}
 
                                 <hr class="mt-2">
 
-                                <x-a-sidenav href="{{ route('sale.dashboard') }}" :active="request()->routeIs('sale.dashboard') ||
-                                    request()->routeIs('sale.create') ||
-                                    request()->routeIs('sale.update')">
-                                    <i class="fas fa-cash-register"></i> Ventas
+                                <x-a-sidenav href="{{ route('service-order.dashboard') }}" :active="request()->routeIs('service-order.dashboard') ||
+                                    request()->routeIs('service-order.create') ||
+                                    request()->routeIs('service-order.update')">
+                                    <i class="far fa-clipboard"></i> En curso
                                 </x-a-sidenav>
+
+                                <x-a-sidenav href="{{ route('service-order.dashboard') }}" :active="request()->routeIs('service-order.dashboard') ||
+                                    request()->routeIs('service-order.create') ||
+                                    request()->routeIs('service-order.update')">
+                                    <i class="fas fa-clipboard-check"></i> Completados
+                                </x-a-sidenav>
+                                
                             </div>
                         </div>
                     </div>
@@ -376,56 +383,54 @@
 
                 {{-- SUPER ADMIN REPORTES --}}
                 @if (Auth::user()->hasAnyRole(['admin']))
-                <div @click.away="open = false" class="relative z-10" x-data="{ open: false }">
-                    <a @click="open = !open"
-                       class="flex flex-row items-center content-between w-full px-4 py-2 mt-2 text-gray-500  text-sm font-semibold text-left bg-transparent rounded-full dark-mode:bg-transparent dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:focus:bg-primary-600 dark-mode:hover:bg-primary-600 md:block hover:text-primary-700 focus:text-primary-700 hover:bg-primary-200 cursor-pointer">
-                        <div class="w-full flex justify-between ">
-                            <div class="flex space-x-2 ">
+                    <div @click.away="open = false" class="relative z-10" x-data="{ open: false }">
+                        <a @click="open = !open"
+                            class="flex flex-row items-center content-between w-full px-4 py-2 mt-2 text-gray-500  text-sm font-semibold text-left bg-transparent rounded-full dark-mode:bg-transparent dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:focus:bg-primary-600 dark-mode:hover:bg-primary-600 md:block hover:text-primary-700 focus:text-primary-700 hover:bg-primary-200 cursor-pointer">
+                            <div class="w-full flex justify-between ">
+                                <div class="flex space-x-2 ">
 
-                                <div class="flex h-full items-center ">
+                                    <div class="flex h-full items-center ">
                                         <span class="inline-block align-middle"><i
                                                 class="fa-solid fa-layer-group"></i>
                                             Reportes
+                                    </div>
+
                                 </div>
+                                <div class="flex space-x-2 ">
+                                    <div class="flex h-full justify-center items-center">
+                                        <svg fill="currentColor" viewBox="0 0 20 20"
+                                            :class="{ 'rotate-180': open, 'rotate-0': !open }"
+                                            class="w-6 h-6 transition-transform duration-200 transform">
+                                            <path fill-rule="evenodd"
+                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                clip-rule="evenodd"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <div x-show="open" x-transition:enter="transition ease-out duration-100"
+                            x-transition:enter-start="transform opacity-0 scale-95"
+                            x-transition:enter-end="transform opacity-100 scale-100"
+                            x-transition:leave="transition ease-in duration-75"
+                            x-transition:leave-start="transform opacity-100 scale-100"
+                            x-transition:leave-end="transform opacity-0 scale-95"
+                            class=" right-0 w-full mt-2 origin-top-right rounded-md shadow-lg">
+                            <div class="px-2 py-2 bg-white rounded-md shadow dark-mode:bg-primary-800">
+
+                                <x-a-sidenav href="{{ route('service-order-expense.dashboard') }}" :active="request()->routeIs('service-order-expense.dashboard')">
+                                    <i class="fas fa-warehouse"></i> Ventas/Gastos
+                                </x-a-sidenav>
+
+                                <x-a-sidenav href="{{ route('report-product.dashboard') }}" :active="request()->routeIs('report-product.dashboard')">
+                                    <i class="fas fa-box"></i> Pruductos
+                                </x-a-sidenav>
+
 
                             </div>
-                            <div class="flex space-x-2 ">
-                                <div class="flex h-full justify-center items-center">
-                                    <svg fill="currentColor" viewBox="0 0 20 20"
-                                         :class="{ 'rotate-180': open, 'rotate-0': !open }"
-                                         class="w-6 h-6 transition-transform duration-200 transform">
-                                        <path fill-rule="evenodd"
-                                              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                              clip-rule="evenodd"></path>
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                    <div x-show="open" x-transition:enter="transition ease-out duration-100"
-                         x-transition:enter-start="transform opacity-0 scale-95"
-                         x-transition:enter-end="transform opacity-100 scale-100"
-                         x-transition:leave="transition ease-in duration-75"
-                         x-transition:leave-start="transform opacity-100 scale-100"
-                         x-transition:leave-end="transform opacity-0 scale-95"
-                         class=" right-0 w-full mt-2 origin-top-right rounded-md shadow-lg">
-                        <div class="px-2 py-2 bg-white rounded-md shadow dark-mode:bg-primary-800">
-
-                            <x-a-sidenav href="{{ route('sale-expense.dashboard') }}"
-                                         :active="request()->routeIs('sale-expense.dashboard')">
-                                <i class="fas fa-warehouse"></i> Ventas/Gastos
-                            </x-a-sidenav>
-
-                            <x-a-sidenav href="{{ route('report-product.dashboard') }}"
-                                         :active="request()->routeIs('report-product.dashboard')">
-                                <i class="fas fa-box"></i> Pruductos
-                            </x-a-sidenav>
-
-
                         </div>
                     </div>
-                </div>
-            @endif
+                @endif
                 {{-- END SUPER ADMIN REPORTES --}}
 
 

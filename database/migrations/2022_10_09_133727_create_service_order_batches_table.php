@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSaleDetailsTable extends Migration
+class CreateServiceOrderBatchesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,17 @@ class CreateSaleDetailsTable extends Migration
      */
     public function up()
     {
-        Schema::create('sale_details', function (Blueprint $table) {
-            $table->id();
+        Schema::create('service_order_batches', function (Blueprint $table) {
+            $table->string('uuid')->inique();
+            $table->primary(['uuid']);
             $table->integer('quantity')->nullable();
             $table->decimal('price', 8, 2)->nullable();
             $table->decimal('discount', 8, 2)->nullable();
             $table->decimal('subtotal', 8, 2)->nullable();
-            $table->enum('state', ['ACTIVE', 'INACTIVE', 'DELETED'])->default('ACTIVE');
-            $table->enum('price_type', ['MAYORISTA', 'MINORISTA', 'CONSTRUCTORA', 'FINAL'])->default('FINAL')->nullable();
             $table->unsignedBigInteger('batch_id')->nullable();
-            $table->unsignedBigInteger('sale_id')->nullable();
+            $table->unsignedBigInteger('service_order_id')->nullable();
             $table->foreign('batch_id')->references('id')->on('batches')->onDedelete('cascade');
-            $table->foreign('sale_id')->references('id')->on('sales')->onDedelete('cascade');
+            $table->foreign('service_order_id')->references('id')->on('service_orders')->onDedelete('cascade');
             $table->timestamps();
         });
     }
@@ -36,6 +35,6 @@ class CreateSaleDetailsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sale_details');
+        Schema::dropIfExists('service_order_batches');
     }
 }

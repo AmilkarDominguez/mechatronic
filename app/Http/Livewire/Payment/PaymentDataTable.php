@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Payment;
 
 use App\Models\Payment;
-use App\Models\Sale;
+use App\Models\ServiceOrder;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\DateColumn;
 use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
@@ -17,7 +17,7 @@ class PaymentDataTable extends LivewireDatatable
     public $model = Payment::class;
 
     //variable que llega desde la vista blade payment-dashboard.blade
-    public $sale_id;
+    public $service_order_id;
 
     public $hideable = 'select';
 
@@ -25,9 +25,9 @@ class PaymentDataTable extends LivewireDatatable
     {
         return (Payment::query()
             ->join('sales', function ($join) {
-                $join->on('sales.id', '=', 'payments.sale_id');
+                $join->on('sales.id', '=', 'payments.service_order_id');
             })
-            ->where('payments.sale_id',  $this->sale_id)
+            ->where('payments.service_order_id',  $this->service_order_id)
             ->where('payments.state', 'ACTIVE'));
     }
     public function edit($id)
@@ -84,15 +84,15 @@ class PaymentDataTable extends LivewireDatatable
     {
         if ($this->idDelet) {
             $Payment = Payment::find($this->idDelet);
-            $this->sale = Sale::where('id', $Payment->sale_id)->firstOrFail();
-            $this->sale->update([
-                'have' => $this->sale->have - $Payment->amount,
-                'must' => $this->sale->must + $Payment->amount,
+            $this->service_order = ServiceOrder::where('id', $Payment->service_order_id)->firstOrFail();
+            $this->service_order->update([
+                'have' => $this->service_order->have - $Payment->amount,
+                'must' => $this->service_order->must + $Payment->amount,
             ]);
             $Payment->delete();
             // $Payment->state = "DELETED";
             // $Payment->update();
-            return redirect()->route('payment.dashboard', [$this->sale->slug]);
+            return redirect()->route('payment.dashboard', [$this->service_order->slug]);
         }
     }
 }

@@ -2,19 +2,19 @@
     <div>
         <table class="border w-full">
             <tr class="border">
-                <td class="border text-center font-bold text-2xl" colspan="3">COMPROBANTE DE PREVENTA P-{{ $sale->id }}</td>
+                <td class="border text-center font-bold text-2xl" colspan="3">COMPROBANTE DE VENTA V-{{ $service_order->id }}</td>
             </tr>
             <tr class="border">
                 <td class="border ">Fecha de Imp.: <b>{{ now() }}</b></td>
-                <td class="border">Entrega: <b>{{ $sale->warehouse->name }}</b></td>
-                <td class="border ">Forma de pago: <b>{{ $sale->payment_type }}</b></td>
+                <td class="border">Entrega: <b>{{ $service_order->warehouse->name }}</b></td>
+                <td class="border ">Forma de pago: <b>{{ $service_order->payment_type }}</b></td>
             </tr>
 
 
             <tr class="border">
-                <td class="border ">Fecha: <b>{{ $sale->created_at }}</b></td>
+                <td class="border ">Fecha: <b>{{ $service_order->created_at }}</b></td>
                 <td class="border ">Estado: <b>Vigente</b></td>
-                <td class="border text-left">Registrado por: <b>{{ $sale->user->person->name }}</b></td>
+                <td class="border text-left">Registrado por: <b>{{ $service_order->user->person->name }}</b></td>
             </tr>
             <tr class="border">
                 <td class="border text-left" colspan="3">
@@ -23,7 +23,7 @@
                 </td>
             </tr>
             <tr class="border">
-                <td class="border text-left" colspan="3">Observaciones: {{ $sale->description }}</td>
+                <td class="border text-left" colspan="3">Observaciones: {{ $service_order->description }}</td>
             </tr>
         </table>
         <hr class="border m-2">
@@ -51,7 +51,7 @@
                     <td class="border text-center">
                         {{ $item->batch->product->presentation->name }}
                     </td>
-                    <td class="border text-center">{{ $item->price }}</td>
+                    <td class="border text-center">{{$item->price}}</td>
                     <td class="border text-center">
                         {{ $item->quantity }}
                     </td>
@@ -77,7 +77,7 @@
             @endforeach
             <tr>
                 <td class="border text-right" colspan="8">
-                    IMPORTE TOTAL <b>{{ $sale->total }} Bs.</b>
+                    IMPORTE TOTAL <b>{{ $service_order->total }} Bs.</b>
                 </td>
             </tr>
 
