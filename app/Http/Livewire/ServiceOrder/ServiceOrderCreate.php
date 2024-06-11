@@ -144,7 +144,6 @@ class ServiceOrderCreate extends Component
                 'confirmButtonText' => 'Aceptar',
                 'onConfirmed' => 'confirmed',
             ]);
-
         }
     }
 
@@ -188,15 +187,6 @@ class ServiceOrderCreate extends Component
                 'stock' => $batch->stock,
             ]);
         }
-    }
-
-    protected $listeners = [
-        'confirmed',
-    ];
-
-    public function confirmed()
-    {
-        return redirect()->route('service-order.dashboard');
     }
 
     public function onChangeSelect()
@@ -422,5 +412,22 @@ class ServiceOrderCreate extends Component
     function calcTotal()
     {
         $this->total = $this->labours_total + $this->sale_details_total + $this->extra_items_total;
+    }
+
+
+    protected $listeners = [
+        'confirmed',
+        'serviceAdded'
+    ];
+
+    public function confirmed()
+    {
+        return redirect()->route('service-order.dashboard');
+    }
+
+    public function serviceAdded($id)
+    {
+        $this->services = Service::all()->where('state', 'ACTIVE');
+        $this->emit('serviceAddedEvent', $this->services, $id);
     }
 }
