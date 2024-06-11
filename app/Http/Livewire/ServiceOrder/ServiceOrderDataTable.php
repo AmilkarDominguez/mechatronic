@@ -38,7 +38,7 @@ class ServiceOrderDataTable extends LivewireDatatable
             ->join('people as service_order_user', function ($join) {
                 $join->on('service_order_user.id', '=', 'users.person_id');
             })
-            ->where('service_orders.state', 'ACTIVE')
+            ->where('service_orders.state', 'PENDING')
         );
     }
 

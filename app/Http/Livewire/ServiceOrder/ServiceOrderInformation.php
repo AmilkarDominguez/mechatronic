@@ -13,7 +13,10 @@ class ServiceOrderInformation extends Component
 {
     use LivewireAlert;
     //ServiceOrder
+    public $service_order;
     public $total;
+    public $customer;
+    public $person;
     //Person
     public $ci;
     public $expedition_ci;

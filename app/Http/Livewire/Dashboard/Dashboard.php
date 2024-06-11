@@ -64,13 +64,13 @@ class Dashboard extends Component
             $data_month = ServiceOrder::select('*')
                 ->whereMonth('created_at', $month)
                 ->whereYear('created_at', $this->current_year)
-                ->where('service_orders.state', 'ACTIVE')
+                ->where('service_orders.state', 'COMPLETED')
                 ->count();
 
             $total = DB::table("service_orders")
                 ->whereMonth('created_at', $month)
                 ->whereYear('created_at', $this->current_year)
-                ->where('service_orders.state', 'ACTIVE')
+                ->where('service_orders.state', 'COMPLETED')
                 ->get()->sum("have");
 
             $this->chart_data_months[$month] = $data_month;

@@ -95,7 +95,7 @@ class ServiceOrderCreate extends Component
                 'slug' => Str::uuid(),
                 'customer_id' => $this->customer_id,
                 'user_id' => Auth::user()->id,
-                'state' => 'ACTIVE',
+                'state' => 'PENDING',
                 'payment_type' => $this->payment_type
             ]);
             foreach ($this->labours as $item) {

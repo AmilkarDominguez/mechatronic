@@ -22,7 +22,7 @@ class CreateServiceOrdersTable extends Migration
             //debe monto que se debe
             $table->decimal('must', 8, 2)->nullable();
             $table->string('slug')->inique();
-            $table->enum('state', ['ACTIVE', 'INACTIVE', 'COMPLETED', 'DELETED'])->default('ACTIVE')->nullable();
+            $table->enum('state', ['DRAFT','PENDING', 'COMPLETED', 'DELETED'])->default('PENDING')->nullable();
             $table->enum('payment_type', ['CONTADO', 'CREDITO'])->default('CONTADO')->nullable();
             $table->unsignedBigInteger('customer_id');
             $table->foreign('customer_id')->references('id')->on('customers')->onDedelete('cascade');
