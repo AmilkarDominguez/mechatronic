@@ -1,51 +1,40 @@
 <?php
 
-namespace App\Http\Livewire\Service;
+namespace App\Http\Livewire\ExtraItem;
 
-use App\Models\Service;
+use App\Models\ExtraItem;
 use Livewire\Component;
 use Illuminate\Support\Str;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
-class ServiceCreate extends Component
+class ExtraItemCreateSmall extends Component
 {
 
     use LivewireAlert;
-    public $service;
+    public $extraItem;
     public $name;
-    public $code;
-    public $description;
+    public $cost;
     public $price;
-    public $state = 'ACTIVE';
-    public $view;
-    public $slug;
 
-
-    public function mount()
-    {
-    }
     public function render()
     {
-        return view('livewire.service.service-create');
+        return view('livewire.extra-item.extra-item-create-small')->layout('layouts.guest');
     }
     protected $rules = [
         'name' => 'required|max:255|min:3|unique:services,name',
-        'code' => 'required|max:255|min:3|unique:services,code',
-        'description' => 'nullable',
-        'price' => 'required',
-        'state' => 'required'
+        'cost' => 'required',
+        'price' => 'required'
     ];
 
     public function submit()
     {
         $this->validate();
-        $this->service = Service::create([
+        $this->extraItem = ExtraItem::create([
             'name' => $this->name,
-            'code' => $this->code,
+            'cost' => $this->cost,
             'slug' => Str::uuid(),
-            'description' => $this->description,
-            'price' => $this->price,
-            'state' => $this->state,
+            'description' => '',
+            'price' => $this->price
         ]);
 
         $this->confirm(__('alert.registerSuccesss'), [
@@ -60,12 +49,19 @@ class ServiceCreate extends Component
         ]);
     }
 
+    function clearInputs() {
+        $this->name = '';
+        $this->cost = '';
+        $this->price = '';
+    }
+
     protected $listeners = [
         'confirmed',
     ];
 
     public function confirmed()
     {
-        return redirect()->route('service.dashboard');
+        $this->clearInputs();
+        $this->emit('extraItemAdded', $this->extraItem->id);
     }
 }

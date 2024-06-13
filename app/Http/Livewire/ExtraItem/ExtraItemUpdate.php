@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Livewire\Service;
+namespace App\Http\Livewire\ExtraItem;
 
 use App\Models\ServiceCategory;
-use App\Models\Service;
+use App\Models\ExtraItem;
 use App\Models\ServicePresentation;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
@@ -11,38 +11,37 @@ use Illuminate\Support\Str;
 use Livewire\WithFileUploads;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
-class ServiceUpdate extends Component
+class ExtraItemUpdate extends Component
 {
     use LivewireAlert;
-    public $service;
+    public $extraItem;
     public $name;
-    public $code;
+    public $cost;
     public $description;
     public $price;
     public $state = 'ACTIVE';
     public $slug;
 
-
     public function mount($slug)
     {
-        $this->service = Service::where('slug', $slug)->firstOrFail();
-        if ($this->service) {
-            $this->name = $this->service->name;
-            $this->code = $this->service->code;
-            $this->description = $this->service->description;
-            $this->price = $this->service->price;
-            $this->slug = $this->service->slug;
+        $this->extraItem = ExtraItem::where('slug', $slug)->firstOrFail();
+        if ($this->extraItem) {
+            $this->name = $this->extraItem->name;
+            $this->cost = $this->extraItem->cost;
+            $this->description = $this->extraItem->description;
+            $this->price = $this->extraItem->price;
+            $this->slug = $this->extraItem->slug;
         }
     }
 
     public function render()
     {
-        return view('livewire.service.service-update');
+        return view('livewire.extra-item.extra-item-update');
     }
 
     protected $rules = [
         'name' => 'required|max:255|min:3|unique:services,name',
-        'code' => 'required|max:255|min:3|unique:services,code',
+        'cost' => 'required',
         'description' => 'nullable',
         'price' => 'required',
         'state' => 'required'
@@ -50,13 +49,12 @@ class ServiceUpdate extends Component
 
     public function submit()
     {
-        $this->rules['name'] = 'required|unique:services,name,' . $this->service->id;
-        $this->rules['code'] = 'required|unique:services,code,' . $this->service->id;
+        $this->rules['name'] = 'required|unique:services,name,' . $this->extraItem->id;
         $this->validate();
 
-        $this->service->update([
+        $this->extraItem->update([
             'name' => $this->name,
-            'code' => $this->code,
+            'cost' => $this->cost,
             'description' => $this->description,
             'price' => $this->price,
             'state' => $this->state,
@@ -80,6 +78,6 @@ class ServiceUpdate extends Component
 
     public function confirmed()
     {
-        return redirect()->route('service.dashboard');
+        return redirect()->route('extra-item.dashboard');
     }
 }

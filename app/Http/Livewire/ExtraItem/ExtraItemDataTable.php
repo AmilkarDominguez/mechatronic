@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Livewire\Service;
+namespace App\Http\Livewire\ExtraItem;
 
-use App\Models\Service;
+use App\Models\ExtraItem;
 use Illuminate\Support\Carbon;
 use App\Models\Municipality;
 use Illuminate\Support\Facades\DB;
@@ -14,24 +14,20 @@ use Mediconesystems\LivewireDatatables\BooleanColumn;
 use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
-class ServiceDataTable extends LivewireDatatable
+class ExtraItemDataTable extends LivewireDatatable
 {
     use LivewireAlert;
     public $exportable = true;
-    public $model = Service::class;
+    public $model = ExtraItem::class;
+    public $ExtraItemSelected;
     public function builder()
     {
-        //return Service::query();
-        return Service::query()->where('state', '!=', 'DELETED');
+        return ExtraItem::query()->where('state', '!=', 'DELETED');
     }
 
     public function columns()
     {
         return [
-
-            Column::name('code')
-                ->searchable()
-                ->label('Código'),
 
             Column::name('name')
                 ->searchable()
@@ -40,6 +36,10 @@ class ServiceDataTable extends LivewireDatatable
             Column::name('description')
                 ->searchable()
                 ->label('Descripción'),
+
+            Column::name('cost')
+                ->searchable()
+                ->label('Costo'),
 
             Column::name('price')
                 ->searchable()
@@ -64,7 +64,7 @@ class ServiceDataTable extends LivewireDatatable
                 ->filterable(),
 
             Column::callback(['slug'], function ($slug) {
-                return view('livewire.service.service-table-actions', ['slug' => $slug]);
+                return view('livewire.extra-item.extra-item-table-actions', ['slug' => $slug]);
             })->label('Opciones')
                 ->excludeFromExport()
 
@@ -72,15 +72,14 @@ class ServiceDataTable extends LivewireDatatable
         ];
     }
 
-    public $ServiceDelet;
     public function toastConfirmDelet($slug)
     {
-        $this->ServiceDelet = Service::where('slug', $slug)->first();
+        $this->ExtraItemSelected = ExtraItem::where('slug', $slug)->first();
         $this->confirm(__('¿Estás seguro de que deseas eliminar el registro?'), [
             'icon' => 'warning',
             'position' =>  'center',
             'toast' =>  false,
-            'text' =>  $this->ServiceDelet->name,
+            'text' =>  $this->ExtraItemSelected->name,
             'confirmButtonText' =>  'Si',
             'showConfirmButton' =>  true,
             'showCancelButton' => true,
@@ -94,10 +93,9 @@ class ServiceDataTable extends LivewireDatatable
     ];
     public function confirmed()
     {
-        if ($this->ServiceoDelet) {
-
-            $this->ServiceoDelet->state = "DELETED";
-            $this->ServiceoDelet->update();
+        if ($this->ExtraItemSelected) {
+            $this->ExtraItemSelected->state = "DELETED";
+            $this->ExtraItemSelected->update();
         }
     }
 }

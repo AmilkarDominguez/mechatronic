@@ -31,8 +31,6 @@ class ProductUpdate extends Component
     public $presentations;
 
 
-    //Aux
-    public $showModal = false;
 
     public function mount($slug)
     {

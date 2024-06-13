@@ -9,19 +9,11 @@ class ExtraItem extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'uuid',
-        'item',
+        'name',
+        'description',
         'cost',
         'price',
-        'quantity',
-        'subtotal',
-        'service_order_id'
+        'slug',
+        'state'
     ];
-
-    public $incrementing = false;
-
-    public function service_order()
-    {
-        return $this->belongsTo(ServiceOrder::class);
-    }
 }

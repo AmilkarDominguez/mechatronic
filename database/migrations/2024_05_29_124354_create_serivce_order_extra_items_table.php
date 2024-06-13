@@ -13,16 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('extra_items', function (Blueprint $table) {
-            $table->id();
-            $table->string('name')->nullable();
-            $table->string('description')->nullable();
+        Schema::create('service_order_extra_items', function (Blueprint $table) {
+            $table->string('uuid')->inique();
+            $table->primary(['uuid']);
+            $table->string('item');
             $table->decimal('cost', 8, 2)->nullable();
             $table->decimal('price', 8, 2)->nullable();
-            $table->string('slug')->inique();
-            $table->enum('state', ['ACTIVE', 'INACTIVE', 'DELETED'])->default('ACTIVE');
+            $table->integer('quantity')->nullable();
+            $table->decimal('subtotal', 8, 2)->nullable();
+            $table->unsignedBigInteger('service_order_id')->nullable();
+            $table->foreign('service_order_id')->references('id')->on('service_orders')->onDedelete('cascade');
             $table->timestamps();
-
         });
     }
 

@@ -55,6 +55,9 @@ use App\Http\Livewire\SaleExpense\SaleExpenseDashboard;
 use App\Http\Livewire\Service\ServiceCreate;
 use App\Http\Livewire\Service\ServiceDashboard;
 use App\Http\Livewire\Service\ServiceUpdate;
+use App\Http\Livewire\ExtraItem\ExtraItemCreate;
+use App\Http\Livewire\ExtraItem\ExtraItemDashboard;
+use App\Http\Livewire\ExtraItem\ExtraItemUpdate;
 use App\Http\Livewire\Setting\UpdateSetting;
 use App\Http\Livewire\Supplier\SupplierCreate;
 use App\Http\Livewire\Supplier\SupplierDashboard;
@@ -65,6 +68,7 @@ use App\Http\Livewire\User\UserUpdate;
 use App\Http\Livewire\Warehouse\WarehouseCreate;
 use App\Http\Livewire\Warehouse\WarehouseDashboard;
 use App\Http\Livewire\Warehouse\WarehouseUpdate;
+use App\Models\ExtraItem;
 use Illuminate\Support\Facades\Route;
 
 
@@ -171,6 +175,12 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::get('service', ServiceDashboard::class)->name('service.dashboard')->middleware('auth', 'role:admin|sales');
     Route::get('service-create', ServiceCreate::class)->name('service.create')->middleware('auth', 'role:admin|sales');
     Route::get('service-update/{slug}', ServiceUpdate::class)->name('service.update')->middleware('auth', 'role:admin|sales');
+
+    //extra-item
+    Route::get('extra-item', ExtraItemDashboard::class)->name('extra-item.dashboard')->middleware('auth', 'role:admin|sales');
+    Route::get('extra-item-create', ExtraItemCreate::class)->name('extra-item.create')->middleware('auth', 'role:admin|sales');
+    Route::get('extra-item-update/{slug}', ExtraItemUpdate::class)->name('extra-item.update')->middleware('auth', 'role:admin|sales');
+
 
     //Admin presentation type
     Route::get('product-presentation', ProductPresentationDashboard::class)->name('product-presentation.dashboard')->middleware('auth', 'role:admin');

@@ -263,6 +263,17 @@
                                     request()->routeIs('service.update')">
                                     <i class="fas fa-screwdriver"></i> Servicios
                                 </x-a-sidenav>
+
+
+                                <hr class=" mt-2">
+
+
+                                <x-a-sidenav href="{{ route('extra-item.dashboard') }}" :active="request()->routeIs('extra-item.dashboard') ||
+                                    request()->routeIs('extra-item.create') ||
+                                    request()->routeIs('extra-item.update')">
+                                    <i class="fa-solid fa-person-circle-plus"></i> Items extra
+                                </x-a-sidenav>
+
                             </div>
                         </div>
                     </div>
@@ -322,7 +333,7 @@
                                     request()->routeIs('service-order.update')">
                                     <i class="fas fa-clipboard-check"></i> Completados
                                 </x-a-sidenav>
-                                
+
                             </div>
                         </div>
                     </div>

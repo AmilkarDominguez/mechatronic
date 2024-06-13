@@ -22,8 +22,6 @@ class ProductCategoryCreate extends Component
     public $icon;
     public $view;
     public $state = 'ACTIVE';
-    //Aux
-    public $showModal = false;
 
     public function render()
     {

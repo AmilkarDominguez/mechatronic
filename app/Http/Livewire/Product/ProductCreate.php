@@ -32,8 +32,6 @@ class ProductCreate extends Component
     public $presentations;
 
 
-    //Aux
-    public $showModal = false;
 
     public function mount()
     {
