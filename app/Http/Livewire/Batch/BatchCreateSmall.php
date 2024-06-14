@@ -23,7 +23,6 @@ class BatchCreateSmall extends Component
     public $stock;
     public $expiration_date;
     public $slug;
-    public $state = 'ACTIVE';
     public $warehouses;
     public $products;
     public $supplier_id;
@@ -72,7 +71,7 @@ class BatchCreateSmall extends Component
             'description' => '',
             'expiration_date' => $this->expiration_date,
             'slug' => $slug,
-            'state' => $this->state,
+            'state' => 'ACTIVE',
         ]);
         $this->registerExpense($this->batch->product->name, $this->purchase_price, $slug);
 
@@ -103,7 +102,6 @@ class BatchCreateSmall extends Component
         $this->final_price = "";
         $this->stock = "";
         $this->expiration_date = "";
-        $this->state = "";
     }
     //Escuchadores para botones de alertas
     protected $listeners = [

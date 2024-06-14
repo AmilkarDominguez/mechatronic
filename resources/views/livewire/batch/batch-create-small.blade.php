@@ -177,26 +177,6 @@
             </p>
         @enderror
         {{-- end purchase_price --}}
-
-        {{-- state --}}
-        <x-jet-label class="mt-2" value="Estado" />
-        <div class="mt-4 space-y-2">
-            <div class="flex items-center">
-                <input wire:model="state" value="ACTIVE" type="radio"
-                    class="focus:ring-primary-500 h-4 w-4 text-primary-600 border-gray-300">
-                <label for="push_everything" class="ml-2 block text-sm font-medium text-gray-700">
-                    Activo
-                </label>
-            </div>
-            <div class="flex items-center">
-                <input wire:model="state" value="INACTIVE" type="radio"
-                    class="focus:ring-primary-500 h-4 w-4 text-primary-600 border-gray-300">
-                <label for="push_email" class="ml-2 block text-sm font-medium text-gray-700">
-                    Inactivo
-                </label>
-            </div>
-        </div>
-        {{-- end state --}}
         {{-- all errors --}}
         @if ($errors->any())
             <div class="bg-red-100 rounded-md text-red-500 p-2 font-semibold my-2">

@@ -5,7 +5,7 @@
         </div>
     </x-slot>
     {{-- variables para modal --}}
-    <section x-data="{ showModal: true, modalType: 'batch' }">
+    <section x-data="{ showModal: false, modalType: 'customer' }">
 
         <section x-show="!showModal">
 
@@ -42,25 +42,33 @@
                 </ul>
                 <div class="content bg-white px-8 py-8 border-l border-r border-b pt-4">
                     <section x-show="tab == 'tab1'" class="flex flex-col gap-8">
-                        {{-- select customer --}}
+
+                        {{-- customer --}}
                         <div wire:ignore>
                             <div class="font-bold mb-2">
                                 Cliente
+
                             </div>
-                            <select id="select-custstomers"
-                                class="border-gray-300 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 shadow-sm mt-1 block w-full rounded-md"
-                                required>
-                                <option selected>(Seleccionar)</option>
-                                @forelse ($customers as $item)
-                                    <option value="{{ $item->id }}">
-                                        CI: {{ $item->person->ci }} | NIT: {{ $item->nit }} | Nombre:
-                                        {{ $item->person->name }} - {{ $item->description }} </option>
-                                @empty
-                                    <option disabled>Sin registros</option>
-                                @endforelse
-                            </select>
+                            <div class="flex items-center">
+                                <select id="select-customers"
+                                    class="border-gray-300 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 shadow-sm mt-1 block w-full rounded-md"
+                                    required>
+                                    <option selected>(Seleccionar)</option>
+                                    @forelse ($customers as $item)
+                                        <option value="{{ $item->id }}">
+                                            CI: {{ $item->person->ci }} | NIT: {{ $item->nit }} | Nombre:
+                                            {{ $item->person->name }} - {{ $item->description }} </option>
+                                    @empty
+                                        <option disabled>Sin registros</option>
+                                    @endforelse
+                                </select>
+
+                                <x-button-plus @click.prevent="showModal = true ; modalType = 'customer'">
+                                </x-button-plus>
+                            </div>
                         </div>
                         {{-- end customer --}}
+
                         {{-- info customer --}}
                         <div class="text-sm border rounded-md p-4">
                             <div wire:loading>
@@ -71,8 +79,8 @@
                                 <span><strong>{{ $selected_customer->person->name }}</strong></span>
                                 <br>
                                 <span class="text-gray-400">CI / NIT : </span>
-                                <span><strong>{{ $selected_customer->nit }} /
-                                        {{ $selected_customer->person->ci }}</strong></span>
+                                <span><strong>{{ $selected_customer->person->ci }} /
+                                        {{ $selected_customer->nit }}</strong></span>
                                 <br>
                                 <span class="text-gray-400">Dirección : </span>
                                 <span><strong>{{ $selected_customer->person->address }}</strong></span>
@@ -111,7 +119,6 @@
                             <div class="font-bold mb-2">
                                 Técnicos
                             </div>
-
                             <div class="flex items-center">
                                 <select id="select-employees" required>
                                     <option selected>(Seleccionar)</option>
@@ -123,11 +130,7 @@
                                         <option disabled>Sin registros</option>
                                     @endforelse
                                 </select>
-                                <x-button-plus @click.prevent="showModal = true ; modalType = 'employee'">
-                                </x-button-plus>
                             </div>
-
-
                         </div>
                         {{-- end employee --}}
                         <section class="flex sm:flex-row flex-col gap-4">
@@ -655,8 +658,8 @@
                 {{-- header --}}
                 <section class="bg-gray-100 rounded-t-lg h-20 flex w-full items-center flex-start relative">
                     <label class="text-2xl font-bold ml-8">
+                        <label x-show="modalType == 'customer'">Agregar cliente</label>
                         <label x-show="modalType == 'service'">Agregar servicio</label>
-                        <label x-show="modalType == 'employee'">Agregar técnico</label>
                         <label x-show="modalType == 'extra_items'">Agregar trabajo adicional</label>
                         <label x-show="modalType == 'batch'">Agregar lote</label>
                     </label>
@@ -667,6 +670,10 @@
                 </section>
                 {{-- end header --}}
                 {{-- body --}}
+                <section x-show="modalType == 'customer'"
+                    class="bg-white  flex w-full items-center relative p-8 rounded-b-lg">
+                    <livewire:customer.customer-create-small />
+                </section>
                 <section x-show="modalType == 'service'"
                     class="bg-white  flex w-full items-center relative p-8 rounded-b-lg">
                     <livewire:service.service-create-small />
@@ -724,12 +731,12 @@
 
 
         function initCustomerSelect2() {
-            $('#select-custstomers').select2();
+            $('#select-customers').select2();
             $(".select2-container").css("width", "100%");
         }
 
         function setEventCustomerSelect() {
-            $('#select-custstomers').on('change', function() {
+            $('#select-customers').on('change', function() {
                 @this.set('customer_id', this.value);
                 @this.onChangeSelectCustomer();
             });
@@ -812,6 +819,28 @@
             window.dispatchEvent(new Event('close-modal'));
         });
 
+        Livewire.on('customerAddedEvent', (items, id) => {
+            const selectElement = $('#select-customers');
+            selectElement.html('')
+            $.each(items, function(key, value) {
+
+                const customer = {
+                    ci: value['person']['ci'],
+                    nit: value['nit'] ? value['nit'] : '',
+                    name: value['person']['name'],
+                }
+
+                selectElement.append(
+                    $("<option></option>")
+                    .attr("value", value['id'])
+                    .text(
+                        `${customer.ci} | NIT: ${customer.nit} | Nombre: ${customer.name}`
+                    )
+                );
+            });
+            selectElement.val(id);
+            window.dispatchEvent(new Event('close-modal'));
+        });
 
         Livewire.on('refreshSelects', batches => {
             const selectElement = $('#select-batches');

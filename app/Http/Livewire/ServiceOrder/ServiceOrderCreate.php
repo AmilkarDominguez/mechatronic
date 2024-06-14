@@ -436,7 +436,8 @@ class ServiceOrderCreate extends Component
         'confirmed',
         'serviceAdded',
         'extraItemAdded',
-        'batchAdded'
+        'batchAdded',
+        'customerAdded'
     ];
 
     public function confirmed()
@@ -468,4 +469,13 @@ class ServiceOrderCreate extends Component
         $this->batch_id = $id;
         $this->emit('batchAddedEvent', $this->batches, $id);
     }
+
+    public function customerAdded($id)
+    {
+        $this->selected_customer = Customer::find($id);
+        $this->customers = Customer::all()->where('state', 'ACTIVE');
+        $this->customer_id = $id;
+        $this->emit('customerAddedEvent', $this->customers, $id);
+    }
+    
 }
