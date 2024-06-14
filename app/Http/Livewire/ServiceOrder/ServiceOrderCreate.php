@@ -47,7 +47,7 @@ class ServiceOrderCreate extends Component
     public $selected_batch;
     public $sale_details = [];
     public $sale_details_total = 0;
-    
+
     public $extra_items;
     public $extra_item_id;
     public $selected_extra_item;
@@ -231,6 +231,8 @@ class ServiceOrderCreate extends Component
         if ($this->service_id > 0) {
             $this->selected_service = Service::find($this->service_id);
             $this->additional_service_price = $this->selected_service->price;
+            $this->additional_percent_employe = 0;
+            $this->additional_extra_item_quantity = 1;
         }
     }
 
@@ -433,12 +435,21 @@ class ServiceOrderCreate extends Component
     protected $listeners = [
         'confirmed',
         'serviceAdded',
-        'extraItemAdded'
+        'extraItemAdded',
+        'batchAdded'
     ];
 
     public function confirmed()
     {
         return redirect()->route('service-order.dashboard');
+    }
+
+    public function serviceAdded($id)
+    {
+        $this->services = Service::all()->where('state', 'ACTIVE');
+        $this->service_id = $id;
+        $this->onChangeSelectService();
+        $this->emit('serviceAddedEvent', $this->services, $id);
     }
 
     public function extraItemAdded($id)
@@ -447,5 +458,14 @@ class ServiceOrderCreate extends Component
         $this->extra_item_id = $id;
         $this->onChangeSelectExtraItems();
         $this->emit('extraItemAddedEvent', $this->extra_items, $id);
+    }
+
+    public function batchAdded($id)
+    {
+        $this->selected_batch = Batch::find($id);
+        $this->warehouse_id = $this->selected_batch->warehouse_id;
+        $this->batches = Batch::where('state', 'ACTIVE')->where('warehouse_id', $this->warehouse_id)->where('stock', '>', '0')->with('product')->get();
+        $this->batch_id = $id;
+        $this->emit('batchAddedEvent', $this->batches, $id);
     }
 }

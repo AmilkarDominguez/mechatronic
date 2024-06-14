@@ -1,5 +1,4 @@
 <div class="w-full">
-
     <form wire:submit.prevent="submit" class="w-full flex flex-col">
         {{-- name --}}
         <div class="">

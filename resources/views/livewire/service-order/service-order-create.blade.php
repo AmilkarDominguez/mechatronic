@@ -5,7 +5,7 @@
         </div>
     </x-slot>
     {{-- variables para modal --}}
-    <section x-data="{ showModal: false, modalType: 'service' }">
+    <section x-data="{ showModal: true, modalType: 'batch' }">
 
         <section x-show="!showModal">
 
@@ -186,20 +186,24 @@
                             </select>
                         </div>
                         {{-- end warehouse --}}
-                        {{-- select batch --}}
+                        {{-- batch --}}
                         <div wire:ignore>
                             <div class="font-bold mb-2">
                                 Lote
                             </div>
-                            <select id="select-batches" required>
-                                <option selected>(Seleccionar)</option>
-                                @forelse ($batches as $item)
-                                    <option value="{{ $item->id }}">{{ $item->product->description }}
-                                    </option>
-                                @empty
-                                    <option disabled>Sin registros</option>
-                                @endforelse
-                            </select>
+                            <div class="flex items-center">
+                                <select id="select-batches" required>
+                                    <option selected>(Seleccionar)</option>
+                                    @forelse ($batches as $item)
+                                        <option value="{{ $item->id }}">{{ $item->product->description }}
+                                        </option>
+                                    @empty
+                                        <option disabled>Sin registros</option>
+                                    @endforelse
+                                </select>
+                                <x-button-plus @click.prevent="showModal = true ; modalType = 'batch'">
+                                </x-button-plus>
+                            </div>
                         </div>
                         {{-- end batch --}}
                         {{-- info batch --}}
@@ -654,6 +658,7 @@
                         <label x-show="modalType == 'service'">Agregar servicio</label>
                         <label x-show="modalType == 'employee'">Agregar técnico</label>
                         <label x-show="modalType == 'extra_items'">Agregar trabajo adicional</label>
+                        <label x-show="modalType == 'batch'">Agregar lote</label>
                     </label>
                     <button class="absolute right-8 text-4xl hover:scale-110 cursor-pointer"
                         @click.prevent="showModal = false">
@@ -666,13 +671,13 @@
                     class="bg-white  flex w-full items-center relative p-8 rounded-b-lg">
                     <livewire:service.service-create-small />
                 </section>
-                <section x-show="modalType == 'service'"
-                    class="bg-white  flex w-full items-center relative p-8 rounded-b-lg">
-                    <livewire:service.service-create-small />
-                </section>
                 <section x-show="modalType == 'extra_items'"
                     class="bg-white  flex w-full items-center relative p-8 rounded-b-lg">
                     <livewire:extra-item.extra-item-create-small />
+                </section>
+                <section x-show="modalType == 'batch'"
+                    class="bg-white  flex w-full items-center relative p-8 rounded-b-lg">
+                    <livewire:batch.batch-create-small />
                 </section>
             </section>
         </section>
@@ -792,6 +797,21 @@
             selectElement.val(id);
             window.dispatchEvent(new Event('close-modal'));
         });
+
+        Livewire.on('batchAddedEvent', (items, id) => {
+            const selectElement = $('#select-batches');
+            selectElement.html('')
+            $.each(items, function(key, value) {
+                selectElement.append(
+                    $("<option></option>")
+                    .attr("value", value['id'])
+                    .text(value['product']['description'])
+                );
+            });
+            selectElement.val(id);
+            window.dispatchEvent(new Event('close-modal'));
+        });
+
 
         Livewire.on('refreshSelects', batches => {
             const selectElement = $('#select-batches');
