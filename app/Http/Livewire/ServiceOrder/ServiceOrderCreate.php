@@ -432,7 +432,8 @@ class ServiceOrderCreate extends Component
 
     protected $listeners = [
         'confirmed',
-        'serviceAdded'
+        'serviceAdded',
+        'extraItemAdded'
     ];
 
     public function confirmed()
@@ -440,9 +441,11 @@ class ServiceOrderCreate extends Component
         return redirect()->route('service-order.dashboard');
     }
 
-    public function serviceAdded($id)
+    public function extraItemAdded($id)
     {
-        $this->services = Service::all()->where('state', 'ACTIVE');
-        $this->emit('serviceAddedEvent', $this->services, $id);
+        $this->extra_items = ExtraItem::all()->where('state', 'ACTIVE');
+        $this->extra_item_id = $id;
+        $this->onChangeSelectExtraItems();
+        $this->emit('extraItemAddedEvent', $this->extra_items, $id);
     }
 }

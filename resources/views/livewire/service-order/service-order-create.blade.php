@@ -267,7 +267,7 @@
                                     <option selected>(Seleccionar)</option>
                                     @forelse ($extra_items as $item)
                                         <option value="{{ $item->id }}">
-                                             {{ $item->name }}
+                                            {{ $item->name }}
                                         </option>
                                     @empty
                                         <option disabled>Sin registros</option>
@@ -653,6 +653,7 @@
                     <label class="text-2xl font-bold ml-8">
                         <label x-show="modalType == 'service'">Agregar servicio</label>
                         <label x-show="modalType == 'employee'">Agregar técnico</label>
+                        <label x-show="modalType == 'extra_items'">Agregar trabajo adicional</label>
                     </label>
                     <button class="absolute right-8 text-4xl hover:scale-110 cursor-pointer"
                         @click.prevent="showModal = false">
@@ -661,8 +662,17 @@
                 </section>
                 {{-- end header --}}
                 {{-- body --}}
-                <section class="bg-white  flex w-full items-center relative p-8 rounded-b-lg">
+                <section x-show="modalType == 'service'"
+                    class="bg-white  flex w-full items-center relative p-8 rounded-b-lg">
                     <livewire:service.service-create-small />
+                </section>
+                <section x-show="modalType == 'service'"
+                    class="bg-white  flex w-full items-center relative p-8 rounded-b-lg">
+                    <livewire:service.service-create-small />
+                </section>
+                <section x-show="modalType == 'extra_items'"
+                    class="bg-white  flex w-full items-center relative p-8 rounded-b-lg">
+                    <livewire:extra-item.extra-item-create-small />
                 </section>
             </section>
         </section>
@@ -720,7 +730,7 @@
             });
         }
 
-        
+
         function initExtraItemSelect2() {
             $('#select-extra-items').select2();
             $(".select2-container").css("width", "100%");
@@ -763,6 +773,20 @@
                     $("<option></option>")
                     .attr("value", value['id'])
                     .text(value['code'] + ' | ' + value['name'])
+                );
+            });
+            selectElement.val(id);
+            window.dispatchEvent(new Event('close-modal'));
+        });
+
+        Livewire.on('extraItemAddedEvent', (items, id) => {
+            const selectElement = $('#select-extra-items');
+            selectElement.html('')
+            $.each(items, function(key, value) {
+                selectElement.append(
+                    $("<option></option>")
+                    .attr("value", value['id'])
+                    .text(value['name'])
                 );
             });
             selectElement.val(id);
