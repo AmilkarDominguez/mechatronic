@@ -4,7 +4,8 @@
             Registrar orden de servicio
         </div>
     </x-slot>
-    <section x-data="{ showModal: true, modalType: 'service' }">
+    {{-- variables para modal --}}
+    <section x-data="{ showModal: false, modalType: 'service' }">
 
         <section x-show="!showModal">
 
@@ -255,15 +256,30 @@
                     </section>
 
                     <section x-show="tab == 'tab4'" class="flex flex-col gap-8">
-                        {{-- additional_extra_item --}}
+
+                        {{-- extra_items --}}
                         <div wire:ignore>
                             <div class="font-bold mb-2">
-                                Item
+                                Trabajos adicionales
                             </div>
-                            <x-jet-input type="text" placeholder="Item" wire:model="additional_extra_item"
-                                class="mt-1 block w-full rounded-md" required />
+                            <div class="flex items-center">
+                                <select id="select-extra-items" required>
+                                    <option selected>(Seleccionar)</option>
+                                    @forelse ($extra_items as $item)
+                                        <option value="{{ $item->id }}">
+                                             {{ $item->name }}
+                                        </option>
+                                    @empty
+                                        <option disabled>Sin registros</option>
+                                    @endforelse
+                                </select>
+
+                                <x-button-plus @click.prevent="showModal = true ; modalType = 'extra_items'">
+                                </x-button-plus>
+                            </div>
                         </div>
-                        {{-- end additional_extra_item --}}
+                        {{-- end extra_items --}}
+
                         <section class="flex sm:flex-row flex-col gap-4">
                             {{-- additional_extra_item_cost --}}
                             <div wire:ignore class="w-full">
@@ -528,31 +544,32 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                        @foreach ($extra_items as $item)
+                        @foreach ($additional_extra_items as $item)
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     {{ $loop->index + 1 }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {{ $item['item'] }}
+                                    {{ $item['name'] }}
                                 </td>
 
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     <x-jet-input class="rounded-fx" type="number" step="1"
-                                        wire:model="extra_items.{{ $item['uuid'] }}.cost" min="1"
+                                        wire:model="additional_extra_items.{{ $item['uuid'] }}.cost" min="1"
                                         max="999999" wire:keyup="updateExtraItem('{{ $item['uuid'] }}')"
                                         wire:change="updateExtraItem('{{ $item['uuid'] }}')" />
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     <x-jet-input class="rounded-fx" type="number" step="1"
-                                        wire:model="extra_items.{{ $item['uuid'] }}.price" min="1"
+                                        wire:model="additional_extra_items.{{ $item['uuid'] }}.price" min="1"
                                         max="999999" wire:keyup="updateExtraItem('{{ $item['uuid'] }}')"
                                         wire:change="updateExtraItem('{{ $item['uuid'] }}')" />
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     <x-jet-input class="rounded-fx" type="number" step="1"
-                                        wire:model="extra_items.{{ $item['uuid'] }}.quantity" min="1"
-                                        max="999" wire:keyup="updateExtraItem('{{ $item['uuid'] }}')"
+                                        wire:model="additional_extra_items.{{ $item['uuid'] }}.quantity"
+                                        min="1" max="999"
+                                        wire:keyup="updateExtraItem('{{ $item['uuid'] }}')"
                                         wire:change="updateExtraItem('{{ $item['uuid'] }}')" />
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -571,7 +588,7 @@
                                 Total $
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-2xl font-bold ">
-                                {{ $extra_items_total }}
+                                {{ $additional_extra_items_total }}
                             </td>
                         </tr>
                     </tbody>
@@ -703,11 +720,25 @@
             });
         }
 
+        
+        function initExtraItemSelect2() {
+            $('#select-extra-items').select2();
+            $(".select2-container").css("width", "100%");
+        }
+
+        function setEventExtraItemSelect() {
+            $('#select-extra-items').on('change', function() {
+                @this.set('extra_item_id', this.value);
+                @this.onChangeSelectExtraItems();
+            });
+        }
+
         function initSelects() {
             initServiceSelect2();
             initEmployeeSelect2();
             initCustomerSelect2();
             initBatchSelect2();
+            initExtraItemSelect2();
         }
 
 
@@ -716,6 +747,7 @@
             setEventEmployeeSelect();
             setEventBatchSelect();
             setEventCustomerSelect();
+            setEventExtraItemSelect();
         }
 
         document.addEventListener('livewire:load', function() {

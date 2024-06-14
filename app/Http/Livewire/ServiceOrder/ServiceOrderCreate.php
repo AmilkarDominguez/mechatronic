@@ -15,6 +15,7 @@ use App\Models\LabourDetail;
 use App\Models\Promoter;
 use App\Models\ServiceOrderBatch;
 use App\Models\Service;
+use App\Models\ServiceOrderExtraItem;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
@@ -46,13 +47,15 @@ class ServiceOrderCreate extends Component
     public $selected_batch;
     public $sale_details = [];
     public $sale_details_total = 0;
-
-    public $additional_extra_item;
+    
+    public $extra_items;
+    public $extra_item_id;
+    public $selected_extra_item;
     public $additional_extra_item_cost = 0;
     public $additional_extra_item_price = 0;
     public $additional_extra_item_quantity = 1;
-    public $extra_items = [];
-    public $extra_items_total = 0;
+    public $additional_extra_items = [];
+    public $additional_extra_items_total = 0;
 
     public $customers;
     public $customer_id;
@@ -66,6 +69,7 @@ class ServiceOrderCreate extends Component
         $this->warehouses = Warehouse::all()->where('state', 'ACTIVE');
         $this->employees = Employee::all()->where('state', 'ACTIVE');
         $this->services = Service::all()->where('state', 'ACTIVE');
+        $this->extra_items = ExtraItem::all()->where('state', 'ACTIVE');
 
         //Seleccionando primer almacen
         if ($this->warehouses[0]) {
@@ -122,14 +126,14 @@ class ServiceOrderCreate extends Component
                 ]);
             }
             $this->updateStock();
-            foreach ($this->extra_items as $item) {
-                ExtraItem::create([
+            foreach ($this->additional_extra_items as $item) {
+                ServiceOrderExtraItem::create([
                     'uuid' => $item['uuid'],
-                    'item' => $item['item'],
                     'cost' => $item['cost'],
                     'price' => $item['price'],
                     'quantity' => $item['quantity'],
                     'subtotal' => $item['subtotal'],
+                    'extra_item_id' => $item['id'],
                     'service_order_id' => $service_order->id,
                 ]);
             }
@@ -227,6 +231,16 @@ class ServiceOrderCreate extends Component
         if ($this->service_id > 0) {
             $this->selected_service = Service::find($this->service_id);
             $this->additional_service_price = $this->selected_service->price;
+        }
+    }
+
+    public function onChangeSelectExtraItems()
+    {
+        if ($this->extra_item_id > 0) {
+            $this->selected_extra_item = ExtraItem::find($this->extra_item_id);
+            $this->additional_extra_item_cost = $this->selected_extra_item->cost;
+            $this->additional_extra_item_price = $this->selected_extra_item->price;
+            $this->additional_extra_item_quantity = 1;
         }
     }
 
@@ -365,17 +379,18 @@ class ServiceOrderCreate extends Component
 
     function addExtraItem()
     {
-        if ($this->additional_extra_item != null) {
+        if ($this->selected_extra_item != null) {
             $uuid = (string) Str::uuid();
             $item = [
                 'uuid' => $uuid,
-                'item' => $this->additional_extra_item,
+                'id' => $this->selected_extra_item->id,
+                'name' => $this->selected_extra_item->name,
                 'cost' => $this->additional_extra_item_cost,
                 'price' => $this->additional_extra_item_price,
                 'quantity' => $this->additional_extra_item_quantity,
                 'subtotal' => $this->additional_extra_item_quantity * $this->additional_extra_item_price
             ];
-            $this->extra_items[$uuid] = $item;
+            $this->additional_extra_items[$uuid] = $item;
             $this->calcExtraItemsTotal();
             $this->toastSuccess('Item agregado.');
         } else {
@@ -385,16 +400,16 @@ class ServiceOrderCreate extends Component
 
     function updateExtraItem($uuid)
     {
-        $price = $this->extra_items[$uuid]['price'];
-        $quantity = $this->extra_items[$uuid]['quantity'];
-        $this->extra_items[$uuid]['subtotal'] = $price * $quantity;
+        $price = $this->additional_extra_items[$uuid]['price'];
+        $quantity = $this->additional_extra_items[$uuid]['quantity'];
+        $this->additional_extra_items[$uuid]['subtotal'] = $price * $quantity;
         $this->calcExtraItemsTotal();
     }
 
     function removeExtraItem($uuid)
     {
-        if (isset($this->extra_items[$uuid])) {
-            unset($this->extra_items[$uuid]);
+        if (isset($this->additional_extra_items[$uuid])) {
+            unset($this->additional_extra_items[$uuid]);
             $this->calcExtraItemsTotal();
             $this->toastSuccess('Item removido.');
         }
@@ -402,16 +417,16 @@ class ServiceOrderCreate extends Component
 
     function calcExtraItemsTotal()
     {
-        $this->extra_items_total = 0;
-        foreach ($this->extra_items as $item) {
-            $this->extra_items_total += $item['subtotal'];
+        $this->additional_extra_items_total = 0;
+        foreach ($this->additional_extra_items as $item) {
+            $this->additional_extra_items_total += $item['subtotal'];
         }
         $this->calcTotal();
     }
 
     function calcTotal()
     {
-        $this->total = $this->labours_total + $this->sale_details_total + $this->extra_items_total;
+        $this->total = $this->labours_total + $this->sale_details_total + $this->additional_extra_items_total;
     }
 
 

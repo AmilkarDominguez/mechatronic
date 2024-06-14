@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\ExtraItem;
 use App\Models\Product;
 use App\Models\Service;
 use Illuminate\Support\Str;
@@ -49,6 +50,33 @@ class ProductSeeder extends Seeder
             'code'=> 'MMC',
             'description' => 'Mantenimiento moto china completo',
             'price' => 250,
+            'slug' => Str::uuid(),
+            'state' => 'ACTIVE',
+        ]);
+
+        ExtraItem::create([
+            'name'=>'Tapizado de interior',
+            'cost'=> 800,
+            'price' => 1500,
+            'description' => 'Tapizado de interior',
+            'slug' => Str::uuid(),
+            'state' => 'ACTIVE',
+        ]);
+
+        ExtraItem::create([
+            'name'=>'Tapizado de volante',
+            'cost'=> 300,
+            'price' => 450,
+            'description' => 'Tapizado de volante',
+            'slug' => Str::uuid(),
+            'state' => 'ACTIVE',
+        ]);
+
+        ExtraItem::create([
+            'name'=>'Soldadura de escape',
+            'cost'=> 500,
+            'price' => 650,
+            'description' => 'Soldadura de escape',
             'slug' => Str::uuid(),
             'state' => 'ACTIVE',
         ]);
