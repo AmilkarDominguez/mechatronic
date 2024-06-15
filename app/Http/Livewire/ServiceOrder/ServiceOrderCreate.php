@@ -26,7 +26,7 @@ class ServiceOrderCreate extends Component
 
 
     public $payment_type = 'CONTADO';
-    public $description;
+    public $description = '';
 
     public $services;
     public $service_id;
@@ -93,7 +93,7 @@ class ServiceOrderCreate extends Component
         $this->validate();
         if ($this->checkStock()) {
             $service_order = ServiceOrder::create([
-                'description' => $this->description || '',
+                'description' => $this->description,
                 'total' => $this->total,
                 'must' => $this->total,
                 'slug' => Str::uuid(),

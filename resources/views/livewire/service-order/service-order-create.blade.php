@@ -634,6 +634,11 @@
                     <x-textarea placeholder="Recomendación" wire:model="description" class="mt-1 block w-full" />
                 </div>
                 {{-- end description --}}
+                {{-- total --}}
+                <div class="font-bold text-4xl mb-2 flex justify-end">
+                    Total $ {{ $total }}
+                </div>
+                {{-- end total --}}
             </section>
 
             <section class="container m-auto mt-5 mb-5">
