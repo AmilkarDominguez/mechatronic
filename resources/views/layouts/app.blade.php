@@ -328,9 +328,7 @@
                                     <i class="far fa-clipboard"></i> En curso
                                 </x-a-sidenav>
 
-                                <x-a-sidenav href="{{ route('service-order.dashboard') }}" :active="request()->routeIs('service-order.dashboard') ||
-                                    request()->routeIs('service-order.create') ||
-                                    request()->routeIs('service-order.update')">
+                                <x-a-sidenav href="{{ route('service-order-completed.dashboard') }}" :active="request()->routeIs('service-order-completed.dashboard')">
                                     <i class="fas fa-clipboard-check"></i> Completados
                                 </x-a-sidenav>
 

@@ -4,8 +4,8 @@
     <a href="{{ route('payment.dashboard', $slug) }}"
         class="p-1 text-primary-600 hover:bg-primary-600 hover:text-white rounded-full">
 
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor" stroke-width="2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+            stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round"
                 d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
         </svg>
@@ -23,8 +23,7 @@
     </a>
     {{-- end view --}}
     {{-- print --}}
-    <a href="{{ route('service-order.print', $slug) }}"
-        class="p-1 hover:bg-gray-600 hover:text-white rounded-full">
+    <a href="{{ route('service-order.print', $slug) }}" class="p-1 hover:bg-gray-600 hover:text-white rounded-full">
 
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd"
@@ -34,19 +33,28 @@
     </a>
     {{-- end print --}}
     {{-- edit --}}
-{{--    <a href="{{ route('service-order.update', $slug) }}"--}}
-{{--       class="p-1 text-blue-600 hover:bg-blue-600 hover:text-white rounded-full">--}}
-{{--        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">--}}
-{{--            <path--}}
-{{--                d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />--}}
-{{--        </svg>--}}
-{{--    </a>--}}
+    {{--    <a href="{{ route('service-order.update', $slug) }}" --}}
+    {{--       class="p-1 text-blue-600 hover:bg-blue-600 hover:text-white rounded-full"> --}}
+    {{--        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"> --}}
+    {{--            <path --}}
+    {{--                d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" /> --}}
+    {{--        </svg> --}}
+    {{--    </a> --}}
     {{-- end edit --}}
     {{-- delet --}}
-    <button wire:click="toastConfirmDelet('{{ $id }}')"
+    <button title="Completar" wire:click="toastConfirmComplete('{{ $id }}')"
+        class="p-1 text-green-500 hover:bg-green-500 hover:text-white rounded-full ">
+        <div class="h-5 w-5 flex justify-center items-center rounded-full">
+            <i class="fas fa-clipboard-check"></i>
+        </div>
+    </button>
+    {{-- end delet --}}
+    {{-- delet --}}
+    <button title="Anular" wire:click="toastConfirmDelet('{{ $id }}')"
         class="p-1 text-red-600 hover:bg-red-600 hover:text-white rounded-full">
-        <svg  class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd" />
+        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z"
+                clip-rule="evenodd" />
         </svg>
     </button>
     {{-- end delet --}}

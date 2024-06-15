@@ -477,5 +477,4 @@ class ServiceOrderCreate extends Component
         $this->customer_id = $id;
         $this->emit('customerAddedEvent', $this->customers, $id);
     }
-    
 }

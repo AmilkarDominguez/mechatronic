@@ -58,6 +58,7 @@ use App\Http\Livewire\Service\ServiceUpdate;
 use App\Http\Livewire\ExtraItem\ExtraItemCreate;
 use App\Http\Livewire\ExtraItem\ExtraItemDashboard;
 use App\Http\Livewire\ExtraItem\ExtraItemUpdate;
+use App\Http\Livewire\ServiceOrder\ServiceOrderDashboardCompleted;
 use App\Http\Livewire\Setting\UpdateSetting;
 use App\Http\Livewire\Supplier\SupplierCreate;
 use App\Http\Livewire\Supplier\SupplierDashboard;
@@ -133,6 +134,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::get('service-order-information/{slug}', ServiceOrderInformation::class)->name('service-order.information')->middleware('auth', 'role:admin|sales');
     Route::get('service-order-print/{slug}', ServiceOrderPrint::class)->name('service-order.print')->middleware('auth', 'role:admin|sales');
     Route::get('service-order-cancelled', SaleCancelledDashboard::class)->name('service-order-cancelled.dashboard')->middleware('auth', 'role:admin');
+    Route::get('service-order-completed', ServiceOrderDashboardCompleted::class)->name('service-order-completed.dashboard')->middleware('auth', 'role:admin|sales');
 
     //Admin Payment
     Route::get('payment/{slug}', PaymentDashboard::class)->name('payment.dashboard')->middleware('auth', 'role:admin|sales');

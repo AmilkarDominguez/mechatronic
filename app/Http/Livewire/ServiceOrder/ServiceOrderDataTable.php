@@ -20,6 +20,8 @@ class ServiceOrderDataTable extends LivewireDatatable
     public $batch;
     public $hideable = 'select';
 
+    public $selectedId;
+
     public function builder()
     {
         return (ServiceOrder::query()
@@ -118,11 +120,9 @@ class ServiceOrderDataTable extends LivewireDatatable
         }
     }
 
-    public $idDelet;
-
     public function toastConfirmDelet($id)
     {
-        $this->idDelet = $id;
+        $this->selectedId = $id;
         $this->confirm(__('¿Estas seguro que seas anular el registro?'), [
             'icon' => 'warning',
             'position' => 'center',
@@ -137,14 +137,40 @@ class ServiceOrderDataTable extends LivewireDatatable
 
     protected $listeners = [
         'confirmed',
+        'confirmedCompleteServiceOrder',
     ];
 
     public function confirmed()
     {
-        if ($this->idDelet) {
-            $ServiceOrder = ServiceOrder::find($this->idDelet);
-            $this->cancelsale($this->idDelet);
+        if ($this->selectedId) {
+            $ServiceOrder = ServiceOrder::find($this->selectedId);
+            $this->cancelsale($this->selectedId);
             $ServiceOrder->state = "DELETED";
+            $ServiceOrder->update();
+        }
+    }
+
+
+    public function toastConfirmComplete($id)
+    {
+        $this->selectedId = $id;
+        $this->confirm(__('¿Estas seguro que seas completar el registro?'), [
+            'icon' => 'warning',
+            'position' => 'center',
+            'toast' => false,
+            'confirmButtonText' => 'Si',
+            'showConfirmButton' => true,
+            'showCancelButton' => true,
+            'onConfirmed' => 'confirmedCompleteServiceOrder',
+            'confirmButtonColor' => '#A5DC86',
+        ]);
+    }
+
+    public function confirmedCompleteServiceOrder()
+    {
+        if ($this->selectedId) {
+            $ServiceOrder = ServiceOrder::find($this->selectedId);
+            $ServiceOrder->state = "COMPLETED";
             $ServiceOrder->update();
         }
     }
