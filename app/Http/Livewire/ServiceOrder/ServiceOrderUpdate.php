@@ -24,12 +24,9 @@ class ServiceOrderUpdate extends Component
 {
     use LivewireAlert;
 
-
     public $service_order;
-
     public $payment_type;
     public $description = '';
-
 
     public $labours_details = [];
     public $services;
@@ -153,7 +150,6 @@ class ServiceOrderUpdate extends Component
         }
         $this->calcExtraItemsTotal();
     }
-
 
     public function render()
     {

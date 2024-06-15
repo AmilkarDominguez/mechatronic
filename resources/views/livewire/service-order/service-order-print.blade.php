@@ -2,11 +2,11 @@
     <div>
         <table class="border w-full">
             <tr class="border">
-                <td class="border text-center font-bold text-2xl" colspan="3">COMPROBANTE DE VENTA V-{{ $service_order->id }}</td>
+                <td class="border text-center font-bold text-2xl" colspan="3">COMPROBANTE DE VENTA
+                    V-{{ $service_order->id }}</td>
             </tr>
             <tr class="border">
                 <td class="border ">Fecha de Imp.: <b>{{ now() }}</b></td>
-                <td class="border">Entrega: <b>{{ $service_order->warehouse->name }}</b></td>
                 <td class="border ">Forma de pago: <b>{{ $service_order->payment_type }}</b></td>
             </tr>
 
@@ -18,8 +18,8 @@
             </tr>
             <tr class="border">
                 <td class="border text-left" colspan="3">
-                    Cliente: {{ $customer->person->name }} - {{ $customer->description }}<br>
-                    Dirección: {{ $customer->person->address }}
+                    Cliente: {{ $selected_customer->person->name }} - {{ $selected_customer->description }}<br>
+                    Dirección: {{ $selected_customer->person->address }}
                 </td>
             </tr>
             <tr class="border">
@@ -27,62 +27,145 @@
             </tr>
         </table>
         <hr class="border m-2">
-        @if($this->setting->print_logo)
+        @if ($this->setting->print_logo)
             <div class="absolute -z-10 flex justify-center items-center w-full">
-                <img class="h-40 mt-10 opacity-20" src="{{ asset('/storage/setting-logo/logo-setting.png') }}" alt="logo">
+                <img class="h-40 mt-10 opacity-20" src="{{ asset('/storage/setting-logo/logo-setting.png') }}"
+                    alt="logo">
             </div>
         @endif
+
+        {{-- MANO DE OBRA --}}
+        <div class="my-2">
+            DETALLE MANO DE OBRA
+        </div>
         <table class="border w-full">
             <thead>
-            <tr>
-                <th class="text-center border" colspan="4">Producto</th>
-                <th class="text-center border">Presentación</th>
-                <th class="text-center border">Precio</th>
-                <th class="text-center border">Cantidad</th>
-                <th class="text-center border">Subtotal</th>
-            </tr>
-            </thead>
-            @foreach ($saledetails as $item)
                 <tr>
-                    <td class="border" colspan="4">
-
-                        {{ $item->batch->product->name }}
+                    <th class="text-center border" colspan="4">ITEM</th>
+                    <th class="text-center border">DESCRIPCIÓN</th>
+                    <th class="text-center border">PRECIO</th>
+                    <th class="text-center border">CATIDAD</th>
+                    <th class="text-center border">SUB TOTAL</th>
+                </tr>
+            </thead>
+            @foreach ($labours_details as $item)
+                <tr>
+                    <td class="border text-center" colspan="4">
+                        {{ $loop->index + 1 }}
                     </td>
                     <td class="border text-center">
-                        {{ $item->batch->product->presentation->name }}
+                        {{ $item->service->name }}
                     </td>
-                    <td class="border text-center">{{$item->price}}</td>
+                    <td class="border text-center">
+                        {{ $item->price }}
+                    </td>
                     <td class="border text-center">
                         {{ $item->quantity }}
                     </td>
                     <td class="border text-right">
-                        {{ $item->subtotal }} Bs.
+                        {{ $item->subtotal }}
                     </td>
                 </tr>
-                @if ($loop->last)
-                    @for ($i = 0; $i < (6 - $loop->count); $i++)
-                        <tr>
-                            <td class="border" colspan="4">
-                                &nbsp;
-                            </td>
-                            <td class="border">
-                            </td>
-                            <td class="border">
-                            </td>
-                            <td class="border">
-                            </td>
-                        </tr>
-                    @endfor
-                @endif
             @endforeach
             <tr>
                 <td class="border text-right" colspan="8">
-                    IMPORTE TOTAL <b>{{ $service_order->total }} Bs.</b>
+                    TOTAL MANO DE OBRA <b>{{ $labours_total }} Bs.</b>
                 </td>
             </tr>
 
 
         </table>
+        {{-- END MANO DE OBRA --}}
+
+        {{-- REPUESTOS E INSUMOS --}}
+        <div class="my-2">
+            DETALLE REPUESTOS E INSUMOS
+        </div>
+        <table class="border w-full">
+            <thead>
+                <tr>
+                    <th class="text-center border" colspan="4">ITEM</th>
+                    <th class="text-center border">DESCRIPCIÓN</th>
+                    <th class="text-center border">PRECIO</th>
+                    <th class="text-center border">CATIDAD</th>
+                    <th class="text-center border">DESCUENTO</th>
+                    <th class="text-center border">SUB TOTAL</th>
+                </tr>
+            </thead>
+            @foreach ($serviceOrderBatches as $item)
+                <tr>
+                    <td class="border text-center" colspan="4">
+                        {{ $loop->index + 1 }}
+                    </td>
+                    <td class="border text-center">
+                        {{ $item->batch->product->name }} - {{ $item->batch->product->description }}
+                    </td>
+                    <td class="border text-center">
+                        {{ $item->price }}
+                    </td>
+                    <td class="border text-center">
+                        {{ $item->quantity }}
+                    </td>
+                    <td class="border text-center">
+                        {{ $item->discount }}
+                    </td>
+                    <td class="border text-right">
+                        {{ $item->subtotal }}
+                    </td>
+                </tr>
+            @endforeach
+            <tr>
+                <td class="border text-right" colspan="9">
+                    TOTAL REPUESTOS E INSUMOS <b>{{ $sale_details_total }} Bs.</b>
+                </td>
+            </tr>
+
+        </table>
+        {{-- END REPUESTOS E INSUMOS --}}
+
+        {{-- TRABAJOS ADICIONALES --}}
+        <div class="my-2">
+            DETALLE TRABAJOS ADICIONALES
+        </div>
+        <table class="border w-full">
+            <thead>
+                <tr>
+                    <th class="text-center border" colspan="4">ITEM</th>
+                    <th class="text-center border">DESCRIPCIÓN</th>
+                    <th class="text-center border">PRECIO</th>
+                    <th class="text-center border">CATIDAD</th>
+                    <th class="text-center border">SUB TOTAL</th>
+                </tr>
+            </thead>
+            @foreach ($serviceOrderExtraItems as $item)
+                <tr>
+                    <td class="border text-center" colspan="4">
+                        {{ $loop->index + 1 }}
+                    </td>
+                    <td class="border text-center">
+                        {{ $item->extra_item->name }}
+                    </td>
+                    <td class="border text-center">
+                        {{ $item->price }}
+                    </td>
+                    <td class="border text-center">
+                        {{ $item->quantity }}
+                    </td>
+                    <td class="border text-right">
+                        {{ $item->subtotal }}
+                    </td>
+                </tr>
+            @endforeach
+            <tr>
+                <td class="border text-right" colspan="8">
+                    TOTAL TRABAJOS ADICIONALES <b>{{ $additional_extra_items_total }} Bs.</b>
+                </td>
+            </tr>
+
+        </table>
+        {{-- END TRABAJOS ADICIONALES --}}
+
+
         <table class="w-full mt-12">
             <tr>
                 <td>
@@ -102,7 +185,7 @@
 
     <div class="container m-auto bg-white rounded-md w-96 p-1 mt-5 mb-10 print:hidden" wire:none>
         <x-jet-button id="btn_print" onclick="printDiv()"
-                      class=" h-12 w-full rounded-full flex items-center justify-center">
+            class=" h-12 w-full rounded-full flex items-center justify-center">
             <i class="fas fa-print"></i>&nbsp; Imprimir
         </x-jet-button>
 

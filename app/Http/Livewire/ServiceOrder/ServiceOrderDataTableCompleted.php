@@ -90,12 +90,11 @@ class ServiceOrderDataTableCompleted extends LivewireDatatable
                 ->format('d/m/Y h:i:s')
                 ->filterable(),
 
-            // Column::callback(['id', 'slug'], function ($id, $slug) {
-            //     return view('livewire.service-order.service-order-table-actions', ['id' => $id, 'slug' => $slug]);
-            // })->label('Opciones')
-            //     ->excludeFromExport()
+            Column::callback(['id', 'slug', 'state'], function ($id, $slug, $state) {
+                return view('livewire.service-order.service-order-table-actions', ['id' => $id, 'slug' => $slug, 'state' => $state]);
+            })->label('Opciones')
+                ->excludeFromExport()
 
         ];
     }
-
 }
