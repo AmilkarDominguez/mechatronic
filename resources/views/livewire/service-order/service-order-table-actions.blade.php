@@ -24,6 +24,12 @@
             </svg>
         </a> --}}
         {{-- end view --}}
+        <button title="Completar" wire:click="toastConfirmComplete('{{ $id }}')"
+            class="p-1 text-green-500 hover:bg-green-500 hover:text-white rounded-full ">
+            <div class="h-5 w-5 flex justify-center items-center rounded-full">
+                <i class="fas fa-clipboard-check"></i>
+            </div>
+        </button>
         {{-- print --}}
         <a href="{{ route('service-order.print', $slug) }}" class="p-1 hover:bg-gray-600 hover:text-white rounded-full">
 

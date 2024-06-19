@@ -16,7 +16,7 @@ class SaleExpenseDashboard extends Component
     public $end_date;
 
     public $expenses_total;
-    public $sales_total;
+    public $service_orders_total;
     public $utility;
 
     public function mount()
@@ -32,9 +32,9 @@ class SaleExpenseDashboard extends Component
 
         $this->calcTotals();
 
-        return view('livewire.service_order-expense.service_order-expense-dashboard', [
+        return view('livewire.sale-expense.sale-expense-dashboard', [
             'expenses_total' => $this->expenses_total,
-            'sales_total' => $this->sales_total,
+            'service_orders_total' => $this->service_orders_total,
         ]);
     }
 
@@ -50,11 +50,11 @@ class SaleExpenseDashboard extends Component
             ->where('expenses.state', 'ACTIVE')
             ->sum('expenses.purchase');
 
-        $this->sales_total = ServiceOrder::select('*')
-            ->whereBetween('sales.created_at', [$this->start_date, $this->end_date])
-            ->where('sales.state', 'ACTIVE')
-            ->sum('sales.have');
-        $this->utility = $this->sales_total - $this->expenses_total;
+        $this->service_orders_total = ServiceOrder::select('*')
+            ->whereBetween('service_orders.created_at', [$this->start_date, $this->end_date])
+            ->where('service_orders.state', 'ACTIVE')
+            ->sum('service_orders.have');
+        $this->utility = $this->service_orders_total - $this->expenses_total;
     }
 
     public function changeInputDate()

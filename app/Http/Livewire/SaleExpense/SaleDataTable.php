@@ -37,20 +37,20 @@ class SaleDataTable extends LivewireDatatable
     public function builder()
     {
         return (ServiceOrder::query()
-            ->whereBetween('sales.created_at', [$this->start_date, $this->end_date])
+            ->whereBetween('service_orders.created_at', [$this->start_date, $this->end_date])
             ->join('customers', function ($join) {
-                $join->on('sales.customer_id', '=', 'customers.id');
+                $join->on('service_orders.customer_id', '=', 'customers.id');
             })
             ->join('people as sale_customer', function ($join) {
                 $join->on('sale_customer.id', '=', 'customers.person_id');
             })
             ->join('users', function ($join) {
-                $join->on('sales.user_id', '=', 'users.id');
+                $join->on('service_orders.user_id', '=', 'users.id');
             })
             ->join('people as sale_user', function ($join) {
                 $join->on('sale_user.id', '=', 'users.person_id');
             })
-            ->where('sales.state', 'ACTIVE')
+            ->where('service_orders.state', 'ACTIVE')
         );
     }
 

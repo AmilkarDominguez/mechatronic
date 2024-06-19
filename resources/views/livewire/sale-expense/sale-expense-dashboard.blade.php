@@ -10,32 +10,28 @@
         <section class="bg-white rounded-md shadow-md col-span-5">
             <div class="flex flex-col justify-between gap-2 p-4 h-full">
                 <div class="flex justify-between">
-                    <span class="text-2xl font-bold">FECHA INICIO&nbsp;:&nbsp;</span><input type="date"
-                                                                                            id="start_date"
-                                                                                            wire:model="start_date"
-                                                                                            wire:input="emitDates"
-                                                                                            wire:change="changeInputDate()">
+                    <span class="text-2xl font-bold">FECHA INICIO&nbsp;:&nbsp;</span><input type="date" id="start_date"
+                        wire:model="start_date" wire:input="emitDates" wire:change="changeInputDate()">
                 </div>
                 <div class="flex justify-between">
-                    <span class="text-2xl font-bold">FECHA FIN&nbsp;:&nbsp;</span><input type="date"
-                                                                                         id="end_date"
-                                                                                         wire:model="end_date"
-                                                                                         wire:input="emitDates"
-                                                                                         wire:change="changeInputDate()">
+                    <span class="text-2xl font-bold">FECHA FIN&nbsp;:&nbsp;</span><input type="date" id="end_date"
+                        wire:model="end_date" wire:input="emitDates" wire:change="changeInputDate()">
                 </div>
             </div>
         </section>
         <section class="bg-white rounded-md shadow-md col-span-5">
             <div class="flex flex-col justify-between gap-2 p-4 h-full">
                 <div class="flex justify-between text-2xl font-bold">
-                    <span>EGRESOS&nbsp;:&nbsp;</span><span class="text-red-500" id="span_start_date">{{$expenses_total}}</span>
+                    <span>EGRESOS&nbsp;:&nbsp;</span><span class="text-red-500"
+                        id="span_start_date">{{ $expenses_total }}</span>
                 </div>
                 <div class="flex justify-between text-2xl font-bold">
-                    <span>INGRESOS&nbsp;:&nbsp;</span><span class="text-green-500">{{$sales_total}}</span>
+                    <span>INGRESOS&nbsp;:&nbsp;</span><span class="text-green-500">{{ $service_orders_total }}</span>
                 </div>
                 <hr>
                 <div class="flex justify-between text-2xl font-bold">
-                    <span>Utilidad&nbsp;:&nbsp;</span><span class="text-blue-500" id="span_start_date">{{$utility}}</span>
+                    <span>Utilidad&nbsp;:&nbsp;</span><span class="text-blue-500"
+                        id="span_start_date">{{ $utility }}</span>
                 </div>
             </div>
         </section>
@@ -57,13 +53,13 @@
             <div class="text-2xl font-bold mb-4 text-red-500">
                 EGRESOS
             </div>
-            <livewire:service_order-expense.expense-data-table/>
+            <livewire:sale-expense.expense-data-table />
             <br>
             <br>
             <div class="text-2xl font-bold mb-4 text-green-500">
                 INGRESOS
             </div>
-            <livewire:service_order-expense.service_order-data-table/>
+            <livewire:sale-expense.sale-data-table />
         </div>
     </div>
 
@@ -71,8 +67,6 @@
 
 @push('custom-scripts')
     <script>
-
-
         Livewire.on('setDates', () => {
 
             buildChart();
@@ -80,7 +74,7 @@
             function buildChart() {
 
                 let expenses_total = @this.expenses_total;
-                let sales_total = @this.sales_total;
+                let service_orders_total = @this.service_orders_total;
 
                 // Obtener una referencia al elemento canvas del DOM
                 const $grafica = document.querySelector("#grafica1");
@@ -91,7 +85,7 @@
                 const chartDataSets = {
                     label: `Gráfica`,
                     // La data es un arreglo que debe tener la misma cantidad de valores que la cantidad de etiquetas
-                    data: [expenses_total, sales_total],
+                    data: [expenses_total, service_orders_total],
                     backgroundColor: [
                         'rgb(239, 68, 68)',
                         'rgb(34, 197, 94)',
@@ -111,13 +105,5 @@
                 });
             }
         })
-
-
     </script>
 @endpush
-
-
-
-
-
-
