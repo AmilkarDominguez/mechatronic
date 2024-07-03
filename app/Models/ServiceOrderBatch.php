@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class ServiceOrderBatch extends Model
 {
     use HasFactory;
+    protected $primaryKey = 'uuid';
+    public $incrementing = false;
+    protected $keyType = 'string';
+
     protected $fillable = [
         'uuid',
         'quantity',
@@ -18,8 +22,6 @@ class ServiceOrderBatch extends Model
         'batch_id',
         'service_order_id'
     ];
-    
-    public $incrementing = false;
 
     public function batch()
     {

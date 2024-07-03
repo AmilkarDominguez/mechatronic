@@ -25,9 +25,9 @@ class CreateServiceOrdersTable extends Migration
             $table->enum('state', ['DRAFT','PENDING', 'COMPLETED', 'DELETED'])->default('PENDING')->nullable();
             $table->enum('payment_type', ['CONTADO', 'CREDITO'])->default('CONTADO')->nullable();
             $table->unsignedBigInteger('customer_id');
-            $table->foreign('customer_id')->references('id')->on('customers')->onDedelete('cascade');
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('users')->onDedelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

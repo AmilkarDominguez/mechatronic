@@ -19,7 +19,7 @@ class CreatePaymentsTable extends Migration
             $table->string('slug')->inique();
             $table->enum('state', ['ACTIVE', 'INACTIVE', 'DELETED'])->default('ACTIVE');
             $table->unsignedBigInteger('service_order_id');
-            $table->foreign('service_order_id')->references('id')->on('service_orders')->onDedelete('cascade');
+            $table->foreign('service_order_id')->references('id')->on('service_orders')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('slug')->inique()->nullable();
             $table->enum('state', ['ACTIVE', 'INACTIVE', 'DELETED'])->default('ACTIVE');
             $table->timestamps();
-            $table->foreign('expense_type_id')->references('id')->on('expense_types')->onDedelete('cascade');
+            $table->foreign('expense_type_id')->references('id')->on('expense_types')->onDelete('cascade');
         });
     }
 

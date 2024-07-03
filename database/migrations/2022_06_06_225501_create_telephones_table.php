@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('number')->nullable();
             $table->enum('type', ['PRIMARY', 'SECONDARY', 'TERTIARY'])->default('PRIMARY')->nullable();
             $table->timestamps();
-            $table->foreign('person_id')->references('id')->on('people')->onDedelete('cascade');
+            $table->foreign('person_id')->references('id')->on('people')->onDelete('cascade');
 
         });
     }

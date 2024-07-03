@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class ServiceOrderExtraItem extends Model
 {
     use HasFactory;
+    protected $primaryKey = 'uuid';
+    public $incrementing = false;
+    protected $keyType = 'string';
+
     protected $fillable = [
         'uuid',
         'cost',
@@ -17,8 +21,6 @@ class ServiceOrderExtraItem extends Model
         'extra_item_id',
         'service_order_id'
     ];
-    
-    public $incrementing = false;
 
     public function extra_item()
     {

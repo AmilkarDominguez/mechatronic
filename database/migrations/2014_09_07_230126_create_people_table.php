@@ -24,7 +24,7 @@ class CreatePeopleTable extends Migration
             $table->integer('num_address')->nullable();
             $table->date('date_birth')->nullable();
             $table->unsignedBigInteger('gender_id')->nullable();
-            $table->foreign('gender_id')->references('id')->on('genders')->onDedelete('cascade');
+            $table->foreign('gender_id')->references('id')->on('genders')->onDelete('cascade');
             $table->timestamps();
         });
     }

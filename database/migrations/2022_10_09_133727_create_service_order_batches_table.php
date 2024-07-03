@@ -15,15 +15,15 @@ class CreateServiceOrderBatchesTable extends Migration
     {
         Schema::create('service_order_batches', function (Blueprint $table) {
             $table->string('uuid')->inique();
-            $table->primary(['uuid']);
+            $table->primary('uuid');
             $table->integer('quantity')->nullable();
             $table->decimal('price', 8, 2)->nullable();
             $table->decimal('discount', 8, 2)->nullable();
             $table->decimal('subtotal', 8, 2)->nullable();
             $table->unsignedBigInteger('batch_id')->nullable();
             $table->unsignedBigInteger('service_order_id')->nullable();
-            $table->foreign('batch_id')->references('id')->on('batches')->onDedelete('cascade');
-            $table->foreign('service_order_id')->references('id')->on('service_orders')->onDedelete('cascade');
+            $table->foreign('batch_id')->references('id')->on('batches')->onDelete('cascade');
+            $table->foreign('service_order_id')->references('id')->on('service_orders')->onDelete('cascade');
             $table->timestamps();
         });
     }

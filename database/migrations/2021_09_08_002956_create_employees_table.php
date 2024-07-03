@@ -22,7 +22,7 @@ class CreateEmployeesTable extends Migration
             $table->string('slug')->inique()->nullable();
             $table->enum('state', ['ACTIVE', 'INACTIVE', 'DELETED'])->default('ACTIVE');
             $table->timestamps();
-            $table->foreign('person_id')->references('id')->on('people')->onDedelete('cascade');
+            $table->foreign('person_id')->references('id')->on('people')->onDelete('cascade');
         });
     }
 

@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class LabourDetail extends Model
 {
     use HasFactory;
+    protected $primaryKey = 'uuid';
+    public $incrementing = false;
+    protected $keyType = 'string';
+    
     protected $fillable = [
         'uuid',
         'employee_percentage',
@@ -19,8 +23,6 @@ class LabourDetail extends Model
         'service_order_id'
     ];
 
-    public $incrementing = false;
-    
     public function employee()
     {
         return $this->belongsTo(Employee::class);

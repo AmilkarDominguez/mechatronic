@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('labour_details', function (Blueprint $table) {
-            $table->string('uuid')->inique();
-            $table->primary(['uuid']);
+            $table->string('uuid')->unique();
+            $table->primary('uuid');
             $table->decimal('employee_percentage', 8, 2)->nullable();
             $table->decimal('price', 8, 2)->nullable();
             $table->integer('quantity')->nullable();
@@ -23,9 +23,9 @@ return new class extends Migration
             $table->unsignedBigInteger('employee_id')->nullable();
             $table->unsignedBigInteger('service_id')->nullable();
             $table->unsignedBigInteger('service_order_id')->nullable();
-            $table->foreign('employee_id')->references('id')->on('employees')->onDedelete('cascade');
-            $table->foreign('service_id')->references('id')->on('services')->onDedelete('cascade');
-            $table->foreign('service_order_id')->references('id')->on('service_orders')->onDedelete('cascade');
+            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
+            $table->foreign('service_id')->references('id')->on('services')->onDelete('cascade');
+            $table->foreign('service_order_id')->references('id')->on('service_orders')->onDelete('cascade');
             $table->timestamps();
         });
     }

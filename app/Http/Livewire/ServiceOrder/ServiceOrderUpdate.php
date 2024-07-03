@@ -97,6 +97,7 @@ class ServiceOrderUpdate extends Component
         foreach ($this->labours_details as $item) {
             $employee = Employee::where('id', $item->employee_id)->firstOrFail();
             $service = Service::where('id', $item->service_id)->firstOrFail();
+            $uuid = (string) $item['uuid'];
             $item = [
                 'uuid' => $item->uuid,
                 'employee_percentage' => $item->employee_percentage,
@@ -108,7 +109,7 @@ class ServiceOrderUpdate extends Component
                 'service_id' => $item->service_id,
                 'service' => $service->name
             ];
-            $this->labours[$item['uuid']] = $item;
+            $this->labours[$uuid] = $item;
         }
         $this->calcLaboursTotal();
     }
@@ -219,7 +220,7 @@ class ServiceOrderUpdate extends Component
                     'subtotal' => $item['subtotal'],
                     'employee_id' => $item['employee_id'],
                     'service_id' => $item['service_id'],
-                    'service_order_id' => $service_order->id
+                    'service_order_id' => $this->service_order->id
                 ]);
             }
             foreach ($this->sale_details as $item) {
@@ -230,7 +231,7 @@ class ServiceOrderUpdate extends Component
                     'discount' => $item['discount'],
                     'subtotal' => $item['subtotal'],
                     'batch_id' => $item['id'],
-                    'service_order_id' => $service_order->id
+                    'service_order_id' => $this->service_order->id
                 ]);
             }
             $this->updateStock();
@@ -242,7 +243,7 @@ class ServiceOrderUpdate extends Component
                     'quantity' => $item['quantity'],
                     'subtotal' => $item['subtotal'],
                     'extra_item_id' => $item['id'],
-                    'service_order_id' => $service_order->id,
+                    'service_order_id' => $this->service_order->id,
                 ]);
             }
 

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->enum('state', ['ACTIVE', 'INACTIVE', 'DELETED'])->default('ACTIVE');
             $table->uuid('slug')->unique();
             $table->timestamps();
-            $table->foreign('user_id')->references('id')->on('users')->onDedelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

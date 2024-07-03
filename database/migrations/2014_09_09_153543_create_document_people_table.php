@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('document_issuance')->nullable();
             $table->string('document_supplement')->nullable();
             $table->timestamps();
-            $table->foreign('person_id')->references('id')->on('people')->onDedelete('cascade');
-            $table->foreign('document_type_id')->references('id')->on('identity_document_types')->onDedelete('cascade');
+            $table->foreign('person_id')->references('id')->on('people')->onDelete('cascade');
+            $table->foreign('document_type_id')->references('id')->on('identity_document_types')->onDelete('cascade');
         });
     }
 

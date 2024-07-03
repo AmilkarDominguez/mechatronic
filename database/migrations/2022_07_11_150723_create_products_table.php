@@ -24,8 +24,8 @@ return new class extends Migration
             $table->string('photo')->nullable();
             $table->enum('state', ['ACTIVE', 'INACTIVE', 'DELETED'])->default('ACTIVE');
             $table->timestamps();
-            $table->foreign('category_id')->references('id')->on('product_categories')->onDedelete('cascade');
-            $table->foreign('presentation_id')->references('id')->on('product_presentations')->onDedelete('cascade');
+            $table->foreign('category_id')->references('id')->on('product_categories')->onDelete('cascade');
+            $table->foreign('presentation_id')->references('id')->on('product_presentations')->onDelete('cascade');
    });
     }
 

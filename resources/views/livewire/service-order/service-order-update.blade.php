@@ -648,7 +648,7 @@
             <section class="container m-auto mt-5 mb-5">
                 <button wire:click="saveSale()"
                     class="h-12 w-full rounded-md flex items-center justify-center border bg-primary-500 text-white hover:bg-primary-600 cursor-pointer">
-                    REGISTRAR
+                    GUARDAR
                 </button>
             </section>
         </section>
@@ -746,7 +746,9 @@
 
         function setEventCustomerSelect() {
             $('#select-customers').on('change', function() {
+                console.log('arrived');
                 @this.set('customer_id', this.value);
+                console.log('arrived 2');
                 @this.onChangeSelectCustomer();
             });
         }

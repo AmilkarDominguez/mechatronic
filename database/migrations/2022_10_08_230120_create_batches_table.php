@@ -31,10 +31,10 @@ return new class extends Migration
             $table->string('slug')->inique();
             $table->enum('state', ['ACTIVE', 'INACTIVE', 'DELETED'])->default('ACTIVE');
             $table->timestamps();
-            $table->foreign('product_id')->references('id')->on('products')->onDedelete('cascade');
-            $table->foreign('warehouse_id')->references('id')->on('warehouses')->onDedelete('cascade');
-            $table->foreign('supplier_id')->references('id')->on('suppliers')->onDedelete('cascade');
-            $table->foreign('industry_id')->references('id')->on('industries')->onDedelete('cascade');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+            $table->foreign('warehouse_id')->references('id')->on('warehouses')->onDelete('cascade');
+            $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade');
+            $table->foreign('industry_id')->references('id')->on('industries')->onDelete('cascade');
         });
     }
 
