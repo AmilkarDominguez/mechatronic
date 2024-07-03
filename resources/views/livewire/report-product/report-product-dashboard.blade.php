@@ -97,8 +97,8 @@
 
                 let expenses_total = @this.
                 expenses_total;
-                let sales_total = @this.
-                sales_total;
+                let service_orders_total = @this.
+                service_orders_total;
 
                 console.log(expenses_total)
 

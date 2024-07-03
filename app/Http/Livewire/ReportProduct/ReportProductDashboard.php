@@ -20,7 +20,7 @@ class ReportProductDashboard extends Component
     public $end_date;
 
     public $expenses_total;
-    public $sales_total;
+    public $service_orders_total;
     public $utility;
 
     public $items;
@@ -40,7 +40,7 @@ class ReportProductDashboard extends Component
 
         return view('livewire.report-product.report-product-dashboard', [
             'expenses_total' => $this->expenses_total,
-            'sales_total' => $this->sales_total,
+            'service_orders_total' => $this->service_orders_total,
             'items' => $this->items,
         ]);
     }
@@ -55,33 +55,33 @@ class ReportProductDashboard extends Component
     {
         $this->expenses_total = Expense::select('*')
             ->whereBetween('expenses.created_at', [$this->start_date, $this->end_date])
-            ->where('expenses.state', 'ACTIVE')
+            //->where('expenses.state', 'ACTIVE')
             ->sum('expenses.purchase');
 
-        $this->sales_total = ServiceOrder::select('*')
-            ->whereBetween('sales.created_at', [$this->start_date, $this->end_date])
-            ->where('sales.state', 'ACTIVE')
-            ->sum('sales.have');
+        $this->service_orders_total = ServiceOrder::select('*')
+            ->whereBetween('service_orders.created_at', [$this->start_date, $this->end_date])
+            //->where('service_orders.state', 'ACTIVE')
+            ->sum('service_orders.have');
 
-        $this->items = DB::table('sale_details')
+        $this->items = DB::table('service_order_batches')
             ->select('name', 'product_id', 'batch_id',
                 DB::raw('COUNT(*) as quantity'),
-                DB::raw('SUM(sale_details.quantity) as total'))
+                DB::raw('SUM(service_order_batches.quantity) as total'))
             ->join('batches', function ($join) {
-                $join->on('sale_details.batch_id', '=', 'batches.id');
+                $join->on('service_order_batches.batch_id', '=', 'batches.id');
             })
             ->join('products', function ($join) {
                 $join->on('batches.product_id', '=', 'products.id');
             })
-            ->where('sale_details.state', '!=', 'DELETED')
-            ->whereBetween('sale_details.created_at', [$this->start_date, $this->end_date])
+            //->where('service_order_batches.state', '!=', 'DELETED')
+            ->whereBetween('service_order_batches.created_at', [$this->start_date, $this->end_date])
             ->groupBy('products.id')
             ->orderBy('total', 'DESC')
             ->limit(100)
             ->get();
 
 
-        $this->utility = $this->sales_total - $this->expenses_total;
+        $this->utility = $this->service_orders_total - $this->expenses_total;
     }
 
     public function changeInputDate()
