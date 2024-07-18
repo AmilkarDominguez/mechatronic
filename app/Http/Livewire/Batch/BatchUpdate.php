@@ -37,9 +37,9 @@ class BatchUpdate extends Component
 
     public function mount($slug)
     {
-
         $this->batch = Batch::where('slug', $slug)->firstOrFail();
         $this->expense = Expense::where('slug', $slug)->firstOrFail();
+
         if ($this->batch) {
             //cargando datos de la batch
             $this->warehouse_id = $this->batch->warehouse_id;

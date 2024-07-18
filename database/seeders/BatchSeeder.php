@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Batch;
+use App\Models\Expense;
 use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 
@@ -16,6 +17,7 @@ class BatchSeeder extends Seeder
     public function run()
     {
         //1
+        $slug  = Str::uuid();
         Batch::create([
             'product_id' => 1,
             'warehouse_id' => 1,
@@ -27,9 +29,17 @@ class BatchSeeder extends Seeder
             'retail_price' => 17.00,
             'final_price' => 25.00,
             'stock' => 20,
-            'slug' => Str::uuid(),
+            'slug' => $slug,
             'state' => 'ACTIVE',
         ]);
+        Expense::create([
+            'expense_type_id' => 1,
+            'purchase' => 200,
+            'description' => 'Compra de lote de producto Aceite Motul',
+            'slug' => $slug,
+            'state' => 'ACTIVE',
+        ]);
+        $slug  = Str::uuid();
         //2
         Batch::create([
             'product_id' => 1,
@@ -42,9 +52,17 @@ class BatchSeeder extends Seeder
             'retail_price' => 16.00,
             'final_price' => 20.00,
             'stock' => 15,
-            'slug' => Str::uuid(),
+            'slug' => $slug,
             'state' => 'ACTIVE',
         ]);
+        Expense::create([
+            'expense_type_id' => 1,
+            'purchase' => 200,
+            'description' => 'Compra de lote de producto Aceite Motul',
+            'slug' => $slug,
+            'state' => 'ACTIVE',
+        ]);
+        $slug  = Str::uuid();
         //3
         Batch::create([
             'product_id' => 1,
@@ -57,7 +75,14 @@ class BatchSeeder extends Seeder
             'retail_price' => 41.00,
             'final_price' => 50.00,
             'stock' => 10,
-            'slug' => Str::uuid(),
+            'slug' => $slug,
+            'state' => 'ACTIVE',
+        ]);
+        Expense::create([
+            'expense_type_id' => 1,
+            'purchase' => 200,
+            'description' => 'Compra de lote de producto Aceite Motul',
+            'slug' => $slug,
             'state' => 'ACTIVE',
         ]);
     }

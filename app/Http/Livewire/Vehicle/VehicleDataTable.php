@@ -1,31 +1,43 @@
 <?php
 
-namespace App\Http\Livewire\Supplier;
+namespace App\Http\Livewire\Vehicle;
 
-use App\Models\Supplier;
+use App\Models\Vehicle;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
-class SupplierDataTable extends LivewireDatatable
+class VehicleDataTable extends LivewireDatatable
 {
     //Using de alert
     use LivewireAlert;
     public $exportable = true;
-    public $model = Supplier::class;
-    
+    public $model = Vehicle::class;
+
 
     public function builder()
     {
-        return Supplier::query()->where('state', '!=', 'DELETED');
+        return Vehicle::query()->where('state', '!=', 'DELETED');
     }
     public function columns()
     {
         return [
 
-            Column::name('name')
+            Column::name('license_plate')
                 ->searchable()
-               ->label('Nombre'),      
+                ->label('Placa'),
+
+            Column::name('brand')
+                ->searchable()
+                ->label('Marca'),
+
+            Column::name('model')
+                ->searchable()
+                ->label('Model'),
+
+            Column::name('displacement')
+                ->searchable()
+                ->label('Cilindrada  '),
 
             Column::callback(['state'], function ($state) {
                 return view('components.datatables.state-data-table', ['state' => $state]);
@@ -41,21 +53,21 @@ class SupplierDataTable extends LivewireDatatable
                 ]),
 
             Column::callback(['slug'], function ($slug) {
-                return view('livewire.supplier.supplier-table-actions', ['slug' => $slug]);
+                return view('livewire.vehicle.vehicle-table-actions', ['slug' => $slug]);
             })->label('Opciones')
                 ->excludeFromExport()
         ];
     }
 
-    public $SupplierDeleted;
+    public $VehicleDeleted;
     public function toastConfirmDelet($slug)
     {
-        $this->SupplierDeleted = Supplier::where('slug', $slug)->first();
+        $this->VehicleDeleted = Vehicle::where('slug', $slug)->first();
         $this->confirm(__('¿Estás seguro de que deseas eliminar el registro?'), [
             'icon' => 'warning',
             'position' =>  'center',
             'toast' =>  false,
-            'text' =>  $this->SupplierDeleted->name,
+            'text' =>  $this->VehicleDeleted->name,
             'confirmButtonText' =>  'Si',
             'showConfirmButton' =>  true,
             'showCancelButton' => true,
@@ -63,18 +75,16 @@ class SupplierDataTable extends LivewireDatatable
             'confirmButtonColor' => '#A5DC86',
         ]);
     }
-    // Listener para eliminar
+
     protected $listeners = [
         'confirmed',
     ];
-    //Funcion para confirmar la eliminacion
+
     public function confirmed()
     {
-        if ($this->SupplierDeleted) {
-            //Asignando estado DELETED
-            $this->SupplierDeleted->state = "DELETED";
-            //Guardando el registro
-            $this->SupplierDeleted->update();
+        if ($this->VehicleDeleted) {
+            $this->VehicleDeleted->state = "DELETED";
+            $this->VehicleDeleted->update();
         }
     }
 }

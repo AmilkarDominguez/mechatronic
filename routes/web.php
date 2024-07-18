@@ -66,10 +66,12 @@ use App\Http\Livewire\Supplier\SupplierUpdate;
 use App\Http\Livewire\User\UserCreate;
 use App\Http\Livewire\User\UserDashboard;
 use App\Http\Livewire\User\UserUpdate;
+use App\Http\Livewire\Vehicle\VehicleCreate;
+use App\Http\Livewire\Vehicle\VehicleDashboard;
+use App\Http\Livewire\Vehicle\VehicleUpdate;
 use App\Http\Livewire\Warehouse\WarehouseCreate;
 use App\Http\Livewire\Warehouse\WarehouseDashboard;
 use App\Http\Livewire\Warehouse\WarehouseUpdate;
-use App\Models\ExtraItem;
 use Illuminate\Support\Facades\Route;
 
 
@@ -151,6 +153,10 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::get('customer-create', CustomerCreate::class)->name('customer.create')->middleware('auth', 'role:admin|sales');
     Route::get('customer-update/{slug}', CustomerUpdate::class)->name('customer.update')->middleware('auth', 'role:admin|sales');
 
+    //Admin vehicle
+    Route::get('vehicle', VehicleDashboard::class)->name('vehicle.dashboard')->middleware('auth', 'role:admin');
+    Route::get('vehicle-create', VehicleCreate::class)->name('vehicle.create')->middleware('auth', 'role:admin');
+    Route::get('vehicle-update/{slug}', VehicleUpdate::class)->name('vehicle.update')->middleware('auth', 'role:admin');
 
     //Admin employee
     Route::get('employee', EmployeeDashboard::class)->name('employee.dashboard')->middleware('auth', 'role:admin|sales');
@@ -182,7 +188,6 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::get('extra-item', ExtraItemDashboard::class)->name('extra-item.dashboard')->middleware('auth', 'role:admin|sales');
     Route::get('extra-item-create', ExtraItemCreate::class)->name('extra-item.create')->middleware('auth', 'role:admin|sales');
     Route::get('extra-item-update/{slug}', ExtraItemUpdate::class)->name('extra-item.update')->middleware('auth', 'role:admin|sales');
-
 
     //Admin presentation type
     Route::get('product-presentation', ProductPresentationDashboard::class)->name('product-presentation.dashboard')->middleware('auth', 'role:admin');

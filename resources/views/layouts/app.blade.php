@@ -153,6 +153,12 @@
                                     request()->routeIs('customer.update')">
                                     <i class="fa-solid fa-user"></i> Clientes
                                 </x-a-sidenav>
+
+                                <x-a-sidenav href="{{ route('vehicle.dashboard') }}" :active="request()->routeIs('vehicle.dashboard') ||
+                                    request()->routeIs('vehicle.create') ||
+                                    request()->routeIs('vehicle.update')">
+                                    <i class="fa-solid fa-car"></i> Vehículos
+                                </x-a-sidenav>
                                 <hr class=" mt-2">
 
                                 {{-- <x-a-sidenav href="{{ route('gender.dashboard') }}" :active="request()->routeIs('gender.dashboard') ||
@@ -328,7 +334,8 @@
                                     <i class="far fa-clipboard"></i> En curso
                                 </x-a-sidenav>
 
-                                <x-a-sidenav href="{{ route('service-order-completed.dashboard') }}" :active="request()->routeIs('service-order-completed.dashboard')">
+                                <x-a-sidenav href="{{ route('service-order-completed.dashboard') }}"
+                                    :active="request()->routeIs('service-order-completed.dashboard')">
                                     <i class="fas fa-clipboard-check"></i> Completados
                                 </x-a-sidenav>
 
