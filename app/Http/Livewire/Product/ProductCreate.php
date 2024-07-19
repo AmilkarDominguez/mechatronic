@@ -47,7 +47,7 @@ class ProductCreate extends Component
         'code' => 'required|max:255|min:3|unique:products,code',
         'description' => 'nullable|max:255|min:3',
         'state' => 'required',
-        'photo' => 'required|image|max:1024',
+        'photo' => 'nullable|image|max:1024',
         'presentation_id' => 'required',
         'category_id' => 'required',
     ];

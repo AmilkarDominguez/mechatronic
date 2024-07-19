@@ -18,7 +18,8 @@ class SettingSeeder extends Seeder
         //1
         ///Setting
         Setting::create([
-            'slug' => 'configuration'
+            'slug' => 'configuration',
+            'service_order_number' => '1000'
         ]);
     }
 }

@@ -16,6 +16,8 @@ use App\Models\Promoter;
 use App\Models\ServiceOrderBatch;
 use App\Models\Service;
 use App\Models\ServiceOrderExtraItem;
+use App\Models\Setting;
+use App\Models\Vehicle;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
@@ -24,9 +26,13 @@ class ServiceOrderCreate extends Component
 {
     use LivewireAlert;
 
-
     public $payment_type = 'CONTADO';
     public $description = '';
+
+    public $mileage;
+    public $started_date;
+    public $ended_date;
+    public $service_order_number;
 
     public $services;
     public $service_id;
@@ -61,10 +67,15 @@ class ServiceOrderCreate extends Component
     public $customer_id;
     public $selected_customer;
 
+    public $vehicles = [];
+    public $vehicle_id;
+
     public $total;
+    public $setting;
 
     public function mount()
     {
+        $this->setting = Setting::where('slug', 'configuration')->firstOrFail();
         $this->customers = Customer::all()->where('state', 'ACTIVE');
         $this->warehouses = Warehouse::all()->where('state', 'ACTIVE');
         $this->employees = Employee::all()->where('state', 'ACTIVE');
@@ -75,6 +86,10 @@ class ServiceOrderCreate extends Component
         if ($this->warehouses[0]) {
             $this->warehouse_id = $this->warehouses[0]->id;
             $this->batches = Batch::where('state', 'ACTIVE')->where('warehouse_id', $this->warehouse_id)->where('stock', '>', '0')->with('product')->get();
+        }
+
+        if ($this->setting){
+            $this->service_order_number = $this->setting->service_order_number;
         }
     }
 
@@ -93,11 +108,16 @@ class ServiceOrderCreate extends Component
         $this->validate();
         if ($this->checkStock()) {
             $service_order = ServiceOrder::create([
+                'number' => $this->service_order_number,
                 'description' => $this->description,
                 'total' => $this->total,
                 'must' => $this->total,
                 'slug' => Str::uuid(),
+                'mileage' => $this->mileage,
+                'started_date' => $this->started_date,
+                'ended_date' => $this->ended_date,
                 'customer_id' => $this->customer_id,
+                'vehicle_id' => $this->vehicle_id,
                 'user_id' => Auth::user()->id,
                 'state' => 'PENDING',
                 'payment_type' => $this->payment_type
@@ -137,6 +157,11 @@ class ServiceOrderCreate extends Component
                     'service_order_id' => $service_order->id,
                 ]);
             }
+
+            $number = ((int)$this->service_order_number) +1;
+            $this->setting->update([
+                'service_order_number' => $number
+            ]);
 
             $this->confirm('Registro creado correctamente', [
                 'icon' => 'success',
@@ -257,6 +282,7 @@ class ServiceOrderCreate extends Component
     {
         if ($this->customer_id > 0) {
             $this->selected_customer = Customer::find($this->customer_id);
+            $this->vehicles = Vehicle::where('state', 'ACTIVE')->where('customer_id', $this->customer_id)->get();
         }
     }
 

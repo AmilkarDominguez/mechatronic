@@ -9,14 +9,19 @@ class ServiceOrder extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'number',
         'description',
         'total',
         'have',
         'must',
+        'mileage',
+        'started_date',
+        'ended_date',
         'slug',
         'state',
         'payment_type',
         'customer_id',
+        'vehicle_id',
         'user_id'
     ];
 

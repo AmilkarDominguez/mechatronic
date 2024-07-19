@@ -16,6 +16,7 @@ use App\Models\Promoter;
 use App\Models\ServiceOrderBatch;
 use App\Models\Service;
 use App\Models\ServiceOrderExtraItem;
+use App\Models\Vehicle;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
@@ -27,6 +28,11 @@ class ServiceOrderUpdate extends Component
     public $service_order;
     public $payment_type;
     public $description = '';
+
+    public $mileage;
+    public $started_date;
+    public $ended_date;
+    public $service_order_number;
 
     public $labours_details = [];
     public $services;
@@ -64,6 +70,9 @@ class ServiceOrderUpdate extends Component
     public $customer_id;
     public $selected_customer;
 
+    public $vehicles = [];
+    public $vehicle_id;
+
     public $total;
 
     public function mount($slug)
@@ -85,6 +94,13 @@ class ServiceOrderUpdate extends Component
         $this->payment_type = $this->service_order->payment_type;
         $this->description = $this->service_order->description;
 
+        $this->vehicles = Vehicle::where('state', 'ACTIVE')->where('customer_id', $this->service_order->customer_id)->get();
+        $this->mileage = $this->service_order->mileage;
+        $this->started_date = $this->service_order->started_date;
+        $this->ended_date = $this->service_order->ended_date;
+        $this->service_order_number = $this->service_order->number;
+        $this->vehicle_id = $this->service_order->vehicle_id;
+        
         $this->loadLabours();
         $this->loadSaleDetails();
         $this->loadExtraItems();
@@ -204,9 +220,15 @@ class ServiceOrderUpdate extends Component
             $this->deleteOldRegisters();
 
             $this->service_order->update([
+                'number' => $this->service_order_number,
                 'description' => $this->description || '',
                 'total' => $this->total,
+                'must' => $this->total,
+                'mileage' => $this->mileage,
+                'started_date' => $this->started_date,
+                'ended_date' => $this->ended_date,
                 'customer_id' => $this->customer_id,
+                'vehicle_id' => $this->vehicle_id,
                 'user_id' => Auth::user()->id,
                 'payment_type' => $this->payment_type
             ]);

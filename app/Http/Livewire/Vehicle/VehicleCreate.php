@@ -32,7 +32,7 @@ class VehicleCreate extends Component
         'brand' => 'nullable',
         'model' => 'nullable',
         'displacement' => 'nullable',
-        'customer_id' => 'required',
+        'customer_id' => 'required'
     ];
 
     public function submit()

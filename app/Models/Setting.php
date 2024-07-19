@@ -20,6 +20,7 @@ class Setting extends Model
         'url_website',
         'address',
         'print_logo',
+        'service_order_number',
         'slug',
     ];
 }

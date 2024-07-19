@@ -13,6 +13,7 @@ class UpdateSetting extends Component
 {
     use WithFileUploads;
     use LivewireAlert;
+    public $service_order_number;
     public $setting;
     public $name;
     public $description;
@@ -34,6 +35,7 @@ class UpdateSetting extends Component
     {
         $this->setting = Setting::where('slug', $slug)->firstOrFail();
         if ($this->setting) {
+            $this->service_order_number = $this->setting->service_order_number;
             $this->name = $this->setting->name;
             $this->logo = $this->setting->logo;
             $this->description = $this->setting->description;
@@ -45,6 +47,7 @@ class UpdateSetting extends Component
             $this->url_website = $this->setting->url_website;
             $this->address = $this->setting->address;
             $this->print_logo = $this->setting->print_logo;
+            
         }
     }
     protected $rules = [
@@ -54,6 +57,7 @@ class UpdateSetting extends Component
     {
         $this->validate();
         $this->setting->update([
+            'service_order_number' => $this->service_order_number,
             'name' => $this->name,
             'description' => $this->description,
             'email' => $this->email,
@@ -64,7 +68,6 @@ class UpdateSetting extends Component
             'url_website' => $this->url_website,
             'address' => $this->address,
             'print_logo' => $this->print_logo,
-
         ]);
         if ($this->new_logo) {
             //Delete File

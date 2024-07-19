@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('url_instagram')->nullable();
             $table->string('url_website')->nullable();
             $table->string('address')->nullable();
+            $table->string('service_order_number')->nullable();
             $table->boolean('print_logo')->default(true)->nullable();
             $table->string('slug')->inique();
             $table->timestamps();

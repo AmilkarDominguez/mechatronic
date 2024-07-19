@@ -6,9 +6,7 @@
     </x-slot>
     {{-- variables para modal --}}
     <section x-data="{ showModal: false, modalType: 'customer' }">
-
         <section x-show="!showModal">
-
             <div class="container mx-auto mt-5 mb-4" x-data="{ tab: 'tab1' }">
                 <ul class="flex mt-6 bg-white p-4">
                     <li class="-mb-px mr-1">
@@ -42,12 +40,19 @@
                 </ul>
                 <div class="content bg-white px-8 py-8 border-l border-r border-b pt-4">
                     <section x-show="tab == 'tab1'" class="flex flex-col gap-8">
-
+                        {{-- service_order_number --}}
+                        <section>
+                            <div class="font-bold mb-2">
+                                Número
+                            </div>
+                            <x-jet-input type="number" placeholder="00000" wire:model="service_order_number"
+                                class="mt-1 block w-full rounded-md" required />
+                        </section>
+                        {{-- end service_order_number --}}
                         {{-- customer --}}
                         <div wire:ignore>
                             <div class="font-bold mb-2">
                                 Cliente
-
                             </div>
                             <div class="flex items-center">
                                 <select id="select-customers"
@@ -89,6 +94,56 @@
                             @endif
                         </div>
                         {{-- end info customer --}}
+
+                        {{-- select customer vehicle --}}
+                        <div>
+                            <div class="font-bold mb-2">
+                                Vehículos
+                            </div>
+                            <select wire:model="vehicle_id"
+                                class="border-gray-300 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 shadow-sm mt-1 block w-full rounded-fx rounded-md"
+                                required>
+                                <option selected>(Seleccionar)</option>
+                                @forelse ($vehicles as $item)
+                                    <option value="{{ $item->id }}">
+                                        Placa: {{ $item->license_plate }} | Modelo: {{ $item->model }} | Marca:
+                                        {{ $item->brand }} </option>
+                                @empty
+                                    <option disabled>Sin registros</option>
+                                @endforelse
+                            </select>
+                        </div>
+                        {{-- end customer vehicle --}}
+
+                        {{-- mileage --}}
+                        <section>
+                            <div class="font-bold mb-2">
+                                Kilometrage
+                            </div>
+                            <x-jet-input type="number" placeholder="00000" wire:model="mileage"
+                                class="mt-1 block w-full rounded-md" required />
+                        </section>
+                        {{-- end mileage --}}
+
+                        {{-- started_date --}}
+                        <section>
+                            <div class="font-bold mb-2">
+                                Fecha Ingreso
+                            </div>
+                            <x-jet-input type="date" wire:model="started_date" class="mt-1 block w-full rounded-md"
+                                required />
+                        </section>
+                        {{-- end started_date --}}
+
+                        {{-- ended_date --}}
+                        <section>
+                            <div class="font-bold mb-2">
+                                Fecha Salida
+                            </div>
+                            <x-jet-input type="date" wire:model="ended_date" class="mt-1 block w-full rounded-md"
+                                required />
+                        </section>
+                        {{-- end ended_date --}}
                     </section>
 
                     <section x-show="tab == 'tab2'" class="flex flex-col gap-8">
