@@ -14,6 +14,7 @@ use App\Models\ServiceOrderBatch;
 use App\Models\Service;
 use App\Models\ServiceOrderExtraItem;
 use App\Models\Setting;
+use App\Models\Vehicle;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class ServiceOrderPrint extends Component
@@ -62,6 +63,8 @@ class ServiceOrderPrint extends Component
     public $customer_id;
     public $selected_customer;
 
+    public $vehicle;
+
     public $total;
 
     public function mount($slug)
@@ -82,6 +85,8 @@ class ServiceOrderPrint extends Component
             $this->batches = Batch::where('state', 'ACTIVE')->where('warehouse_id', $this->warehouse_id)->where('stock', '>', '0')->with('product')->get();
         }
         $this->selected_customer = Customer::where('id', $this->service_order->customer_id)->firstOrFail();
+        $this->vehicle = Vehicle::where('id', $this->service_order->vehicle_id)->firstOrFail();
+
         $this->customer_id = $this->service_order->customer_id;
         $this->payment_type = $this->service_order->payment_type;
         $this->description = $this->service_order->description;
