@@ -18,6 +18,7 @@ class CreateCustomersTable extends Migration
             $table->string('description')->nullable();
             $table->unsignedBigInteger('person_id');
             $table->unsignedBigInteger('customer_type_id')->default('4')->nullable();
+            $table->date('birthday')->nullable();
             $table->string('email')->nullable();
             $table->string('nit')->nullable();
             $table->string('slug')->inique()->nullable();

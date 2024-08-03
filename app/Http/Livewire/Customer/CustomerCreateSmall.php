@@ -26,6 +26,8 @@ class CustomerCreateSmall extends Component
     public $person_id;
     public $email;
     public $nit;
+    public $birthday;
+    
     public function mount()
     {
         $this->customer_types = CustomerType::all()->where('state', 'ACTIVE');
@@ -42,6 +44,7 @@ class CustomerCreateSmall extends Component
         'code_ci' => 'nullable',
         //'customer_type_id' => 'required',
         'name' => 'required|max:255|min:2',
+        'birthday' => 'nullable',        
         //restriccion customer
         'email' => 'nullable',
         'nit' => 'nullable',
@@ -62,6 +65,7 @@ class CustomerCreateSmall extends Component
         $this->customer = Customer::create([
             'person_id' => $Person->id,
             'email' => $this->email,
+            'birthday' => $this->birthday,
             'slug' => Str::uuid(),
             'state' => 'ACTIVE',
         ]);
@@ -88,6 +92,7 @@ class CustomerCreateSmall extends Component
         $this->expedition_ci = "";
         $this->code_ci = "";
         $this->customer_type_id = "";
+        $this->birthday = "";
         $this->name = "";
         $this->email = "";
         $this->nit = "";

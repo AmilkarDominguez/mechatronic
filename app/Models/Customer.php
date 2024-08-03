@@ -12,6 +12,7 @@ class Customer extends Model
         'person_id',
         'customer_type_id',
         'description',
+        'birthday',
         'email',
         'nit',
         'slug',

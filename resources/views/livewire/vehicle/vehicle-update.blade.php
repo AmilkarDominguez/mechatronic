@@ -58,7 +58,7 @@
 
             {{-- model --}}
             <div class="">
-                Marca
+                Modelo
             </div>
             <x-jet-input type="text" placeholder="Modelo" wire:model="model" class="mt-1 block w-full rounded-md"
                 required />
@@ -71,7 +71,7 @@
 
             {{-- displacement --}}
             <div class="">
-                Cilindrada
+                Tipo/Cilindrada
             </div>
             <x-jet-input type="text" placeholder="Cilindrada" wire:model="displacement"
                 class="mt-1 block w-full rounded-md" required />

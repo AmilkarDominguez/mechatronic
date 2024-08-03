@@ -28,6 +28,7 @@ class CustomerUpdate extends Component
     public $nit;
     public $slug;
     public $state;
+    public $birthday;
     //telephones
 
     public $phone_primary;
@@ -48,6 +49,7 @@ class CustomerUpdate extends Component
             $this->email = $this->customer->email;
             $this->nit = $this->customer->nit;
             $this->state = $this->customer->state;
+            $this->birthday = $this->customer->birthday;
 
             //Verificando telefonos
 
@@ -89,6 +91,7 @@ class CustomerUpdate extends Component
         'email' => 'nullable',
         'nit' => 'nullable',
         'state' => 'required',
+        'birthday' => 'required',
         //restriccion telefonos
         'telephone_whatsapp' => 'nullable',
         'telephone_secondary' => 'nullable',
@@ -107,6 +110,7 @@ class CustomerUpdate extends Component
             'email' => $this->email,
             'nit' => $this->nit,
             'state' => $this->state,
+            'birthday' => $this->birthday,
         ]);
         $this->person->update([
             'ci' => $this->ci,

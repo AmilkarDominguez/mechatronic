@@ -27,6 +27,7 @@ class CustomerCreate extends Component
     public $person_id;
     public $email;
     public $nit;
+    public $birthday;
     public $state = "ACTIVE";
     //telephone
     public $telephone_whatsapp;
@@ -49,6 +50,7 @@ class CustomerCreate extends Component
         //'customer_type_id' => 'required',
         'name' => 'required|max:255|min:2',
         'address' => 'nullable',
+        'birthday' => 'nullable',
         //restriccion customer
         'description' => 'nullable',
         'email' => 'nullable',
@@ -77,6 +79,7 @@ class CustomerCreate extends Component
         $Customer = Customer::create([
             'person_id' => $Person->id,
             'description' => $this->description,
+            'birthday' => $this->birthday,
             //'customer_type_id' => $this->customer_type_id,
             'email' => $this->email,
             //encriptando slug
@@ -124,9 +127,10 @@ class CustomerCreate extends Component
         $this->customer_type_id = "";
         $this->name = "";
         $this->address = "";
-
+        
         $this->email = "";
         $this->nit = "";
+        $this->birthday = "";
 
         $this->telephone_whatsapp = "";
         $this->telephone_secondary = "";

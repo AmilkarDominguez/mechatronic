@@ -15,7 +15,7 @@
                 {{-- ci --}}
                 <div class="mt-2 text-sm">CI</div>
                 <x-jet-input type="number" placeholder="Nro. Cédula de identidad" wire:model="ci"
-                    class="mt-1 block w-full rounded-md" required />
+                    class="mt-1 block w-full rounded-md" />
                 @error('ci')
                     <p class="text-red-500 font-semibold my-2">
                         {{ $message }}
@@ -27,8 +27,7 @@
                 {{-- select expedition_ci --}}
                 <div class="mt-2 text-sm">Lugar de expedición</div>
                 <select wire:model="expedition_ci"
-                    class="border-gray-300 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 shadow-sm mt-1 block w-full rounded-md"
-                    required>
+                    class="border-gray-300 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 shadow-sm mt-1 block w-full rounded-md">
                     <option value="" selected>(Seleccionar)</option>
                     <option value="CH">CH Chuquisaca</option>
                     <option value="LP">LP La Paz</option>
@@ -79,6 +78,16 @@
             </p>
         @enderror
         {{-- end email --}}
+
+        {{-- birthday --}}
+        <div class="mt-2 text-sm">Fecha Nac.</div>
+        <x-jet-input type="date" wire:model="birthday" class="mt-1 block w-full rounded-md" />
+        @error('birthday')
+            <p class="text-red-500 font-semibold my-2">
+                {{ $message }}
+            </p>
+        @enderror
+        {{-- end birthday --}}
         {{-- all errors --}}
         @if ($errors->any())
             <div class="bg-red-100 rounded-md text-red-500 p-2 font-semibold my-2">

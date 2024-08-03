@@ -21,7 +21,7 @@
                     {{-- ci --}}
                     <div class="mt-2 text-sm">CI</div>
                     <x-jet-input type="number" placeholder="Nro. Cédula de identidad" wire:model="ci"
-                        class="mt-1 block w-full rounded-md" required />
+                        class="mt-1 block w-full rounded-md" />
                     @error('ci')
                         <p class="text-red-500 font-semibold my-2">
                             {{ $message }}
@@ -33,8 +33,7 @@
                     {{-- select expedition_ci --}}
                     <div class="mt-2 text-sm">Lugar de expedición</div>
                     <select wire:model="expedition_ci"
-                        class="border-gray-300 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 shadow-sm mt-1 block w-full rounded-md"
-                        required>
+                        class="border-gray-300 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 shadow-sm mt-1 block w-full rounded-md">
                         <option value="" selected>(Seleccionar)</option>
                         <option value="CH">CH Chuquisaca</option>
                         <option value="LP">LP La Paz</option>
@@ -95,25 +94,25 @@
             @enderror
             {{-- end email --}}
             {{-- select customer_type --}}
-{{--            <div class="mt-2 text-sm">Tipo cliente</div>--}}
-{{--            <select wire:model="customer_type_id" wire:change="onChangeSelectCustomerType"--}}
-{{--                class="border-gray-300 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 shadow-sm mt-1 block w-full rounded-fx rounded-md"--}}
-{{--                required>--}}
+            {{--            <div class="mt-2 text-sm">Tipo cliente</div> --}}
+            {{--            <select wire:model="customer_type_id" wire:change="onChangeSelectCustomerType" --}}
+            {{--                class="border-gray-300 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 shadow-sm mt-1 block w-full rounded-fx rounded-md" --}}
+            {{--                required> --}}
 
-{{--                <option selected>(Seleccionar)</option>--}}
-{{--                @forelse ($customer_types as $customertype)--}}
-{{--                    <option value="{{ $customertype->id }}">--}}
-{{--                        {{ $customertype->name }}</option>--}}
-{{--                @empty--}}
-{{--                    <option disabled>Sin registros</option>--}}
-{{--                @endforelse--}}
-{{--            </select>--}}
+            {{--                <option selected>(Seleccionar)</option> --}}
+            {{--                @forelse ($customer_types as $customertype) --}}
+            {{--                    <option value="{{ $customertype->id }}"> --}}
+            {{--                        {{ $customertype->name }}</option> --}}
+            {{--                @empty --}}
+            {{--                    <option disabled>Sin registros</option> --}}
+            {{--                @endforelse --}}
+            {{--            </select> --}}
 
-{{--            @error('customer_type_id')--}}
-{{--                <p class="text-red-500 font-semibold my-2">--}}
-{{--                    {{ $message }}--}}
-{{--                </p>--}}
-{{--            @enderror--}}
+            {{--            @error('customer_type_id') --}}
+            {{--                <p class="text-red-500 font-semibold my-2"> --}}
+            {{--                    {{ $message }} --}}
+            {{--                </p> --}}
+            {{--            @enderror --}}
             {{-- end customer_type --}}
             {{-- telephones --}}
             <div class="mt-2 text-base opacity-40 uppercase">Teléfonos</div>
@@ -156,6 +155,16 @@
                 </div>
             </div>
             {{-- end telephones --}}
+            {{-- birthday --}}
+            <div class="mt-4 text-sm">Fecha Nac.</div>
+            <x-jet-input type="date" wire:model="birthday"
+                class="mt-1 block w-full rounded-md" />
+            @error('birthday')
+                <p class="text-red-500 font-semibold my-2">
+                    {{ $message }}
+                </p>
+            @enderror
+            {{-- end birthday --}}
             {{-- state --}}
             <x-jet-label class="mt-4" value="Estado" />
             <div class="mt-4 space-y-2">
@@ -179,11 +188,11 @@
             <div class="mt-4 text-sm">
                 Descripción
             </div>
-            <x-textarea placeholder="Descripción" wire:model="description" class="mt-1 block w-full"/>
+            <x-textarea placeholder="Descripción" wire:model="description" class="mt-1 block w-full" />
             @error('description')
-            <p class="text-red-500 font-semibold my-2">
-                {{ $message }}
-            </p>
+                <p class="text-red-500 font-semibold my-2">
+                    {{ $message }}
+                </p>
             @enderror
             {{-- end description --}}
             {{-- all errors --}}
