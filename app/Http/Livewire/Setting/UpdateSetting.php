@@ -23,6 +23,9 @@ class UpdateSetting extends Component
     public $url_facebook;
     public $url_instagram;
     public $url_website;
+    public $url_tiktok;
+    public $url_1;
+    public $url_2;
     public $address;
     public $logo;
     public $new_logo;
@@ -45,6 +48,9 @@ class UpdateSetting extends Component
             $this->url_facebook = $this->setting->url_facebook;
             $this->url_instagram = $this->setting->url_instagram;
             $this->url_website = $this->setting->url_website;
+            $this->url_tiktok = $this->setting->url_tiktok;
+            $this->url_1 = $this->setting->url_1;
+            $this->url_2 = $this->setting->url_2;
             $this->address = $this->setting->address;
             $this->print_logo = $this->setting->print_logo;
             
@@ -66,6 +72,9 @@ class UpdateSetting extends Component
             'url_facebook' => $this->url_facebook,
             'url_instagram' => $this->url_instagram,
             'url_website' => $this->url_website,
+            'url_tiktok' => $this->url_tiktok,
+            'url_1' => $this->url_1,
+            'url_2' => $this->url_2,
             'address' => $this->address,
             'print_logo' => $this->print_logo,
         ]);

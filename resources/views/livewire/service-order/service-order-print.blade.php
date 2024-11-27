@@ -35,8 +35,8 @@
                     <span class="bg-blue-100 w-48 text-center px-8 ">{{ $service_order->ended_date }}</span>
                 </section>
             </section>
-            <section class="w-1/5 flex items-center">
-                <img class=" h-36 object-cover" src="{{ asset('/storage/setting-logo/logo-setting.png') }}"
+            <section class="w-1/5 flex items-center justify-center ">
+                <img class="h-24 object-cover" src="{{ asset('/storage/setting-logo/logo-setting.png') }}"
                     alt="logo">
             </section>
         </article>
@@ -167,11 +167,11 @@
 
         <section class="w-full flex justify-between text-base mt-8 gap-48">
 
-            <section class="w-1/2 px-4 py-2 border-double border-4 border-red-500 flex flex-col gap-2">
-                <section class="flex justify-center items-center font-bold text-red-500 w-full border-b border-red-500">
+            <section class="w-1/2 border-double border-4 border-red-500 flex flex-col gap-2">
+                <section class="flex justify-center items-center font-bold text-red-500 w-full border-b border-black py-2">
                     RECOMENDACIÓN
                 </section>
-                <div class="flex">
+                <div class="flex ml-2">
                     {{ $service_order->description }}
                 </div>
             </section>

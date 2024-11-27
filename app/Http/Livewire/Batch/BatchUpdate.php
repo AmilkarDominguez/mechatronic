@@ -24,6 +24,8 @@ class BatchUpdate extends Component
     public $final_price;
     public $stock;
     public $description;
+    public $brand;
+    public $model;
     public $expiration_date;
     public $slug;
     public $state;
@@ -51,14 +53,14 @@ class BatchUpdate extends Component
             $this->final_price = $this->batch->final_price;
             $this->stock = $this->batch->stock;
             $this->description = $this->batch->description;
+            $this->brand = $this->batch->brand;
+            $this->model = $this->batch->model;
             $this->expiration_date = $this->batch->expiration_date;
             $this->state = $this->batch->state;
         }
         if ($this->expense) {
             $this->purchase_price = $this->expense->purchase;
         }
-
-
         $this->warehouses = Warehouse::all()->where('state', 'ACTIVE');
         $this->products = Product::all()->where('state', 'ACTIVE');
         $this->suppliers = Supplier::all()->where('state', 'ACTIVE');
@@ -75,10 +77,12 @@ class BatchUpdate extends Component
         'supplier_id' => 'required',
         'industry_id' => 'required',
         'wholesale_price' => 'required',
-        'retail_price' => 'required',
-        'final_price' => 'required',
+        'retail_price' => 'nullable',
+        'final_price' => 'nullable',
         'stock' => 'required',
         'description' => 'nullable',
+        'brand' => 'nullable',
+        'model' => 'nullable',
         'expiration_date' => 'nullable',
         'state' => 'required',
     ];
@@ -97,6 +101,8 @@ class BatchUpdate extends Component
             'final_price' => $this->final_price,
             'stock' => $this->stock,
             'description' => $this->description,
+            'brand' => $this->brand,
+            'model' => $this->model,
             'expiration_date' => $this->expiration_date,
             'state' => $this->state,
         ]);
@@ -109,7 +115,6 @@ class BatchUpdate extends Component
         $this->alert('success', 'Registro actualizado correctamente', [
             'toast' => true,
             'position' => 'top-end',
-
         ]);
     }
 }

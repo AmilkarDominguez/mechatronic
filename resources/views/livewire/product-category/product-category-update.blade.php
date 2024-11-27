@@ -1,7 +1,7 @@
 <div>
     <x-slot name="header">
         <div class="font-semibold text-xl text-gray-800 leading-tight">
-            Actualizar género
+            Actualizar categoría
         </div>
     </x-slot>
     <div class="max-w-8xl mx-auto py-10 sm:px-6 lg:px-8">
@@ -20,14 +20,14 @@
             {{-- end name --}}
 
             {{-- title --}}
-            <x-jet-label class="mt-2" for="title" value="{{ __('Título') }}" />
+            {{-- <x-jet-label class="mt-2" for="title" value="{{ __('Título') }}" />
             <x-jet-input type="text" placeholder="Titulo" wire:model="title" wire:keyup="generateSlug"
                 class="mt-1 block w-full rounded-md" required />
             @error('title')
                 <p class="text-red-500 font-semibold my-2">
                     {{ $message }}
                 </p>
-            @enderror
+            @enderror --}}
             {{-- end title --}}
 
             {{-- description --}}

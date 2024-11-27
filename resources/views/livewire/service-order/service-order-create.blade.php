@@ -278,7 +278,9 @@
                                         <span class="text-gray-400">Fecha de expiración : </span>
                                         <span><strong>{{ $selected_batch->expiration_date }}</strong></span>
                                         <br>
-                                        <span class="text-gray-400">Precios : </span><br>
+                                        <span class="text-gray-400">Precio : </span>
+                                        <span><strong>{{ $selected_batch->wholesale_price }}</strong></span>
+                                        {{-- <span class="text-gray-400">Precios : </span><br>
                                         <div class="flex flex-col">
                                             <div class="flex justify-start items-center gap-2">
                                                 MAYORISTA:
@@ -292,7 +294,7 @@
                                                 FINAL:
                                                 <b class="text-primary-500">{{ $selected_batch->final_price }}</b>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         <hr class="my-2">
                                         <span class="text-gray-400">Producto : </span>
                                         <span><strong>{{ $selected_batch->product->name }}</strong></span>

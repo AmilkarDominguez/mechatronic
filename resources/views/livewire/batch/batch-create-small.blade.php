@@ -97,11 +97,11 @@
             @enderror
         </div>
         {{-- end select industries --}}
-        <div class="flex justify-between gap-2">
+        <div class="flex justify-between gap-2 mb-2">
             <div class="w-full">
                 {{-- wholesale_price --}}
                 <div class="my-2">
-                    Precio mayorista
+                    Precio
                 </div>
                 <x-jet-input type="number" step="0.01" placeholder="00.00" wire:model="wholesale_price"
                     class="mt-1 block w-full rounded-md" required />
@@ -112,9 +112,9 @@
                 @enderror
                 {{-- end wholesale_price --}}
             </div>
-            <div class="w-full">
-                {{-- retail_price --}}
-                <div class="my-2">
+            {{-- <div class="w-full"> --}}
+            {{-- retail_price --}}
+            {{-- <div class="my-2">
                     Precio minorista
                 </div>
                 <x-jet-input type="number" step="0.01" placeholder="00.00" wire:model="retail_price"
@@ -123,12 +123,12 @@
                     <p class="text-red-500 font-semibold my-2">
                         {{ $message }}
                     </p>
-                @enderror
-                {{-- end retail_price --}}
-            </div>
-            <div class="w-full">
-                {{-- final_price --}}
-                <div class="my-2">
+                @enderror --}}
+            {{-- end retail_price --}}
+            {{-- </div> --}}
+            {{-- <div class="w-full"> --}}
+            {{-- final_price --}}
+            {{-- <div class="my-2">
                     Precio final
                 </div>
                 <x-jet-input type="number" step="0.01" placeholder="00.00" wire:model="final_price"
@@ -137,23 +137,56 @@
                     <p class="text-red-500 font-semibold my-2">
                         {{ $message }}
                     </p>
+                @enderror --}}
+            {{-- end final_price --}}
+            {{-- </div> --}}
+        </div>
+
+        <div class="flex justify-between gap-2 mb-2">
+            <div class="w-full">
+                {{-- stock --}}
+                <div class="my-2">
+                    Cantidad
+                </div>
+                <x-jet-input type="number" step="0.01" placeholder="00.00" wire:model="stock"
+                    class="mt-1 block w-full rounded-md" required />
+                @error('stock')
+                    <p class="text-red-500 font-semibold my-2">
+                        {{ $message }}
+                    </p>
                 @enderror
-                {{-- end final_price --}}
+                {{-- end stock --}}
+            </div>
+            <div class="w-full">
+                {{-- brand --}}
+                <div class="my-2">
+                    Marca(s)
+                </div>
+                <x-jet-input type="text" placeholder="Marca(s)" wire:model="brand"
+                    class="mt-1 block w-full rounded-md" />
+                @error('brand')
+                    <p class="text-red-500 font-semibold my-2">
+                        {{ $message }}
+                    </p>
+                @enderror
+                {{-- end brand --}}
+            </div>
+            <div class="w-full">
+                {{-- model --}}
+                <div class="my-2">
+                    Modelo(s)
+                </div>
+                <x-jet-input type="text" placeholder="Modelo(s)" wire:model="model"
+                    class="mt-1 block w-full rounded-md" />
+                @error('model')
+                    <p class="text-red-500 font-semibold my-2">
+                        {{ $message }}
+                    </p>
+                @enderror
+                {{-- end model --}}
             </div>
         </div>
 
-        {{-- stock --}}
-        <div class="">
-            Cantidad
-        </div>
-        <x-jet-input type="number" step="0.01" placeholder="Cantidad" wire:model="stock"
-            class="mt-1 block w-full rounded-md" required />
-        @error('stock')
-            <p class="text-red-500 font-semibold my-2">
-                {{ $message }}
-            </p>
-        @enderror
-        {{-- end stock --}}
         {{-- expiration_date --}}
         <div class="">
             Fecha de expiración

@@ -24,6 +24,9 @@ return new class extends Migration
             $table->string('url_facebook')->nullable();
             $table->string('url_instagram')->nullable();
             $table->string('url_website')->nullable();
+            $table->string('url_tiktok')->nullable();
+            $table->string('url_1')->nullable();
+            $table->string('url_2')->nullable();
             $table->string('address')->nullable();
             $table->string('service_order_number')->nullable();
             $table->boolean('print_logo')->default(true)->nullable();

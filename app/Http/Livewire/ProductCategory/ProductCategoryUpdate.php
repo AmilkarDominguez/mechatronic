@@ -47,7 +47,7 @@ class ProductCategoryUpdate extends Component
     }
     protected $rules = [
         'name' => 'required|max:255|min:3',
-        'title' => 'required|max:255|min:3',
+        'title' => 'nullable|max:255|min:3',
         'description' => 'nullable|max:255|min:3',
         'state' => 'required',
         'photo_new' => 'nullable|image|max:1024',
@@ -55,10 +55,7 @@ class ProductCategoryUpdate extends Component
     ];
     public function submit()
     {
-        //Modificando regla para actualizar
-        $this->rules['slug'] = 'required|unique:product_categories,slug,' . $this->category->id;
         $this->validate();
-
         $this->category->update([
             'name' => $this->name,
             'title' => $this->title,

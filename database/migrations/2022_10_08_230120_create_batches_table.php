@@ -27,6 +27,8 @@ return new class extends Migration
             $table->decimal('final_price', 8, 2)->nullable();
             $table->integer('stock')->nullable();
             $table->string('description')->nullable();
+            $table->string('brand')->nullable();
+            $table->string('model')->nullable();
             $table->date('expiration_date')->nullable();
             $table->string('slug')->inique();
             $table->enum('state', ['ACTIVE', 'INACTIVE', 'DELETED'])->default('ACTIVE');

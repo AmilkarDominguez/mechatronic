@@ -8,7 +8,8 @@
         <form wire:submit.prevent="submit" class="m-10 mt-0 p-4">
             {{-- service_order_number --}}
             <div class="mt-4 text-sm">Nro. de orden de servicio</div>
-            <x-jet-input type="text" placeholder="00000" wire:model="service_order_number" class="mt-1 block w-full rounded-md" />
+            <x-jet-input type="text" placeholder="00000" wire:model="service_order_number"
+                class="mt-1 block w-full rounded-md" />
             @error('service_order_number')
                 <p class="text-red-500 font-semibold my-2">
                     {{ $message }}
@@ -92,6 +93,36 @@
                 </p>
             @enderror
             {{-- end url_website --}}
+            {{-- url_tiktok --}}
+            <div class="mt-4 text-sm">Tik tok</div>
+            <x-jet-input type="text" placeholder="Enlace instagram" wire:model="url_tiktok"
+                class="mt-1 block w-full rounded-md" />
+            @error('url_tiktok')
+                <p class="text-red-500 font-semibold my-2">
+                    {{ $message }}
+                </p>
+            @enderror
+            {{-- end url_tiktok --}}
+            {{-- url_1 --}}
+            <div class="mt-4 text-sm">URL extra</div>
+            <x-jet-input type="text" placeholder="Enlace instagram" wire:model="url_1"
+                class="mt-1 block w-full rounded-md" />
+            @error('url_1')
+                <p class="text-red-500 font-semibold my-2">
+                    {{ $message }}
+                </p>
+            @enderror
+            {{-- end url_1 --}}
+           {{-- url_2 --}}
+           <div class="mt-4 text-sm">URL extra</div>
+           <x-jet-input type="text" placeholder="Enlace instagram" wire:model="url_2"
+               class="mt-1 block w-full rounded-md" />
+           @error('url_2')
+               <p class="text-red-500 font-semibold my-2">
+                   {{ $message }}
+               </p>
+           @enderror
+           {{-- end url_2 --}}
             {{-- address --}}
             <div class="mt-4 text-sm">Dirección</div>
             <x-jet-input type="text" placeholder="Dirección" wire:model="address"

@@ -1,7 +1,7 @@
 <div>
     <x-slot name="header">
         <div class="font-semibold text-xl text-gray-800 leading-tight">
-            Registro de Categia
+            Registrar categoría
         </div>
     </x-slot>
     <div class="max-w-8xl mx-auto py-10 sm:px-6 lg:px-8">
@@ -9,9 +9,9 @@
             <form wire:submit.prevent="submit" class="lg:m-10 p-4">
                 {{-- name --}}
                 <div class="mt-4 text-sm">
-                    Nombre completo
+                    Nombre
                 </div>
-                <x-jet-input type="text" placeholder="Nombre completo" wire:model="name"
+                <x-jet-input type="text" placeholder="Nombre" wire:model="name"
                     class="mt-1 block w-full rounded-md" required />
                 @error('name')
                     <p class="text-red-500 font-semibold my-2">
@@ -21,7 +21,7 @@
                 {{-- end name --}}
 
                 {{-- title --}}
-                <div class="">
+                {{-- <div class="">
                     Titulo
                 </div>
                 <x-jet-input type="text" placeholder="Titulo" wire:model="title"
@@ -30,7 +30,7 @@
                     <p class="text-red-500 font-semibold my-2">
                         {{ $message }}
                     </p>
-                @enderror
+                @enderror --}}
                 {{-- end title --}}
 
                 {{-- description --}}

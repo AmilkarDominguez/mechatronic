@@ -18,6 +18,8 @@ class Batch extends Model
         'final_price',
         'stock',
         'description',
+        'brand',
+        'model',
         'expiration_date',
         'slug',
         'state'

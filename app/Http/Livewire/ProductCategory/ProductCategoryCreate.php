@@ -30,11 +30,11 @@ class ProductCategoryCreate extends Component
 
     protected $rules = [
         'name' => 'required|max:255|min:3',
-        'title' => 'required|max:255|min:3',
+        'title' => 'nullable|max:255|min:3',
         'description' => 'nullable|max:255|min:3',
         'state' => 'required',
-        'photo' => 'required|image|max:1024',
-        'icon' => 'required|image|max:1024',
+        'photo' => 'nullable|image|max:1024',
+        'icon' => 'nullable|image|max:1024',
     ];
     public function submit()
     {

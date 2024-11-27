@@ -22,6 +22,8 @@ class BatchCreate extends Component
     public $final_price;
     public $stock;
     public $description;
+    public $brand;
+    public $model;
     public $expiration_date;
     public $slug;
     public $state = 'ACTIVE';
@@ -50,11 +52,13 @@ class BatchCreate extends Component
         'supplier_id' => 'required',
         'industry_id' => 'required',
         'wholesale_price' => 'required',
-        'retail_price' => 'required',
-        'final_price' => 'required',
+        'retail_price' => 'nullable',
+        'final_price' => 'nullable',
         'suppliers' => 'required',
         'stock' => 'required',
         'description' => 'nullable',
+        'brand' => 'nullable',
+        'model' => 'nullable',
         'expiration_date' => 'nullable',
         'state' => 'required',
     ];
@@ -72,6 +76,8 @@ class BatchCreate extends Component
             'final_price' => $this->final_price,
             'stock' => $this->stock,
             'description' => $this->description,
+            'brand' => $this->brand,
+            'model' => $this->model,
             'expiration_date' => $this->expiration_date,
             'slug' => $slug,
             'state' => $this->state,
@@ -105,6 +111,8 @@ class BatchCreate extends Component
         $this->final_price = "";
         $this->stock = "";
         $this->description = "";
+        $this->brand = "";
+        $this->model = "";
         $this->expiration_date = "";
         $this->state = "";
     }

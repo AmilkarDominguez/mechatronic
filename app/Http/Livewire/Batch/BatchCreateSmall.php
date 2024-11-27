@@ -20,6 +20,8 @@ class BatchCreateSmall extends Component
     public $wholesale_price;
     public $retail_price;
     public $final_price;
+    public $brand;
+    public $model;
     public $stock;
     public $expiration_date;
     public $slug;
@@ -48,12 +50,13 @@ class BatchCreateSmall extends Component
         'supplier_id' => 'required',
         'industry_id' => 'required',
         'wholesale_price' => 'required',
-        'retail_price' => 'required',
-        'final_price' => 'required',
+        'retail_price' => 'nullable',
+        'final_price' => 'nullable',
         'suppliers' => 'required',
         'stock' => 'required',
         'expiration_date' => 'nullable',
-        'state' => 'required',
+        'brand' => 'nullable',
+        'model' => 'nullable'
     ];
     public function submit()
     {
@@ -67,6 +70,8 @@ class BatchCreateSmall extends Component
             'wholesale_price' => $this->wholesale_price,
             'retail_price' => $this->retail_price,
             'final_price' => $this->final_price,
+            'brand' => $this->brand,
+            'model' => $this->model,
             'stock' => $this->stock,
             'description' => '',
             'expiration_date' => $this->expiration_date,
@@ -100,6 +105,8 @@ class BatchCreateSmall extends Component
         $this->wholesale_price = "";
         $this->retail_price = "";
         $this->final_price = "";
+        $this->brand = "";
+        $this->model = "";
         $this->stock = "";
         $this->expiration_date = "";
     }
