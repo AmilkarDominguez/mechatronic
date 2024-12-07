@@ -154,7 +154,7 @@ class ServiceOrderDataTable extends LivewireDatatable
     public function toastConfirmComplete($id)
     {
         $this->selectedId = $id;
-        $this->confirm(__('¿Estas seguro que seas completar el registro?'), [
+        $this->confirm(__('¿Estas seguro que deseas completar el registro?'), [
             'icon' => 'warning',
             'position' => 'center',
             'toast' => false,
@@ -174,4 +174,6 @@ class ServiceOrderDataTable extends LivewireDatatable
             $ServiceOrder->update();
         }
     }
+
+    
 }

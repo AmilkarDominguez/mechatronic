@@ -13,10 +13,11 @@ use Jantinnerezo\LivewireAlert\LivewireAlert;
 class PaymentDataTable extends LivewireDatatable
 {
     use LivewireAlert;
+
     public $exportable = true;
     public $model = Payment::class;
 
-    //variable que llega desde la vista blade payment-dashboard.blade
+    // Variable que llega desde la vista Blade payment-dashboard.blade
     public $service_order_id;
 
     public $hideable = 'select';
@@ -24,12 +25,13 @@ class PaymentDataTable extends LivewireDatatable
     public function builder()
     {
         return (Payment::query()
-            ->join('sales', function ($join) {
-                $join->on('sales.id', '=', 'payments.service_order_id');
+            ->join('service_orders', function ($join) {
+                $join->on('service_orders.id', '=', 'payments.service_order_id');
             })
-            ->where('payments.service_order_id',  $this->service_order_id)
+            ->where('payments.service_order_id', $this->service_order_id)
             ->where('payments.state', 'ACTIVE'));
     }
+
     public function edit($id)
     {
         $this->emit('edit_documento', $id);
@@ -39,9 +41,9 @@ class PaymentDataTable extends LivewireDatatable
     public function columns()
     {
         return [
-            Column::name('sales.id')
+            Column::name('service_orders.id')
                 ->searchable()
-                ->label('Código de venta'),
+                ->label('Código de Orden de Servicio'),
 
             Column::name('amount')
                 ->searchable()
@@ -52,25 +54,24 @@ class PaymentDataTable extends LivewireDatatable
                 ->format('d/m/Y h:i:s')
                 ->filterable(),
 
-
             Column::callback(['id', 'slug'], function ($id, $slug) {
                 return view('livewire.payment.payment-table-actions', ['id' => $id, 'slug' => $slug]);
             })->label('Opciones')
                 ->excludeFromExport()
-
         ];
     }
 
     public $idDelet;
+
     public function toastConfirmDelet($id)
     {
         $this->idDelet = $id;
-        $this->confirm(__('¿Estas seguro que seas eliminar el registro?'), [
+        $this->confirm(__('¿Estás seguro de que deseas eliminar el registro?'), [
             'icon' => 'warning',
-            'position' =>  'center',
-            'toast' =>  false,
-            'confirmButtonText' =>  'Si',
-            'showConfirmButton' =>  true,
+            'position' => 'center',
+            'toast' => false,
+            'confirmButtonText' => 'Sí',
+            'showConfirmButton' => true,
             'showCancelButton' => true,
             'onConfirmed' => 'confirmed',
             'confirmButtonColor' => '#A5DC86',
@@ -80,6 +81,7 @@ class PaymentDataTable extends LivewireDatatable
     protected $listeners = [
         'confirmed',
     ];
+
     public function confirmed()
     {
         if ($this->idDelet) {
@@ -90,8 +92,6 @@ class PaymentDataTable extends LivewireDatatable
                 'must' => $this->service_order->must + $Payment->amount,
             ]);
             $Payment->delete();
-            // $Payment->state = "DELETED";
-            // $Payment->update();
             return redirect()->route('payment.dashboard', [$this->service_order->slug]);
         }
     }

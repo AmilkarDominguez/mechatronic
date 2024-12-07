@@ -19,7 +19,7 @@
 
     <!-- Scripts -->
     <script src="{{ mix('js/app.js') }}" defer></script>
-    <script src="https://kit.fontawesome.com/860d5b4aa4.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/d28e5f8122.js" crossorigin="anonymous"></script>
 
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"

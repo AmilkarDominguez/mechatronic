@@ -696,7 +696,7 @@
                     <div class="font-bold mb-2">
                         Recomendación
                     </div>
-                    <x-textarea placeholder="Recomendación" wire:model="description" class="mt-1 block w-full" />
+                    <x-textarea placeholder="Recomendación" wire:model.lazy="description" class="mt-1 block w-full" />
                 </div>
                 {{-- end description --}}
                 {{-- total --}}

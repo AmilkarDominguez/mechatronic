@@ -221,7 +221,7 @@ class ServiceOrderUpdate extends Component
 
             $this->service_order->update([
                 'number' => $this->service_order_number,
-                'description' => $this->description || '',
+                'description' => $this->description,
                 'total' => $this->total,
                 'must' => $this->total,
                 'mileage' => $this->mileage,
@@ -259,7 +259,7 @@ class ServiceOrderUpdate extends Component
             $this->updateStock();
             foreach ($this->additional_extra_items as $item) {
                 ServiceOrderExtraItem::create([
-                    'uuid' => $item['uuid'],
+                    'uuid' => $item['uuid'] ?? (string) Str::uuid(),
                     'cost' => $item['cost'],
                     'price' => $item['price'],
                     'quantity' => $item['quantity'],

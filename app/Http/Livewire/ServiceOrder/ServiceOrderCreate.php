@@ -69,6 +69,7 @@ class ServiceOrderCreate extends Component
 
     public $vehicles = [];
     public $vehicle_id;
+    public $selected_vehicle;
 
     public $total;
     public $setting;
@@ -282,8 +283,13 @@ class ServiceOrderCreate extends Component
     {
         if ($this->customer_id > 0) {
             $this->selected_customer = Customer::find($this->customer_id);
-            $this->vehicles = Vehicle::where('state', 'ACTIVE')->where('customer_id', $this->customer_id)->get();
+            $this->emitCustomerSelectedEvent();
         }
+    }
+
+    private function emitCustomerSelectedEvent(){
+        $this->vehicles = Vehicle::where('state', 'ACTIVE')->where('customer_id', $this->customer_id)->get();
+        $this->emit('customerSelectedEvent', $this->vehicles);
     }
 
     public function onChangeSelectWarehouse()
@@ -297,6 +303,13 @@ class ServiceOrderCreate extends Component
     {
         if ($this->batch_id > 0) {
             $this->selected_batch = Batch::find($this->batch_id);
+        }
+    }
+
+    public function onChangeSelectVehicle()
+    {
+        if ($this->vehicle_id > 0) {
+            $this->selected_vehicle = Vehicle::find($this->vehicle_id);
         }
     }
 
@@ -354,7 +367,6 @@ class ServiceOrderCreate extends Component
     {
         if ($this->selected_batch != null) {
             $id = $this->selected_batch->id;
-            //verificacion si el producto existe
             if ($this->sale_details && isset($this->sale_details[$id])) {
                 $this->sale_details[$id]['quantity'] += 1;
                 $this->updateSaleDetail($id);
@@ -463,7 +475,8 @@ class ServiceOrderCreate extends Component
         'serviceAdded',
         'extraItemAdded',
         'batchAdded',
-        'customerAdded'
+        'customerAdded',
+        'vehicleAdded'
     ];
 
     public function confirmed()
@@ -477,6 +490,14 @@ class ServiceOrderCreate extends Component
         $this->service_id = $id;
         $this->onChangeSelectService();
         $this->emit('serviceAddedEvent', $this->services, $id);
+    }
+
+    public function vehicleAdded($id)
+    {
+        $this->vehicles = Vehicle::where('state', 'ACTIVE')->where('customer_id', $this->customer_id)->get();
+        $this->vehicle_id = $id;
+        $this->onChangeSelectVehicle();
+        $this->emit('vehicleAddedEvent', $this->vehicles, $id);
     }
 
     public function extraItemAdded($id)
@@ -502,5 +523,6 @@ class ServiceOrderCreate extends Component
         $this->customers = Customer::all()->where('state', 'ACTIVE');
         $this->customer_id = $id;
         $this->emit('customerAddedEvent', $this->customers, $id);
+        $this->emitCustomerSelectedEvent();
     }
 }

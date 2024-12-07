@@ -97,4 +97,34 @@ class ServiceOrderDataTableCompleted extends LivewireDatatable
 
         ];
     }
+
+    protected $listeners = [
+        'confirmedRevertServiceOrder',
+    ];
+
+    public function toastConfirmRevert($id)
+    {
+        $this->selectedId = $id;
+        $this->confirm(__('¿Estas seguro que deseas revertir el registro?'), [
+            'icon' => 'warning',
+            'position' => 'center',
+            'toast' => false,
+            'confirmButtonText' => 'Si',
+            'showConfirmButton' => true,
+            'showCancelButton' => true,
+            'onConfirmed' => 'confirmedRevertServiceOrder',
+            'confirmButtonColor' => '#A5DC86',
+        ]);
+    }
+
+    
+    public function confirmedRevertServiceOrder()
+    {
+        if ($this->selectedId) {
+            $ServiceOrder = ServiceOrder::find($this->selectedId);
+            $ServiceOrder->state = "PENDING";
+            $ServiceOrder->update();
+        }
+    }
+    
 }
