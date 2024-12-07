@@ -72,7 +72,8 @@ class ServiceOrderUpdate extends Component
 
     public $vehicles = [];
     public $vehicle_id;
-
+    public $selected_vehicle;
+    
     public $total;
 
     public function mount($slug)
@@ -100,7 +101,7 @@ class ServiceOrderUpdate extends Component
         $this->ended_date = $this->service_order->ended_date;
         $this->service_order_number = $this->service_order->number;
         $this->vehicle_id = $this->service_order->vehicle_id;
-        
+
         $this->loadLabours();
         $this->loadSaleDetails();
         $this->loadExtraItems();
@@ -269,7 +270,7 @@ class ServiceOrderUpdate extends Component
                 ]);
             }
 
-            $this->confirm('Registro creado correctamente', [
+            $this->confirm('Registro actualizado correctamente', [
                 'icon' => 'success',
                 'toast' => false,
                 'position' => 'center',
@@ -402,6 +403,13 @@ class ServiceOrderUpdate extends Component
     {
         if ($this->batch_id > 0) {
             $this->selected_batch = Batch::find($this->batch_id);
+        }
+    }
+
+    public function onChangeSelectVehicle()
+    {
+        if ($this->vehicle_id > 0) {
+            $this->selected_vehicle = Vehicle::find($this->vehicle_id);
         }
     }
 
@@ -568,7 +576,8 @@ class ServiceOrderUpdate extends Component
         'serviceAdded',
         'extraItemAdded',
         'batchAdded',
-        'customerAdded'
+        'customerAdded',
+        'vehicleAdded'
     ];
 
     public function confirmed()
@@ -582,6 +591,14 @@ class ServiceOrderUpdate extends Component
         $this->service_id = $id;
         $this->onChangeSelectService();
         $this->emit('serviceAddedEvent', $this->services, $id);
+    }
+
+    public function vehicleAdded($id)
+    {
+        $this->vehicles = Vehicle::where('state', 'ACTIVE')->where('customer_id', $this->customer_id)->get();
+        $this->vehicle_id = $id;
+        $this->onChangeSelectVehicle();
+        $this->emit('vehicleAddedEvent', $this->vehicles, $id);
     }
 
     public function extraItemAdded($id)
@@ -607,5 +624,6 @@ class ServiceOrderUpdate extends Component
         $this->customers = Customer::all()->where('state', 'ACTIVE');
         $this->customer_id = $id;
         $this->emit('customerAddedEvent', $this->customers, $id);
+        $this->emitCustomerSelectedEvent();
     }
 }

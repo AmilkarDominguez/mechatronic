@@ -60,17 +60,11 @@
                                 <select id="select-customers"
                                     class="border-gray-300 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 shadow-sm mt-1 block w-full rounded-md"
                                     required>
-                                    <option>(Seleccionar)</option>
+                                    <option selected>(Seleccionar)</option>
                                     @forelse ($customers as $item)
-                                        @if ($item->id == $customer_id)
-                                            <option selected value="{{ $item->id }}">
-                                                CI: {{ $item->person->ci }} | NIT: {{ $item->nit }} | Nombre:
-                                                {{ $item->person->name }} - {{ $item->description }} </option>
-                                        @else
-                                            <option value="{{ $item->id }}">
-                                                CI: {{ $item->person->ci }} | NIT: {{ $item->nit }} | Nombre:
-                                                {{ $item->person->name }} - {{ $item->description }} </option>
-                                        @endif
+                                        <option value="{{ $item->id }}">
+                                            CI: {{ $item->person->ci }} | NIT: {{ $item->nit }} | Nombre:
+                                            {{ $item->person->name }} - {{ $item->description }} </option>
                                     @empty
                                         <option disabled>Sin registros</option>
                                     @endforelse
@@ -104,22 +98,26 @@
                         {{-- end info customer --}}
 
                         {{-- select customer vehicle --}}
-                        <div>
+                        <div wire:ignore>
                             <div class="font-bold mb-2">
                                 Vehículos
                             </div>
-                            <select wire:model="vehicle_id"
-                                class="border-gray-300 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 shadow-sm mt-1 block w-full rounded-fx rounded-md"
-                                required>
-                                <option selected>(Seleccionar)</option>
-                                @forelse ($vehicles as $item)
-                                    <option value="{{ $item->id }}">
-                                        Placa: {{ $item->license_plate }} | Modelo: {{ $item->model }} | Marca:
-                                        {{ $item->brand }} </option>
-                                @empty
-                                    <option disabled>Sin registros</option>
-                                @endforelse
-                            </select>
+                            <div class="flex items-center">
+                                <select id="select-vehicles"
+                                    class="border-gray-300 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 shadow-sm mt-1 block w-full rounded-fx rounded-md"
+                                    required>
+                                    <option selected>(Seleccionar)</option>
+                                    @forelse ($vehicles as $item)
+                                        <option value="{{ $item->id }}">
+                                            Placa: {{ $item->license_plate }} | Modelo: {{ $item->model }} | Marca:
+                                            {{ $item->brand }} </option>
+                                    @empty
+                                        <option disabled>Sin registros</option>
+                                    @endforelse
+                                </select>
+                                <x-button-plus @click.prevent="showModal = true ; modalType = 'vehicle'">
+                                </x-button-plus>
+                            </div>
                         </div>
                         {{-- end customer vehicle --}}
 
@@ -648,10 +646,9 @@
                                     {{ $item['subtotal'] }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-2xl ">
-                                    <a
-                                        class="inline-flex items-cente text-primary-500  hover:text-primary-700 cursor-pointer"><i
-                                            class="fas fa-cart-arrow-down"
-                                            wire:click="removeExtraItem('{{ $item['uuid'] }}')"></i></a>
+                                    <a class="inline-flex items-cente text-primary-500  hover:text-primary-700 cursor-pointer"
+                                        wire:click="removeExtraItem('{{ $item['uuid'] }}')"><i
+                                            class="fas fa-cart-arrow-down"></i></a>
                                 </td>
                             </tr>
                         @endforeach
@@ -696,7 +693,7 @@
                     <div class="font-bold mb-2">
                         Recomendación
                     </div>
-                    <x-textarea placeholder="Recomendación" wire:model.lazy="description" class="mt-1 block w-full" />
+                    <x-textarea placeholder="Recomendación" wire:model="description" class="mt-1 block w-full" />
                 </div>
                 {{-- end description --}}
                 {{-- total --}}
@@ -732,6 +729,7 @@
                         <label x-show="modalType == 'service'">Agregar servicio</label>
                         <label x-show="modalType == 'extra_items'">Agregar trabajo adicional</label>
                         <label x-show="modalType == 'batch'">Agregar lote</label>
+                        <label x-show="modalType == 'vehicle'">Agregar vehículo</label>
                     </label>
                     <button class="absolute right-8 text-4xl hover:scale-110 cursor-pointer"
                         @click.prevent="showModal = false">
@@ -740,22 +738,28 @@
                 </section>
                 {{-- end header --}}
                 {{-- body --}}
-                <section x-show="modalType == 'customer'"
-                    class="bg-white  flex w-full items-center relative p-8 rounded-b-lg">
-                    <livewire:customer.customer-create-small />
-                </section>
-                <section x-show="modalType == 'service'"
-                    class="bg-white  flex w-full items-center relative p-8 rounded-b-lg">
-                    <livewire:service.service-create-small />
-                </section>
-                <section x-show="modalType == 'extra_items'"
-                    class="bg-white  flex w-full items-center relative p-8 rounded-b-lg">
-                    <livewire:extra-item.extra-item-create-small />
-                </section>
-                <section x-show="modalType == 'batch'"
-                    class="bg-white  flex w-full items-center relative p-8 rounded-b-lg">
-                    <livewire:batch.batch-create-small />
-                </section>
+                <div class="overflow-y-auto">
+                    <section x-show="modalType == 'customer'"
+                        class="bg-white  flex w-full items-center relative p-8 rounded-b-lg">
+                        <livewire:customer.customer-create-small />
+                    </section>
+                    <section x-show="modalType == 'service'"
+                        class="bg-white  flex w-full items-center relative p-8 rounded-b-lg">
+                        <livewire:service.service-create-small />
+                    </section>
+                    <section x-show="modalType == 'extra_items'"
+                        class="bg-white  flex w-full items-center relative p-8 rounded-b-lg">
+                        <livewire:extra-item.extra-item-create-small />
+                    </section>
+                    <section x-show="modalType == 'vehicle'"
+                        class="bg-white  flex w-full items-center relative p-8 rounded-b-lg">
+                        <livewire:vehicle.vehicle-create-small />
+                    </section>
+                    <section x-show="modalType == 'batch'"
+                        class="bg-white  flex w-full items-center relative p-8 rounded-b-lg">
+                        <livewire:batch.batch-create-small />
+                    </section>
+                </div>
             </section>
         </section>
     </section>
@@ -799,7 +803,6 @@
             });
         }
 
-
         function initCustomerSelect2() {
             $('#select-customers').select2();
             $(".select2-container").css("width", "100%");
@@ -807,13 +810,10 @@
 
         function setEventCustomerSelect() {
             $('#select-customers').on('change', function() {
-                console.log('arrived');
                 @this.set('customer_id', this.value);
-                console.log('arrived 2');
                 @this.onChangeSelectCustomer();
             });
         }
-
 
         function initExtraItemSelect2() {
             $('#select-extra-items').select2();
@@ -827,12 +827,25 @@
             });
         }
 
+        function initVehicleSelect2() {
+            $('#select-vehicles').select2();
+            $(".select2-container").css("width", "100%");
+        }
+
+        function setEventVehicleSelect() {
+            $('#select-vehicles').on('change', function() {
+                @this.set('vehicle_id', this.value);
+                @this.onChangeSelectVehicle();
+            });
+        }
+
         function initSelects() {
             initServiceSelect2();
             initEmployeeSelect2();
             initCustomerSelect2();
             initBatchSelect2();
             initExtraItemSelect2();
+            initVehicleSelect2();
         }
 
 
@@ -842,6 +855,7 @@
             setEventBatchSelect();
             setEventCustomerSelect();
             setEventExtraItemSelect();
+            setEventVehicleSelect();
         }
 
         document.addEventListener('livewire:load', function() {
@@ -891,6 +905,27 @@
             window.dispatchEvent(new Event('close-modal'));
         });
 
+        Livewire.on('vehicleAddedEvent', (items, id) => {
+            const selectElement = $('#select-vehicles');
+            selectElement.html('')
+            $.each(items, function(key, value) {
+                const vehicle = {
+                    license_plate: value['license_plate'],
+                    model: value['model'],
+                    brand: value['brand'],
+                }
+                selectElement.append(
+                    $("<option></option>")
+                    .attr("value", value['id'])
+                    .text(
+                        ` Placa: ${vehicle.license_plate} | Modelo: ${vehicle.model} | Marca: ${vehicle.brand}`
+                    )
+                );
+            });
+            selectElement.val(id);
+            window.dispatchEvent(new Event('close-modal'));
+        });
+
         Livewire.on('customerAddedEvent', (items, id) => {
             const selectElement = $('#select-customers');
             selectElement.html('')
@@ -922,6 +957,27 @@
                     $("<option></option>")
                     .attr("value", value['id'])
                     .text(value['product']['description'])
+                );
+            });
+        });
+
+        Livewire.on('customerSelectedEvent', vehicles => {
+            console.log(vehicles);
+            
+            const selectElement = $('#select-vehicles');
+            selectElement.html('')
+            $.each(vehicles, function(key, value) {
+                const vehicle = {
+                    license_plate: value['license_plate'],
+                    model: value['model'],
+                    brand: value['brand'],
+                }
+                selectElement.append(
+                    $("<option></option>")
+                    .attr("value", value['id'])
+                    .text(
+                        ` Placa: ${vehicle.license_plate} | Modelo: ${vehicle.model} | Marca: ${vehicle.brand}`
+                    )
                 );
             });
         });
