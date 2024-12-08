@@ -59,7 +59,7 @@ class ExpenseTypeDataTable extends LivewireDatatable
     public function toastConfirmDelet($name, $id)
     {
         $this->idDelet = $id;
-        $this->confirm(__('¿Estas seguro que seas eliminar el registro?'), [
+        $this->confirm(__('¿Estás seguro que seas eliminar el registro?'), [
             'icon' => 'warning',
             'position' =>  'center',
             'toast' =>  false,

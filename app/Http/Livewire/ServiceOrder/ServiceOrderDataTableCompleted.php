@@ -105,7 +105,7 @@ class ServiceOrderDataTableCompleted extends LivewireDatatable
     public function toastConfirmRevert($id)
     {
         $this->selectedId = $id;
-        $this->confirm(__('¿Estas seguro que deseas revertir el registro?'), [
+        $this->confirm(__('¿Estás seguro que deseas revertir el registro?'), [
             'icon' => 'warning',
             'position' => 'center',
             'toast' => false,

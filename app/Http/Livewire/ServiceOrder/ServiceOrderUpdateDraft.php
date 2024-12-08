@@ -570,7 +570,6 @@ class ServiceOrderUpdateDraft extends Component
         $this->total = $this->labours_total + $this->sale_details_total + $this->additional_extra_items_total;
     }
 
-
     protected $listeners = [
         'confirmed',
         'serviceAdded',

@@ -123,7 +123,7 @@ class ServiceOrderDataTable extends LivewireDatatable
     public function toastConfirmDelet($id)
     {
         $this->selectedId = $id;
-        $this->confirm(__('¿Estas seguro que seas anular el registro?'), [
+        $this->confirm(__('¿Estás seguro que seas anular el registro?'), [
             'icon' => 'warning',
             'position' => 'center',
             'toast' => false,
@@ -154,7 +154,7 @@ class ServiceOrderDataTable extends LivewireDatatable
     public function toastConfirmComplete($id)
     {
         $this->selectedId = $id;
-        $this->confirm(__('¿Estas seguro que deseas completar el registro?'), [
+        $this->confirm(__('¿Estás seguro que deseas completar el registro?'), [
             'icon' => 'warning',
             'position' => 'center',
             'toast' => false,

@@ -97,26 +97,26 @@ class ServiceOrderDataTableDraft extends LivewireDatatable
     }
 
     protected $listeners = [
-        'confirmedRevertServiceOrder',
+        'confirmedDraftToPending',
     ];
 
-    public function toastConfirmRevert($id)
+    public function toastConfirmDraftToPending($id)
     {
         $this->selectedId = $id;
-        $this->confirm(__('¿Estas seguro que deseas revertir el registro?'), [
+        $this->confirm(__('¿Estás seguro que deseas confirmar cotización?'), [
             'icon' => 'warning',
             'position' => 'center',
             'toast' => false,
             'confirmButtonText' => 'Si',
             'showConfirmButton' => true,
             'showCancelButton' => true,
-            'onConfirmed' => 'confirmedRevertServiceOrder',
+            'onConfirmed' => 'confirmedDraftToPending',
             'confirmButtonColor' => '#A5DC86',
         ]);
     }
 
     
-    public function confirmedRevertServiceOrder()
+    public function confirmedDraftToPending()
     {
         if ($this->selectedId) {
             $ServiceOrder = ServiceOrder::find($this->selectedId);
