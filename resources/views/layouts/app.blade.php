@@ -444,6 +444,10 @@
                                     <i class="fas fa-box"></i> Pruductos
                                 </x-a-sidenav>
 
+                                <x-a-sidenav href="{{ route('birthday-report.dashboard') }}" :active="request()->routeIs('birthday-report.dashboard')">
+                                    <i class="fa-solid fa-cake-candles"></i> Cumpleañeros
+                                </x-a-sidenav>
+
 
                             </div>
                         </div>

@@ -61,6 +61,7 @@ use App\Http\Livewire\Service\ServiceUpdate;
 use App\Http\Livewire\ExtraItem\ExtraItemCreate;
 use App\Http\Livewire\ExtraItem\ExtraItemDashboard;
 use App\Http\Livewire\ExtraItem\ExtraItemUpdate;
+use App\Http\Livewire\Reports\BirthdayReport\BirthdayReportDashboard;
 use App\Http\Livewire\ServiceOrder\ServiceOrderDashboardCompleted;
 use App\Http\Livewire\ServiceOrder\ServiceOrderDashboardDraft;
 use App\Http\Livewire\Setting\UpdateSetting;
@@ -217,4 +218,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::get('service-order-expense', SaleExpenseDashboard::class)->name('service-order-expense.dashboard')->middleware('auth', 'role:admin');
     //service_order-expense
     Route::get('report-product', ReportProductDashboard::class)->name('report-product.dashboard')->middleware('auth', 'role:admin');
+
+    //Reports
+    Route::get('birthday-report', BirthdayReportDashboard::class)->name('birthday-report.dashboard')->middleware('auth', 'role:admin');
 });

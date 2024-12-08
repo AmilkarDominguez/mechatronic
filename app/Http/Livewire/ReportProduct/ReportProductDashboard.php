@@ -55,12 +55,12 @@ class ReportProductDashboard extends Component
     {
         $this->expenses_total = Expense::select('*')
             ->whereBetween('expenses.created_at', [$this->start_date, $this->end_date])
-            //->where('expenses.state', 'ACTIVE')
+            ->where('expenses.state', 'PENDING')
             ->sum('expenses.purchase');
 
         $this->service_orders_total = ServiceOrder::select('*')
             ->whereBetween('service_orders.created_at', [$this->start_date, $this->end_date])
-            //->where('service_orders.state', 'ACTIVE')
+            ->where('service_orders.state', 'COMPLETED')
             ->sum('service_orders.have');
 
         $this->items = DB::table('service_order_batches')

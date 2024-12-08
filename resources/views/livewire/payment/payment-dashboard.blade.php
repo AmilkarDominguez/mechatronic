@@ -27,5 +27,4 @@
             <livewire:payment.payment-data-table :service_order_id="$service_order->id" />
         </div>
     </div>
-
 </div>

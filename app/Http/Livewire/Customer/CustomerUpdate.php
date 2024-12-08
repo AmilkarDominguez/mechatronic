@@ -121,21 +121,58 @@ class CustomerUpdate extends Component
             'address' => $this->address,
         ]);
 
-        //Editando telefonos
-        $this->phone_primary->update([
-            'number' => ($this->telephone_whatsapp) ? $this->telephone_whatsapp : '-',
-        ]);
-        $this->phone_secondary->update([
-            'number' => ($this->telephone_secondary) ? $this->telephone_secondary : '-',
-        ]);
-        $this->phone_tertiary->update([
-            'number' => ($this->landline) ? $this->landline : '-',
-        ]);
+        // Actualizar los teléfonos
+        $this->updateTelephones();
 
         //Llamando Alerta
         $this->alert('success', 'Registro actualizado correctamente', [
             'toast' => true,
             'position' => 'top-end',
         ]);
+    }
+
+    /**
+     * Método para actualizar o crear teléfonos.
+     */
+    private function updateTelephones()
+    {
+        // Actualizar o crear el teléfono primario
+        if ($this->phone_primary) {
+            $this->phone_primary->update([
+                'number' => $this->telephone_whatsapp ?: '-',
+            ]);
+        } else {
+            Telephone::create([
+                'person_id' => $this->person->id,
+                'type' => 'PRIMARY',
+                'number' => $this->telephone_whatsapp ?: '-',
+            ]);
+        }
+
+        // Actualizar o crear el teléfono secundario
+        if ($this->phone_secondary) {
+            $this->phone_secondary->update([
+                'number' => $this->telephone_secondary ?: '-',
+            ]);
+        } else {
+            Telephone::create([
+                'person_id' => $this->person->id,
+                'type' => 'SECONDARY',
+                'number' => $this->telephone_secondary ?: '-',
+            ]);
+        }
+
+        // Actualizar o crear el teléfono terciario
+        if ($this->phone_tertiary) {
+            $this->phone_tertiary->update([
+                'number' => $this->landline ?: '-',
+            ]);
+        } else {
+            Telephone::create([
+                'person_id' => $this->person->id,
+                'type' => 'TERTIARY',
+                'number' => $this->landline ?: '-',
+            ]);
+        }
     }
 }
