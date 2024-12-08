@@ -19,6 +19,7 @@ class PaymentDataTable extends LivewireDatatable
 
     // Variable que llega desde la vista Blade payment-dashboard.blade
     public $service_order_id;
+    public $service_order;
 
     public $hideable = 'select';
 

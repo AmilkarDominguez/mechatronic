@@ -4,16 +4,14 @@
             Pagos
         </div>
     </x-slot>
-    <div class=" max-w-8xl mx-auto py-10 sm:px-6 lg:px-8">
-        <div class="w-full flex justify-start space-x-2 container bg-white">
-            <div class="my-2 mx-4">
-                <h1 class="text-lg opacity-50">Información de venta</h1>
-                <h1 class="text-2xl">Venta: {{ $service_order->id }}</h1>
-                <h2 class="text-lg">Fecha: {{ $service_order->created_at }}</h2>
-                <h2 class="text-lg opacity-75 text-red-500">Debe: {{ $service_order->must }}</h2>
-                <h2 class="text-lg opacity-75 text-green-500">Haber: {{ $service_order->have }}</h2>
-                <h2 class="text-xl font-bold">Total: {{ $service_order->total }}</h2>
-            </div>
+    <div class="mx-auto p-4">
+        <div class="w-full flex flex-col bg-white rounded-md py-2 px-4 gap-2">
+            <h1 class="text-2xl font-bold">Orden de servicio: {{ $service_order->number }}</h1>
+            <hr>
+            <h2 class="text-lg">Fecha: {{ $service_order->created_at }}</h2>
+            <h2 class="text-lg opacity-75 text-red-500">Debe: {{ $service_order->must }}</h2>
+            <h2 class="text-lg opacity-75 text-green-500">Haber: {{ $service_order->have }}</h2>
+            <h2 class="text-xl font-bold">Total: {{ $service_order->total }}</h2>
         </div>
         <div class="w-full flex justify-end space-x-2 mt-4">
             <a href="{{ route('payment.create', $service_order->slug) }}"
@@ -25,7 +23,7 @@
                 </svg>
             </a>
         </div>
-        <div class="m-5">
+        <div>
             <livewire:payment.payment-data-table :service_order_id="$service_order->id" />
         </div>
     </div>
