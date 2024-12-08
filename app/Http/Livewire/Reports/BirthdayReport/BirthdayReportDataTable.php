@@ -48,7 +48,8 @@ class BirthdayReportDataTable extends LivewireDatatable
             ->leftJoin('telephones as phone3', function ($join) {
                 $join->on('phone3.person_id', '=', 'person.id')
                     ->where('phone3.type', '=', 'tertiary');
-            });
+            })
+            ->groupBy('customers.id');
     }
 
 
