@@ -1,5 +1,4 @@
 <div class="p-4 print:p-0">
-    {{-- <img src="{{ asset('/storage/model.png') }}" alt=""> --}}
     <div>
         <div
             class="flex justify-center items-center w-full font-bold text-2xl text-red-500 underline underline-offset-8">
@@ -11,32 +10,32 @@
             <section class="w-4/5 grid grid-cols-1 md:grid-cols-7 gap-2 h-24">
                 <section class="flex h-10 items-center gap-1 text-sm col-span-3">
                     <span class="font-bold w-20 text-right">Cliente:</span>
-                    <span class="bg-blue-100 w-full text-center px-8">{{ $selected_customer->person->name }}</span>
+                    <span class="bg-blue-100 md:w-full w-auto text-center md:px-2 px-8">{{ $selected_customer->person->name }}</span>
                 </section>
                 <section class="flex h-10 items-center gap-1  text-sm col-span-2">
                     <span class="font-bold w-40 text-right">Placa:</span>
-                    <span class="bg-blue-100 w-full text-center px-8">{{ $vehicle->license_plate }}</span>
+                    <span class="bg-blue-100 md:w-full w-auto text-center md:px-2 px-8">{{ $vehicle->license_plate }}</span>
                 </section>
                 <section class="flex h-10 items-center gap-1 text-sm col-span-2">
                     <span class="font-bold w-48 text-right">Fecha Ing:</span>
-                    <span class="bg-blue-100 w-48 text-center px-8">{{ $service_order->started_date }}</span>
+                    <span class="bg-blue-100 md:w-48 w-auto text-center md:px-2 px-8">{{ $service_order->started_date }}</span>
                 </section>
                 <section class="flex h-10 items-center gap-1 text-sm col-span-3">
                     <span class="font-bold w-20 text-right">Vehículo:</span>
-                    <span class="bg-blue-100 w-full text-center px-8">{{ $vehicle->brand }} /
+                    <span class="bg-blue-100 md:w-full w-auto text-center md:px-2 px-8">{{ $vehicle->brand }} /
                         {{ $vehicle->model }}</span>
                 </section>
                 <section class="flex h-10 items-center gap-1 text-sm col-span-2">
                     <span class="font-bold w-40  text-right">Kilometraje:</span>
-                    <span class="bg-blue-100 w-full text-right px-8">{{ $service_order->mileage }}</span>
+                    <span class="bg-blue-100 md:w-full w-auto text-right md:px-2 px-8">{{ $service_order->mileage }}</span>
                 </section>
                 <section class="flex h-10 items-center gap-1 text-sm col-span-2">
                     <span class="font-bold w-48 text-right">Fecha Entrega:</span>
-                    <span class="bg-blue-100 w-48 text-center px-8 ">{{ $service_order->ended_date }}</span>
+                    <span class="bg-blue-100 md:w-48 w-auto text-center md:px-2 px-8 ">{{ $service_order->ended_date }}</span>
                 </section>
             </section>
             <section class="w-1/5 flex items-center justify-center ">
-                <img class="h-24 object-cover" src="{{ asset('/storage/setting-logo/logo-setting.png') }}"
+                <img class="h-24 object-fill" src="{{ asset('/storage/setting-logo/logo-setting.png') }}"
                     alt="logo">
             </section>
         </article>
