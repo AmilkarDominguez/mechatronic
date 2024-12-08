@@ -52,6 +52,7 @@ use App\Http\Livewire\ServiceOrder\ServiceOrderInformation;
 use App\Http\Livewire\ServiceOrder\ServiceOrderPrint;
 use App\Http\Livewire\ServiceOrder\ServiceOrderPrintDraft;
 use App\Http\Livewire\ServiceOrder\ServiceOrderUpdate;
+use App\Http\Livewire\ServiceOrder\ServiceOrderUpdateDraft;
 use App\Http\Livewire\SaleCancelled\SaleCancelledDashboard;
 use App\Http\Livewire\SaleExpense\SaleExpenseDashboard;
 use App\Http\Livewire\Service\ServiceCreate;
@@ -137,6 +138,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::get('service-order-create', ServiceOrderCreate::class)->name('service-order.create')->middleware('auth', 'role:admin|sales');
     Route::get('service-order-create-draft', ServiceOrderCreateDraft::class)->name('service-order.create-draft')->middleware('auth', 'role:admin|sales');
     Route::get('service-order-update/{slug}', ServiceOrderUpdate::class)->name('service-order.update')->middleware('auth', 'role:admin|sales');
+    Route::get('service-order-update-draft/{slug}', ServiceOrderUpdateDraft::class)->name('service-order.update-draft')->middleware('auth', 'role:admin|sales');
     Route::get('service-order-information/{slug}', ServiceOrderInformation::class)->name('service-order.information')->middleware('auth', 'role:admin|sales');
     Route::get('service-order-print/{slug}', ServiceOrderPrint::class)->name('service-order.print')->middleware('auth', 'role:admin|sales');
     Route::get('service-order-print-draft/{slug}', ServiceOrderPrintDraft::class)->name('service-order.print-draft')->middleware('auth', 'role:admin|sales');
