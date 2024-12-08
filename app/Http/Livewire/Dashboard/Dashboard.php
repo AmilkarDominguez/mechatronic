@@ -18,8 +18,8 @@ class Dashboard extends Component
     public int $current_month = 1;
     public int $current_day = 1;
 
-    public int $total_sales = 0;
-    public int $total_products = 0;
+    public int $count_comleted_services_ordes = 0;
+    public int $count_pending_services_ordes = 0;
     public int $total_customers = 0;
 
     public $chart_data_months = [];
@@ -32,8 +32,8 @@ class Dashboard extends Component
         $this->current_year = now()->year;
         $this->current_month = now()->month;
         $this->current_day = now()->day;
-        $this->total_sales = ServiceOrder::all()->count();
-        $this->total_products = Product::all()->count();
+        $this->count_comleted_services_ordes = ServiceOrder::all()->where('state','COMPLETED')->count();
+        $this->count_pending_services_ordes = ServiceOrder::all()->where('state','PENDING')->count();
         $this->total_customers = Customer::all()->count();
         $this->calcSalesChar();
     }

@@ -85,13 +85,15 @@
             <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
                 <div class="bg-white rounded-md shadow-md flex justify-center flex-col p-4">
-                    <h1 class="text-xl font-bold text-center">Ventas Totales</h1>
-                    <h2 class="text-2xl font-bold text-center">{{$total_sales}}</h2>
+                    <h1 class="text-xl font-bold text-center">Ordenes Completadas</h1>
+                    <h2 class="text-2xl font-bold text-center">{{$count_comleted_services_ordes}}</h2>
                 </div>
+
                 <div class="bg-white rounded-md shadow-md flex justify-center flex-col p-4">
-                    <h1 class="text-xl font-bold text-center">Productos Totales</h1>
-                    <h2 class="text-2xl font-bold text-center">{{$total_products}}</h2>
+                    <h1 class="text-xl font-bold text-center">Ordenes en Curso</h1>
+                    <h2 class="text-2xl font-bold text-center">{{$count_pending_services_ordes}}</h2>
                 </div>
+
                 <div class="bg-white rounded-md shadow-md flex justify-center flex-col p-4">
                     <h1 class="text-xl font-bold text-center">Clientes Totales</h1>
                     <h2 class="text-2xl font-bold text-center">{{$total_customers}}</h2>

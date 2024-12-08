@@ -50,7 +50,7 @@ class SaleDataTable extends LivewireDatatable
             ->join('people as sale_user', function ($join) {
                 $join->on('sale_user.id', '=', 'users.person_id');
             })
-            ->where('service_orders.state', 'ACTIVE')
+            ->where('service_orders.state', 'COMPLETED')
         );
     }
 

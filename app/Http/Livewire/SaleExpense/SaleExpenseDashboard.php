@@ -21,8 +21,6 @@ class SaleExpenseDashboard extends Component
 
     public function mount()
     {
-//        $this->start_date = Carbon::now()->subMonth()->format('Y-m-d');
-//        $this->end_date = Carbon::now()->format('Y-m-d');
         $this->start_date = Carbon::now()->format('Y-m-d');
         $this->end_date = Carbon::now()->format('Y-m-d');
     }
@@ -52,7 +50,7 @@ class SaleExpenseDashboard extends Component
 
         $this->service_orders_total = ServiceOrder::select('*')
             ->whereBetween('service_orders.created_at', [$this->start_date, $this->end_date])
-            ->where('service_orders.state', 'ACTIVE')
+            ->where('service_orders.state', 'COMPLETED')
             ->sum('service_orders.have');
         $this->utility = $this->service_orders_total - $this->expenses_total;
     }
@@ -60,7 +58,6 @@ class SaleExpenseDashboard extends Component
     public function changeInputDate()
     {
         $this->calcTotals();
-        //dd($this->expenses_total);
     }
 
 
