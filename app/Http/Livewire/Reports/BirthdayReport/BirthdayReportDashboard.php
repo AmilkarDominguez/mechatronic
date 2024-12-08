@@ -3,7 +3,6 @@
 namespace App\Http\Livewire\Reports\BirthdayReport;
 
 use App\Models\Customer;
-use App\Models\ServiceOrder;
 use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;

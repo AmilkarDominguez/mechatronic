@@ -448,6 +448,10 @@
                                     <i class="fa-solid fa-cake-candles"></i> Cumpleañeros
                                 </x-a-sidenav>
 
+                                <x-a-sidenav href="{{ route('batch-stock-report.dashboard') }}" :active="request()->routeIs('batch-stock-report.dashboard')">
+                                    <i class="fas fa-dolly-flatbed"></i> Lotes - stock
+                                </x-a-sidenav>
+
 
                             </div>
                         </div>

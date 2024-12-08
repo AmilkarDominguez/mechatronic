@@ -5,12 +5,13 @@
         </label>
     </x-slot>
 
-    <section class="flex items-center justify-center">
+    {{-- <section class="flex items-center justify-center">
         <div class="mt-10 text-primary-500 text-4xl font-bold">¡Bienvenido!</div>
-    </section>
+    </section> --}}
 
-    <section class="my-10 md:m-10 grid grid-cols-1 md:grid-cols-2 gap-4">
-        <section class="bg-white rounded-md shadow-md">
+    <section class="my-10 md:m-10 grid grid-cols-1 md:grid-cols-1 gap-4">
+
+        {{-- <section class="bg-white rounded-md shadow-md">
             <div class="text-2xl font-bold text-center my-4 uppercase">
                 Vencimientos del mes
                 <select wire:model="current_month">
@@ -78,7 +79,7 @@
 
             </div>
 
-        </section>
+        </section> --}}
 
         <section>
 

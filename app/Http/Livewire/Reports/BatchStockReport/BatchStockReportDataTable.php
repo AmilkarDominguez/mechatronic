@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Http\Livewire\Batch;
+namespace App\Http\Livewire\Reports\BatchStockReport;
 
 use App\Models\Batch;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\DateColumn;
 use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
 
-class BatchDataTable extends LivewireDatatable
+class BatchStockReportDataTable extends LivewireDatatable
 {
     use LivewireAlert;
-    public $exportable = true;
+
+    public $exportable = false;
     public $model = Batch::class;
     public $persistSearch = false;
     public $persistComplexQuery = false;
@@ -19,19 +20,31 @@ class BatchDataTable extends LivewireDatatable
     public $persistSort = false;
     public $persistPerPage = false;
     public $persistFilters = false;
+    
+    public $limit = 0;
 
+
+    protected $listeners = ['setNumberLimit'];
+
+    public function setNumberLimit($limit)
+    {
+        $this->limit = $limit;
+    }
 
     public function builder()
     {
         return (Batch::query()
+            ->where('batches.stock','<=', $this->limit)
             ->join('products', function ($join) {
                 $join->on('products.id', '=', 'batches.product_id');
-            }));
+            })
+        );
     }
+
+
     public function columns()
     {
         return [
-
 
             Column::name('products.code')
                 ->searchable()
@@ -78,43 +91,6 @@ class BatchDataTable extends LivewireDatatable
                 ->label('Creado')
                 ->format('d/m/Y h:i:s')
                 ->filterable(),
-
-
-            Column::callback(['slug'], function ($slug) {
-                return view('livewire.batch.batch-table-actions', ['slug' => $slug]);
-            })->label('Opciones')
-                ->excludeFromExport()
         ];
-    }
-
-    public $BatchDeleted;
-    public function toastConfirmDelet($slug)
-    {
-        $this->BatchDeleted = Batch::where('slug', $slug)->first();
-        $this->confirm(__('¿Estás seguro de que deseas eliminar el registro?'), [
-            'icon' => 'warning',
-            'position' =>  'center',
-            'toast' =>  false,
-            'text' =>  $this->BatchDeleted->id,
-            'confirmButtonText' =>  'Si',
-            'showConfirmButton' =>  true,
-            'showCancelButton' => true,
-            'onConfirmed' => 'confirmed',
-            'confirmButtonColor' => '#A5DC86',
-        ]);
-    }
-    // Listener para eliminar
-    protected $listeners = [
-        'confirmed',
-    ];
-    //Funcion para confirmar la eliminacion
-    public function confirmed()
-    {
-        if ($this->BatchDeleted) {
-            //Asignando estado DELETED
-            $this->BatchDeleted->state = "DELETED";
-            //Guardando el registro
-            $this->BatchDeleted->update();
-        }
     }
 }
