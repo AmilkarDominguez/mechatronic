@@ -103,7 +103,7 @@
                                 <div class="flex space-x-2 ">
 
                                     <div class="flex h-full items-center">
-                                        <span class="inline-block align-middle"><i class="fa-solid fa-house"></i>
+                                        <span class="inline-block align-middle"><i class="fas fa-home"></i>
                                             Administración</span>
                                     </div>
 
@@ -132,7 +132,7 @@
                                 @if (Auth::user()->hasAnyRole(['admin']))
                                     <x-a-sidenav href="{{ route('setting.update', 'configuration') }}"
                                         :active="request()->routeIs('setting.update', 'configuration')">
-                                        <i class="fa-solid fa-gear"></i></i> Configuración
+                                        <i class="fa-solid fa-gear"></i> Configuración
                                     </x-a-sidenav>
                                 @endif
 
@@ -321,10 +321,12 @@
                             x-transition:leave-end="transform opacity-0 scale-95"
                             class=" right-0 w-full mt-2 origin-top-right rounded-md shadow-lg">
                             <div class="px-2 py-2 bg-white rounded-md shadow dark-mode:bg-primary-800">
-                                {{-- <x-a-sidenav href="{{ route('pre-service-order.dashboard') }}" :active="request()->routeIs('pre-service-order.dashboard') ||
-                                    request()->routeIs('pre-service-order.create')">
-                                <i class="far fa-clipboard"></i> Pre Ventas
-                            </x-a-sidenav> --}}
+                                
+                                <x-a-sidenav href="{{ route('service-order-draft.dashboard') }}" :active="request()->routeIs('service-order-draft.dashboard') ||
+                                    request()->routeIs('service-order-draft.create')">
+                                    <i class="fa-solid fa-file-fragment"></i>
+                                    Cotizaciones</span>
+                                </x-a-sidenav>
 
                                 <hr class="mt-2">
 

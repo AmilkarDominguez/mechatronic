@@ -46,9 +46,11 @@ use App\Http\Livewire\ProductPresentation\ProductPresentationImport;
 use App\Http\Livewire\ProductPresentation\ProductPresentationUpdate;
 use App\Http\Livewire\ReportProduct\ReportProductDashboard;
 use App\Http\Livewire\ServiceOrder\ServiceOrderCreate;
+use App\Http\Livewire\ServiceOrder\ServiceOrderCreateDraft;
 use App\Http\Livewire\ServiceOrder\ServiceOrderDashboard;
 use App\Http\Livewire\ServiceOrder\ServiceOrderInformation;
 use App\Http\Livewire\ServiceOrder\ServiceOrderPrint;
+use App\Http\Livewire\ServiceOrder\ServiceOrderPrintDraft;
 use App\Http\Livewire\ServiceOrder\ServiceOrderUpdate;
 use App\Http\Livewire\SaleCancelled\SaleCancelledDashboard;
 use App\Http\Livewire\SaleExpense\SaleExpenseDashboard;
@@ -59,6 +61,7 @@ use App\Http\Livewire\ExtraItem\ExtraItemCreate;
 use App\Http\Livewire\ExtraItem\ExtraItemDashboard;
 use App\Http\Livewire\ExtraItem\ExtraItemUpdate;
 use App\Http\Livewire\ServiceOrder\ServiceOrderDashboardCompleted;
+use App\Http\Livewire\ServiceOrder\ServiceOrderDashboardDraft;
 use App\Http\Livewire\Setting\UpdateSetting;
 use App\Http\Livewire\Supplier\SupplierCreate;
 use App\Http\Livewire\Supplier\SupplierDashboard;
@@ -132,11 +135,14 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     //Admin ServiceOrder
     Route::get('service-order', ServiceOrderDashboard::class)->name('service-order.dashboard')->middleware('auth', 'role:admin|sales');
     Route::get('service-order-create', ServiceOrderCreate::class)->name('service-order.create')->middleware('auth', 'role:admin|sales');
+    Route::get('service-order-create-draft', ServiceOrderCreateDraft::class)->name('service-order.create-draft')->middleware('auth', 'role:admin|sales');
     Route::get('service-order-update/{slug}', ServiceOrderUpdate::class)->name('service-order.update')->middleware('auth', 'role:admin|sales');
     Route::get('service-order-information/{slug}', ServiceOrderInformation::class)->name('service-order.information')->middleware('auth', 'role:admin|sales');
     Route::get('service-order-print/{slug}', ServiceOrderPrint::class)->name('service-order.print')->middleware('auth', 'role:admin|sales');
+    Route::get('service-order-print-draft/{slug}', ServiceOrderPrintDraft::class)->name('service-order.print-draft')->middleware('auth', 'role:admin|sales');
     Route::get('service-order-cancelled', SaleCancelledDashboard::class)->name('service-order-cancelled.dashboard')->middleware('auth', 'role:admin');
     Route::get('service-order-completed', ServiceOrderDashboardCompleted::class)->name('service-order-completed.dashboard')->middleware('auth', 'role:admin|sales');
+    Route::get('service-order-draft', ServiceOrderDashboardDraft::class)->name('service-order-draft.dashboard')->middleware('auth', 'role:admin|sales');
 
     //Admin Payment
     Route::get('payment/{slug}', PaymentDashboard::class)->name('payment.dashboard')->middleware('auth', 'role:admin|sales');

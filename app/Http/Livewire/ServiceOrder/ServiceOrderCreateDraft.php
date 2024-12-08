@@ -16,25 +16,24 @@ use App\Models\Promoter;
 use App\Models\ServiceOrderBatch;
 use App\Models\Service;
 use App\Models\ServiceOrderExtraItem;
+use App\Models\Setting;
 use App\Models\Vehicle;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
-class ServiceOrderUpdate extends Component
+class ServiceOrderCreateDraft extends Component
 {
     use LivewireAlert;
 
-    public $service_order;
-    public $payment_type;
+    public $payment_type = 'CONTADO';
     public $description = '';
 
     public $mileage;
-    public $started_date;
+    public $draft_expiration_date;
     public $ended_date;
     public $service_order_number;
 
-    public $labours_details = [];
     public $services;
     public $service_id;
     public $selected_service;
@@ -47,7 +46,6 @@ class ServiceOrderUpdate extends Component
     public $labours = [];
     public $labours_total = 0;
 
-    public $serviceOrderBatches = [];
     public $warehouses;
     public $warehouse_id;
     public $batches;
@@ -56,7 +54,6 @@ class ServiceOrderUpdate extends Component
     public $sale_details = [];
     public $sale_details_total = 0;
 
-    public $serviceOrderExtraItems = [];
     public $extra_items;
     public $extra_item_id;
     public $selected_extra_item;
@@ -73,12 +70,13 @@ class ServiceOrderUpdate extends Component
     public $vehicles = [];
     public $vehicle_id;
     public $selected_vehicle;
-    
-    public $total;
 
-    public function mount($slug)
+    public $total;
+    public $setting;
+
+    public function mount()
     {
-        $this->service_order = ServiceOrder::where('slug', $slug)->firstOrFail();
+        $this->setting = Setting::where('slug', 'configuration')->firstOrFail();
         $this->customers = Customer::all()->where('state', 'ACTIVE');
         $this->warehouses = Warehouse::all()->where('state', 'ACTIVE');
         $this->employees = Employee::all()->where('state', 'ACTIVE');
@@ -90,89 +88,15 @@ class ServiceOrderUpdate extends Component
             $this->warehouse_id = $this->warehouses[0]->id;
             $this->batches = Batch::where('state', 'ACTIVE')->where('warehouse_id', $this->warehouse_id)->where('stock', '>', '0')->with('product')->get();
         }
-        $this->selected_customer = Customer::where('id', $this->service_order->customer_id)->firstOrFail();
-        $this->customer_id = $this->service_order->customer_id;
-        $this->payment_type = $this->service_order->payment_type;
-        $this->description = $this->service_order->description;
 
-        $this->vehicles = Vehicle::where('state', 'ACTIVE')->where('customer_id', $this->service_order->customer_id)->get();
-        $this->mileage = $this->service_order->mileage;
-        $this->started_date = $this->service_order->started_date;
-        $this->ended_date = $this->service_order->ended_date;
-        $this->service_order_number = $this->service_order->number;
-        $this->vehicle_id = $this->service_order->vehicle_id;
-        $this->selected_vehicle = Vehicle::find($this->vehicle_id);
-
-        $this->loadLabours();
-        $this->loadSaleDetails();
-        $this->loadExtraItems();
-    }
-
-    public function loadLabours()
-    {
-        $this->labours = [];
-        $this->labours_details = LabourDetail::all()->where('service_order_id', $this->service_order->id);
-        foreach ($this->labours_details as $item) {
-            $employee = Employee::where('id', $item->employee_id)->firstOrFail();
-            $service = Service::where('id', $item->service_id)->firstOrFail();
-            $uuid = (string) $item['uuid'];
-            $item = [
-                'uuid' => $item->uuid,
-                'employee_percentage' => $item->employee_percentage,
-                'price' => $item->price,
-                'quantity' => $item->quantity,
-                'subtotal' => $item->subtotal,
-                'employee_id' => $item->employee_id,
-                'employee' => $employee->person->name,
-                'service_id' => $item->service_id,
-                'service' => $service->name
-            ];
-            $this->labours[$uuid] = $item;
+        if ($this->setting){
+            $this->service_order_number = $this->setting->service_order_number;
         }
-        $this->calcLaboursTotal();
-    }
-
-    public function loadSaleDetails()
-    {
-        $this->serviceOrderBatches = ServiceOrderBatch::all()->where('service_order_id', $this->service_order->id);
-        foreach ($this->serviceOrderBatches as $item) {
-            $batch = Batch::where('id', $item->batch_id)->firstOrFail();
-            $item = [
-                'uudid' => $item->uudid,
-                'id' => $batch->id,
-                'name' => $batch->product->name,
-                'price' => $item->price,
-                'quantity' => $item->quantity,
-                'discount' => $item->discount,
-                'subtotal' => $item->subtotal
-            ];
-            $this->sale_details[$item['id']] = $item;
-        }
-        $this->calcSaleDetailsTotal();
-    }
-
-    public function loadExtraItems()
-    {
-        $this->serviceOrderExtraItems = ServiceOrderExtraItem::all()->where('service_order_id', $this->service_order->id);
-        foreach ($this->serviceOrderExtraItems as $item) {
-            $extraItem = ExtraItem::where('id', $item->extra_item_id)->firstOrFail();
-            $item = [
-                'uuid' => $item->uudid,
-                'id' => $extraItem->id,
-                'name' => $extraItem->name,
-                'cost' => $item->cost,
-                'price' => $item->price,
-                'quantity' => $item->quantity,
-                'subtotal' => $item->subtotal
-            ];
-            $this->additional_extra_items[$item['uuid']] = $item;
-        }
-        $this->calcExtraItemsTotal();
     }
 
     public function render()
     {
-        return view('livewire.service-order.service-order-update');
+        return view('livewire.service-order.service-order-create-draft');
     }
 
     //reglas para validacion
@@ -180,61 +104,23 @@ class ServiceOrderUpdate extends Component
         'customer_id' => 'required',
     ];
 
-    public function deleteOldRegisters()
-    {
-        foreach ($this->labours_details as $item) {
-            $item->delete();
-        }
-        foreach ($this->serviceOrderBatches as $item) {
-            $item->delete();
-        }
-        foreach ($this->serviceOrderExtraItems as $item) {
-            $item->delete();
-        }
-    }
-
-    public function deleteOldLabours()
-    {
-        $this->labours = [];
-        $this->labours_details = LabourDetail::all()->where('service_order_id', $this->service_order->id);
-        foreach ($this->labours_details as $item) {
-            $employee = Employee::where('id', $item->employee_id)->firstOrFail();
-            $service = Service::where('id', $item->service_id)->firstOrFail();
-            $item = [
-                'uuid' => $item->uuid,
-                'employee_percentage' => $item->employee_percentage,
-                'price' => $item->price,
-                'quantity' => $item->quantity,
-                'subtotal' => $item->subtotal,
-                'employee_id' => $item->employee_id,
-                'employee' => $employee->person->name,
-                'service_id' => $item->service_id,
-                'service' => $service->name
-            ];
-            $this->labours[$item['uuid']] = $item;
-        }
-        $this->calcLaboursTotal();
-    }
     public function saveSale()
     {
         $this->validate();
         if ($this->checkStock()) {
-            $this->deleteOldRegisters();
-
-            $this->service_order->update([
+            $service_order = ServiceOrder::create([
                 'number' => $this->service_order_number,
                 'description' => $this->description,
                 'total' => $this->total,
                 'must' => $this->total,
-                'mileage' => $this->mileage,
-                'started_date' => $this->started_date,
-                'ended_date' => $this->ended_date,
+                'slug' => Str::uuid(),
+                'draft_expiration_date' => $this->draft_expiration_date,
                 'customer_id' => $this->customer_id,
                 'vehicle_id' => $this->vehicle_id,
                 'user_id' => Auth::user()->id,
+                'state' => 'DRAFT',
                 'payment_type' => $this->payment_type
             ]);
-
             foreach ($this->labours as $item) {
                 LabourDetail::create([
                     'uuid' => $item['uuid'],
@@ -244,7 +130,7 @@ class ServiceOrderUpdate extends Component
                     'subtotal' => $item['subtotal'],
                     'employee_id' => $item['employee_id'],
                     'service_id' => $item['service_id'],
-                    'service_order_id' => $this->service_order->id
+                    'service_order_id' => $service_order->id
                 ]);
             }
             foreach ($this->sale_details as $item) {
@@ -255,23 +141,28 @@ class ServiceOrderUpdate extends Component
                     'discount' => $item['discount'],
                     'subtotal' => $item['subtotal'],
                     'batch_id' => $item['id'],
-                    'service_order_id' => $this->service_order->id
+                    'service_order_id' => $service_order->id
                 ]);
             }
-            $this->updateStock();
+            //$this->updateStock();
             foreach ($this->additional_extra_items as $item) {
                 ServiceOrderExtraItem::create([
-                    'uuid' => $item['uuid'] ?? (string) Str::uuid(),
+                    'uuid' => $item['uuid'],
                     'cost' => $item['cost'],
                     'price' => $item['price'],
                     'quantity' => $item['quantity'],
                     'subtotal' => $item['subtotal'],
                     'extra_item_id' => $item['id'],
-                    'service_order_id' => $this->service_order->id,
+                    'service_order_id' => $service_order->id,
                 ]);
             }
 
-            $this->confirm('Registro actualizado correctamente', [
+            $number = ((int)$this->service_order_number) +1;
+            $this->setting->update([
+                'service_order_number' => $number
+            ]);
+
+            $this->confirm('Registro creado correctamente', [
                 'icon' => 'success',
                 'toast' => false,
                 'position' => 'center',
@@ -394,6 +285,11 @@ class ServiceOrderUpdate extends Component
         }
     }
 
+    private function emitCustomerSelectedEvent(){
+        $this->vehicles = Vehicle::where('state', 'ACTIVE')->where('customer_id', $this->customer_id)->get();
+        $this->emit('customerSelectedEvent', $this->vehicles);
+    }
+
     public function onChangeSelectWarehouse()
     {
         $this->batches = Batch::where('state', 'ACTIVE')->where('warehouse_id', $this->warehouse_id)->where('stock', '>', '0')->with('product')->get();
@@ -469,7 +365,6 @@ class ServiceOrderUpdate extends Component
     {
         if ($this->selected_batch != null) {
             $id = $this->selected_batch->id;
-            //verificacion si el producto existe
             if ($this->sale_details && isset($this->sale_details[$id])) {
                 $this->sale_details[$id]['quantity'] += 1;
                 $this->updateSaleDetail($id);
@@ -584,7 +479,7 @@ class ServiceOrderUpdate extends Component
 
     public function confirmed()
     {
-        return redirect()->route('service-order.dashboard');
+        return redirect()->route('service-order-draft.dashboard');
     }
 
     public function serviceAdded($id)
@@ -627,10 +522,5 @@ class ServiceOrderUpdate extends Component
         $this->customer_id = $id;
         $this->emit('customerAddedEvent', $this->customers, $id);
         $this->emitCustomerSelectedEvent();
-    }
-
-    private function emitCustomerSelectedEvent(){
-        $this->vehicles = Vehicle::where('state', 'ACTIVE')->where('customer_id', $this->customer_id)->get();
-        $this->emit('customerSelectedEvent', $this->vehicles);
     }
 }

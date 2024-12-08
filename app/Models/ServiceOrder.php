@@ -15,6 +15,7 @@ class ServiceOrder extends Model
         'have',
         'must',
         'mileage',
+        'draft_expiration_date',
         'started_date',
         'ended_date',
         'slug',

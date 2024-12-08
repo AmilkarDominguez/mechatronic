@@ -104,7 +104,6 @@
                                 <select id="select-vehicles"
                                     class="border-gray-300 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 shadow-sm mt-1 block w-full rounded-fx rounded-md"
                                     required>
-                                    <option selected>(Seleccionar)</option>
                                     @forelse ($vehicles as $item)
                                         <option value="{{ $item->id }}">
                                             Placa: {{ $item->license_plate }} | Modelo: {{ $item->model }} | Marca:
@@ -960,8 +959,6 @@
         });
 
         Livewire.on('customerSelectedEvent', vehicles => {
-            console.log(vehicles);
-            
             const selectElement = $('#select-vehicles');
             selectElement.html('')
             $.each(vehicles, function(key, value) {
@@ -970,6 +967,12 @@
                     model: value['model'],
                     brand: value['brand'],
                 }
+
+                //set first value
+                if (key == 0) {
+                    @this.set('vehicle_id', value['id']);
+                }
+
                 selectElement.append(
                     $("<option></option>")
                     .attr("value", value['id'])

@@ -1,14 +1,12 @@
 <div>
     <x-slot name="header">
         <div class="font-semibold text-xl text-gray-800 leading-tight">
-            Actualizar orden de servicio
+            Registrar cotización
         </div>
     </x-slot>
     {{-- variables para modal --}}
     <section x-data="{ showModal: false, modalType: 'customer' }">
-
         <section x-show="!showModal">
-
             <div class="container mx-auto mt-5 mb-4" x-data="{ tab: 'tab1' }">
                 <ul class="flex mt-6 bg-white p-4">
                     <li class="-mb-px mr-1">
@@ -120,35 +118,15 @@
                         </div>
                         {{-- end customer vehicle --}}
 
-                        {{-- mileage --}}
+                        {{-- draft_expiration_date --}}
                         <section>
                             <div class="font-bold mb-2">
-                                Kilometrage
+                                Válido hasta
                             </div>
-                            <x-jet-input type="number" placeholder="00000" wire:model="mileage"
-                                class="mt-1 block w-full rounded-md" required />
-                        </section>
-                        {{-- end mileage --}}
-
-                        {{-- started_date --}}
-                        <section>
-                            <div class="font-bold mb-2">
-                                Fecha Ingreso
-                            </div>
-                            <x-jet-input type="date" wire:model="started_date" class="mt-1 block w-full rounded-md"
+                            <x-jet-input type="date" wire:model="draft_expiration_date" class="mt-1 block w-full rounded-md"
                                 required />
                         </section>
-                        {{-- end started_date --}}
-
-                        {{-- ended_date --}}
-                        <section>
-                            <div class="font-bold mb-2">
-                                Fecha Salida
-                            </div>
-                            <x-jet-input type="date" wire:model="ended_date" class="mt-1 block w-full rounded-md"
-                                required />
-                        </section>
-                        {{-- end ended_date --}}
+                        {{-- end draft_expiration_date --}}
                     </section>
 
                     <section x-show="tab == 'tab2'" class="flex flex-col gap-8">
@@ -665,7 +643,7 @@
 
             <section
                 class="container m-auto p-8 bg-white mt-5 rounded-md shadow overflow-hidden overflow-x-scroll flex flex-col gap-8">
-                <div>
+                {{-- <div>
                     <div class="font-bold mb-2">
                         Tipo de pago
                     </div>
@@ -685,15 +663,15 @@
                             </label>
                         </div>
                     </div>
-                </div>
+                </div> --}}
                 {{-- end payment_type --}}
                 {{-- description --}}
-                <div>
+                {{-- <div>
                     <div class="font-bold mb-2">
                         Recomendación
                     </div>
                     <x-textarea placeholder="Recomendación" wire:model="description" class="mt-1 block w-full" />
-                </div>
+                </div> --}}
                 {{-- end description --}}
                 {{-- total --}}
                 <div class="font-bold text-4xl mb-2 flex justify-end">
@@ -705,7 +683,7 @@
             <section class="container m-auto mt-5 mb-5">
                 <button wire:click="saveSale()"
                     class="h-12 w-full rounded-md flex items-center justify-center border bg-primary-500 text-white hover:bg-primary-600 cursor-pointer">
-                    GUARDAR
+                    REGISTRAR
                 </button>
             </section>
         </section>
@@ -961,9 +939,6 @@
         });
 
         Livewire.on('customerSelectedEvent', vehicles => {
-            console.log('customerSelectedEvent');
-            console.log(vehicles);
-            
             const selectElement = $('#select-vehicles');
             selectElement.html('')
             $.each(vehicles, function(key, value) {
@@ -974,10 +949,10 @@
                 }
 
                 //set first value
-                if (key == 0) {
+                if(key == 0){
                     @this.set('vehicle_id', value['id']);
                 }
-
+                
                 selectElement.append(
                     $("<option></option>")
                     .attr("value", value['id'])

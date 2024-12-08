@@ -25,6 +25,7 @@ class CreateServiceOrdersTable extends Migration
             $table->string('slug')->inique();
 
             $table->string('mileage')->nullable();
+            $table->date('draft_expiration_date')->nullable();
             $table->date('started_date')->nullable();
             $table->date('ended_date')->nullable();
 

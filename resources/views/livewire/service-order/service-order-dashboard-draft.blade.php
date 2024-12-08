@@ -1,12 +1,12 @@
 <div>
     <x-slot name="header">
         <div class="font-semibold text-xl text-gray-800 leading-tight">
-            Ordenes de servicio en curso
+            Cotizaciones
         </div>
     </x-slot>
     <div class="max-w-8xl mx-auto py-10 sm:px-6 lg:px-8">
         <div class="w-full flex justify-end space-x-2">
-            <a href="{{ route('service-order.create')}}"
+            <a href="{{ route('service-order.create-draft')}}"
                 class="my-2  mx-4 border-2 border-green-500 text-green-500 bg-white flex items-center rounded-full hover:bg-green-500 hover:text-white">
                 <svg class="w-8 h-8 m-2" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd"
@@ -16,7 +16,7 @@
             </a>
         </div>
         <div class="m-5">
-            <livewire:service-order.service-order-data-table />
+            <livewire:service-order.service-order-data-table-draft />
         </div>
     </div>
 </div>
