@@ -452,6 +452,10 @@
                                     <i class="fas fa-dolly-flatbed"></i> Lotes - stock
                                 </x-a-sidenav>
 
+                                <x-a-sidenav href="{{ route('service-by-employee-report.dashboard') }}" :active="request()->routeIs('service-by-employee-report.dashboard')">
+                                    <i class="fa-solid fa-screwdriver"></i> Servicios por técnico
+                                </x-a-sidenav>
+
 
                             </div>
                         </div>
