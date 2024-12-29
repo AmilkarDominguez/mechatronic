@@ -4,15 +4,17 @@ namespace App\Http\Livewire\BankAccount;
 
 use Livewire\Component;
 use App\Models\BankAccount;
+use App\Services\BankAccountHistoryService;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class BankAccountUpdate extends Component
 {
-    use LivewireAlert; 
+    use LivewireAlert;
     public $name;
     public $description;
     public $number;
     public $balance;
+    public $backup_balance;
     public $slug;
     public $state;
     public $bank_account;
@@ -25,6 +27,7 @@ class BankAccountUpdate extends Component
             $this->description = $this->bank_account->description;
             $this->number = $this->bank_account->number;
             $this->balance = $this->bank_account->balance;
+            $this->backup_balance = $this->bank_account->balance;
             $this->state = $this->bank_account->state;
         }
     }
@@ -41,12 +44,12 @@ class BankAccountUpdate extends Component
         'balance' => 'nullable|max:225|min:2',
         'state' => 'required',
     ];
-    
+
     public function submit()
     {
-        $this->rules['name'] = 'required|unique:bank_accounts,name,' .$this->bank_account->id;
+        $this->rules['name'] = 'required|unique:bank_accounts,name,' . $this->bank_account->id;
         $this->validate();
-        
+
         $this->bank_account->update([
             'name' => $this->name,
             'description' => $this->description,
@@ -55,9 +58,23 @@ class BankAccountUpdate extends Component
             'state' => $this->state,
         ]);
 
+        $this->registerAccountHistory();
+
         $this->alert('success', 'Registro actualizado correctamente', [
             'toast' => true,
             'position' => 'top-end',
         ]);
+    }
+
+    private function registerAccountHistory(): void
+    {
+        $bankAccountHistoryService = app(BankAccountHistoryService::class);
+        $diference =  $this->bank_account->balance - $this->backup_balance;
+        $bankAccountHistoryService->registerHistory(
+            $this->bank_account->id,
+            $diference,
+            $this->bank_account->balance
+        );
+        $this->backup_balance = $this->bank_account->balance;
     }
 }

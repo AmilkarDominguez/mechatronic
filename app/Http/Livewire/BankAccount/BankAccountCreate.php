@@ -4,6 +4,7 @@ namespace App\Http\Livewire\BankAccount;
 
 use Livewire\Component;
 use App\Models\BankAccount;
+use App\Services\BankAccountHistoryService;
 use Illuminate\Support\Str;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
@@ -16,6 +17,7 @@ class BankAccountCreate extends Component
     public $number;
     public $balance;
     public $state = "ACTIVE";
+    public $bank_account;
 
     public function render()
     {
@@ -33,7 +35,7 @@ class BankAccountCreate extends Component
     public function submit()
     {
         $this->validate();
-        BankAccount::create([
+        $this->bank_account = BankAccount::create([
             'name' => $this->name,
             'description' => $this->description,
             'number' => $this->number,
@@ -42,6 +44,8 @@ class BankAccountCreate extends Component
             'state' => $this->state,
         ]);
 
+        $this->registerAccountHistory();
+        
         $this->cleanInputs();
 
         $this->confirm('Registro creado correctamente', [
@@ -71,5 +75,11 @@ class BankAccountCreate extends Component
     public function confirmed()
     {
         return redirect()->route('bank-account.dashboard');
+    }
+
+    private function registerAccountHistory(): void
+    {
+        $bankAccountHistoryService = app(BankAccountHistoryService::class);
+        $bankAccountHistoryService->registerHistory($this->bank_account->id, 0, $this->bank_account->balance);
     }
 }
