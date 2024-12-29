@@ -62,7 +62,7 @@ class ProductPresentationDataTable extends LivewireDatatable
     public function toastConfirmDelet($slug)
     {
         $this->presentation = ProductPresentation::where('slug', $slug)->firstOrFail();
-        $this->confirm(__('¿Estás seguro que seas eliminar el registro?'), [
+        $this->confirm(__('¿Estás seguro que deseas eliminar el registro?'), [
             'icon' => 'warning',
             'position' =>  'center',
             'toast' =>  false,

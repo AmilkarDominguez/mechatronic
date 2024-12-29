@@ -181,6 +181,14 @@
                                     <i class="fa-solid fa-screwdriver"></i> Técnicos
                                 </x-a-sidenav>
 
+                                <hr class=" mt-2">
+
+                                <x-a-sidenav href="{{ route('bank-account.dashboard') }}" :active="request()->routeIs('bank-account.dashboard') ||
+                                    request()->routeIs('bank-account.create') ||
+                                    request()->routeIs('bank-account.update')">
+                                    <i class="fa-solid fa-wallet"></i> Cuentas
+                                </x-a-sidenav>
+
                             </div>
                         </div>
                     </div>

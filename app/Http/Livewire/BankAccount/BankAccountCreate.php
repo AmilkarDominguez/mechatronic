@@ -1,47 +1,43 @@
 <?php
 
-namespace App\Http\Livewire\Expense;
+namespace App\Http\Livewire\BankAccount;
 
-
-use App\Models\ExpenseType;
-use App\Models\Expense;
-use Illuminate\Support\Str;
 use Livewire\Component;
+use App\Models\BankAccount;
+use Illuminate\Support\Str;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
-class ExpenseCreate extends Component
+class BankAccountCreate extends Component
 {
     use LivewireAlert;
-    public $expense_type_id;
-    public $purchase;
+    public $name;
     public $description;
     public $slug;
+    public $number;
+    public $balance;
     public $state = "ACTIVE";
 
-    public $expense_types;
-
-    public function mount()
-    {
-        $this->expense_types = ExpenseType::all()->where('state', 'ACTIVE');
-    }
     public function render()
     {
-        return view('livewire.expense.expense-create');
+        return view('livewire.bank-account.bank-account-create');
     }
+
     protected $rules = [
-        'purchase' => 'required',
-        'description' => 'nullable|max:225|min:2|',
+        'name' => 'required|max:20|min:2|unique:bank_accounts,name',
+        'description' => 'nullable|max:225|min:2',
+        'number' => 'nullable|max:225|min:2',
+        'balance' => 'nullable|max:225|min:2',
         'state' => 'required',
     ];
+
     public function submit()
     {
-
         $this->validate();
-        //Creando registro
-        Expense::create([
-            'expense_type_id' => $this->expense_type_id,
-            'purchase' => $this->purchase,
+        BankAccount::create([
+            'name' => $this->name,
             'description' => $this->description,
+            'number' => $this->number,
+            'balance' => $this->balance,
             'slug' => Str::uuid(),
             'state' => $this->state,
         ]);
@@ -59,25 +55,21 @@ class ExpenseCreate extends Component
             'onConfirmed' => 'confirmed',
         ]);
     }
+
     public function cleanInputs()
     {
-        $this->expense_type_id = "";
-        $this->purchase = "";
+        $this->name = "";
         $this->description = "";
+        $this->number = "";
+        $this->balance = "";
     }
 
-    //Escuchadores para botones de alertas
     protected $listeners = [
         'confirmed',
     ];
 
-    //Funcion que llama la alerta para redigir al dashboar
     public function confirmed()
     {
-        return redirect()->route('expense.dashboard');
-    }
-    public function onChangeSelectExpenseType()
-    {
-        $this->expense_types = ExpenseType::all()->where('state', 'ACTIVE');
+        return redirect()->route('bank-account.dashboard');
     }
 }

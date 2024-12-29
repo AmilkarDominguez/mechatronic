@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Livewire\BankAccount\BankAccountCreate;
+use App\Http\Livewire\BankAccount\BankAccountDashboard;
+use App\Http\Livewire\BankAccount\BankAccountUpdate;
 use App\Http\Livewire\Batch\BatchCreate;
 use App\Http\Livewire\Batch\BatchDashboard;
 use App\Http\Livewire\Batch\BatchImport;
@@ -109,6 +112,10 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     ///superadmin
     Route::get('setting-update/{slug}', UpdateSetting::class)->name('setting.update')->middleware('auth', 'role:admin');
     //Admin User
+
+    Route::get('bank-account', BankAccountDashboard::class)->name('bank-account.dashboard')->middleware('auth', 'role:admin');
+    Route::get('bank-account-create', BankAccountCreate::class)->name('bank-account.create')->middleware('auth', 'role:admin');
+    Route::get('bank-account-update/{slug}', BankAccountUpdate::class)->name('bank-account.update')->middleware('auth', 'role:admin');
 
     Route::get('product-category', ProductCategoryDashboard::class)->name('product-category.dashboard')->middleware('auth', 'role:admin');
     Route::get('product-category-create', ProductCategoryCreate::class)->name('product-category.create')->middleware('auth', 'role:admin');

@@ -58,7 +58,7 @@ class CountryDataTable extends LivewireDatatable
      public function toastConfirmDelet($slug)
      {
          $this->CountryDeleted = Country::where('slug', $slug)->first();
-         $this->confirm(__('¿Estás seguro que seas eliminar el registro?'), [
+         $this->confirm(__('¿Estás seguro que deseas eliminar el registro?'), [
              'icon' => 'warning',
              'position' =>  'center',
              'toast' =>  false,

@@ -1,65 +1,44 @@
 <?php
 
-namespace App\Http\Livewire\Customer;
+namespace App\Http\Livewire\BankAccount;
 
-use App\Models\Customer;
-use App\Models\Person;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
+use App\Models\BankAccount;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\DateColumn;
-use Mediconesystems\LivewireDatatables\TimeColumn;
-use Mediconesystems\LivewireDatatables\NumberColumn;
-use Mediconesystems\LivewireDatatables\BooleanColumn;
 use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 
-class CustomerDataTable extends LivewireDatatable
+class BankAccountDataTable extends LivewireDatatable
 {
     use LivewireAlert;
     public $exportable = true;
-    public $model = Customer::class;
-
+    public $model = BankAccount::class;
     public $hideable = 'select';
-
 
     public function builder()
     {
-
-        return (Customer::query()
-            ->where('customers.state', '!=', 'DELETED')
-            ->join('people as person', function ($join) {
-                $join->on('person.id', '=', 'customers.person_id');
-            }));
+        return BankAccount::query()->where('state', '!=', 'DELETED');
     }
 
     public function columns()
     {
         return [
-            Column::name('person.name')
+            Column::name('name')
                 ->searchable()
-                ->label('Nombre completo')
-                ->alignRight(),
+                ->label('Nombre'),
 
-            Column::name('person.address')
+            Column::name('number')
                 ->searchable()
-                ->label('Dirección')
-                ->alignRight(),
+                ->label('Número'),
+
+            Column::name('balance')
+                ->searchable()
+                ->label('Saldo'),
 
             Column::name('description')
                 ->searchable()
-                ->label('Description')
-                ->alignRight(),
-
-            Column::name('email')
-                ->searchable()
-                ->label('Correo electrónico')
-                ->alignRight(),
-
-            Column::name('customers.nit')
-                ->searchable()
-                ->label('Nit'),
-
+                ->label('Descripción'),
+                
             Column::callback(['state'], function ($state) {
                 return view('components.datatables.state-data-table', ['state' => $state]);
             })
@@ -72,30 +51,28 @@ class CustomerDataTable extends LivewireDatatable
                     'ACTIVE',
                     'INACTIVE'
                 ]),
-
             DateColumn::name('created_at')
                 ->label('Creado')
                 ->format('d/m/Y h:i:s')
                 ->filterable(),
 
-            Column::callback(['id', 'slug'], function ($id, $slug) {
-                return view('livewire.customer.customer-table-actions', ['id' => $id, 'slug' => $slug]);
+            Column::callback(['id', 'slug', 'name'], function ($id, $slug, $name) {
+                return view('livewire.bank-account.bank-account-table-actions', ['id' => $id, 'slug' => $slug, 'name' => $name]);
             })->label('Opciones')
                 ->excludeFromExport()
-
 
         ];
     }
 
     public $idDelet;
-    public function toastConfirmDelet($id)
+    public function toastConfirmDelet($name, $id)
     {
         $this->idDelet = $id;
         $this->confirm(__('¿Estás seguro que deseas eliminar el registro?'), [
             'icon' => 'warning',
             'position' =>  'center',
             'toast' =>  false,
-            'text' =>  'Cliente con el Id  ' . $id,
+            'text' =>  $name,
             'confirmButtonText' =>  'Si',
             'showConfirmButton' =>  true,
             'showCancelButton' => true,
@@ -110,10 +87,9 @@ class CustomerDataTable extends LivewireDatatable
     public function confirmed()
     {
         if ($this->idDelet) {
-            $Customer = Customer::find($this->idDelet);
-            $Customer->state = "DELETED";
-            $Customer->update();
-            //$Consignment->delete();
+            $BankAccount = BankAccount::find($this->idDelet);
+            $BankAccount->state = "DELETED";
+            $BankAccount->update();
         }
     }
 }
