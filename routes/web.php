@@ -19,10 +19,9 @@ use App\Http\Livewire\Employee\EmployeeDashboard;
 use App\Http\Livewire\Employee\EmployeeUpdate;
 use App\Http\Livewire\Expense\ExpenseCreate;
 use App\Http\Livewire\Expense\ExpenseDashboard;
-use App\Http\Livewire\Expense\ExpenseUpdate;
-use App\Http\Livewire\ExpenseType\ExpenseTypeCreate;
-use App\Http\Livewire\ExpenseType\ExpenseTypeDashboard;
-use App\Http\Livewire\ExpenseType\ExpenseTypeUpdate;
+use App\Http\Livewire\TransactionType\TransactionTypeCreate;
+use App\Http\Livewire\TransactionType\TransactionTypeDashboard;
+use App\Http\Livewire\TransactionType\TransactionTypeUpdate;
 use App\Http\Livewire\Gender\GenderCreate;
 use App\Http\Livewire\Gender\GenderDashboard;
 use App\Http\Livewire\Gender\GenderUpdate;
@@ -64,9 +63,12 @@ use App\Http\Livewire\Service\ServiceUpdate;
 use App\Http\Livewire\ExtraItem\ExtraItemCreate;
 use App\Http\Livewire\ExtraItem\ExtraItemDashboard;
 use App\Http\Livewire\ExtraItem\ExtraItemUpdate;
+use App\Http\Livewire\Income\IncomeCreate;
+use App\Http\Livewire\Income\IncomeDashboard;
 use App\Http\Livewire\Reports\BatchStockReport\BatchStockReportDashboard;
 use App\Http\Livewire\Reports\BirthdayReport\BirthdayReportDashboard;
 use App\Http\Livewire\Reports\ServiceByEmployeeReport\ServiceByEmployeeReportDashboard;
+use App\Http\Livewire\Reports\UtilityReport\UtilityReportDashboard;
 use App\Http\Livewire\ServiceOrder\ServiceOrderDashboardCompleted;
 use App\Http\Livewire\ServiceOrder\ServiceOrderDashboardDraft;
 use App\Http\Livewire\Setting\UpdateSetting;
@@ -213,18 +215,19 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::get('product-presentation-update/{slug}', ProductPresentationUpdate::class)->name('product-presentation.update')->middleware('auth', 'role:admin');
     Route::get('product-presentation-import', ProductPresentationImport::class)->name('product-presentation.import')->middleware('auth', 'role:admin');
 
-    //expense type
-    Route::get('expense-type', ExpenseTypeDashboard::class)->name('expense-type.dashboard')->middleware('auth', 'role:admin');
-    Route::get('expense-type-create', ExpenseTypeCreate::class)->name('expense-type.create')->middleware('auth', 'role:admin');
-    Route::get('expense-type-update/{slug}', ExpenseTypeUpdate::class)->name('expense-type.update')->middleware('auth', 'role:admin');
+    //transaction type
+    Route::get('transaction-type', TransactionTypeDashboard::class)->name('transaction-type.dashboard')->middleware('auth', 'role:admin');
+    Route::get('transaction-type-create', TransactionTypeCreate::class)->name('transaction-type.create')->middleware('auth', 'role:admin');
+    Route::get('transaction-type-update/{slug}', TransactionTypeUpdate::class)->name('transaction-type.update')->middleware('auth', 'role:admin');
 
     //expense
     Route::get('expense', ExpenseDashboard::class)->name('expense.dashboard')->middleware('auth', 'role:admin|sales');
     Route::get('expense-create', ExpenseCreate::class)->name('expense.create')->middleware('auth', 'role:admin|sales');
-    Route::get('expense-update/{slug}', ExpenseUpdate::class)->name('expense.update')->middleware('auth', 'role:admin|sales');
 
-    //service-order-expense
-    Route::get('service-order-expense', SaleExpenseDashboard::class)->name('service-order-expense.dashboard')->middleware('auth', 'role:admin');
+    //income
+    Route::get('income', IncomeDashboard::class)->name('income.dashboard')->middleware('auth', 'role:admin|sales');
+    Route::get('income-create', IncomeCreate::class)->name('income.create')->middleware('auth', 'role:admin|sales');
+
     //service_order-expense
     Route::get('report-product', ReportProductDashboard::class)->name('report-product.dashboard')->middleware('auth', 'role:admin');
 
@@ -232,4 +235,5 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::get('birthday-report', BirthdayReportDashboard::class)->name('birthday-report.dashboard')->middleware('auth', 'role:admin');
     Route::get('batch-stock-report', BatchStockReportDashboard::class)->name('batch-stock-report.dashboard')->middleware('auth', 'role:admin');
     Route::get('service-by-employee-report', ServiceByEmployeeReportDashboard::class)->name('service-by-employee-report.dashboard')->middleware('auth', 'role:admin');
+    Route::get('utility-report', UtilityReportDashboard::class)->name('utility-report.dashboard')->middleware('auth', 'role:admin');
 });

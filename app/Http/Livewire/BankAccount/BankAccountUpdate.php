@@ -4,7 +4,6 @@ namespace App\Http\Livewire\BankAccount;
 
 use Livewire\Component;
 use App\Models\BankAccount;
-use App\Services\BankAccountHistoryService;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class BankAccountUpdate extends Component
@@ -41,7 +40,6 @@ class BankAccountUpdate extends Component
         'name' => 'required|max:20|min:2|unique:bank_accounts,name',
         'description' => 'nullable|max:225|min:2',
         'number' => 'nullable|max:225|min:2',
-        'balance' => 'nullable|max:225|min:2',
         'state' => 'required',
     ];
 
@@ -54,27 +52,12 @@ class BankAccountUpdate extends Component
             'name' => $this->name,
             'description' => $this->description,
             'number' => $this->number,
-            'balance' => $this->balance,
             'state' => $this->state,
         ]);
-
-        $this->registerAccountHistory();
 
         $this->alert('success', 'Registro actualizado correctamente', [
             'toast' => true,
             'position' => 'top-end',
         ]);
-    }
-
-    private function registerAccountHistory(): void
-    {
-        $bankAccountHistoryService = app(BankAccountHistoryService::class);
-        $diference =  $this->bank_account->balance - $this->backup_balance;
-        $bankAccountHistoryService->registerHistory(
-            $this->bank_account->id,
-            $diference,
-            $this->bank_account->balance
-        );
-        $this->backup_balance = $this->bank_account->balance;
     }
 }

@@ -1,42 +1,41 @@
 <?php
 
-namespace App\Http\Livewire\ExpenseType;
+namespace App\Http\Livewire\TransactionType;
 
 use Livewire\Component;
-use App\Models\ExpenseType;
+use App\Models\TransactionType;
 use Illuminate\Support\Str;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
-class ExpenseTypeCreate extends Component
+class TransactionTypeCreate extends Component
 {
     use LivewireAlert; 
     public $name;
     public $description;
     public $slug;
     public $state = "ACTIVE";
+    public $type = "INGRESO";
+
     public function render()
     {
-        return view('livewire.expense-type.expense-type-create');
+        return view('livewire.transaction-type.transaction-type-create');
     }
-    //reglas para validacion
+
     protected $rules = [
-        'name' => 'required|max:20|min:2|unique:expense_types,name',
+        'name' => 'required|min:2|unique:transaction_types,name',
         'description' => 'nullable|max:225|min:2|',
+        'type' => 'required',
         'state' => 'required',
     ];
 
-    //Metodo que llama el formulario
     public function submit()
     {
-        //dd($this->name,$this->description);
-        //Funcion para validar mediante las reglas
-        
         $this->validate();
-        //Creando registro
-        ExpenseType::create([
+        TransactionType::create([
             'name' => $this->name,
             'description' => $this->description,
             'slug' => Str::uuid(),
-            'state' => $this->state,
+            'type' => $this->type,
+            'state' => $this->state
         ]);
       
         $this->cleanInputs();
@@ -53,21 +52,18 @@ class ExpenseTypeCreate extends Component
         ]);
     }
 
-    //Funcion para limpiar imputs
     public function cleanInputs()
     {
         $this->name = "";
         $this->description = "";
     }
 
-    //Escuchadores para botones de alertas
     protected $listeners = [
         'confirmed',
     ];
 
-    //Funcion que llama la alerta para redigir al dashboar
     public function confirmed()
     {
-        return redirect()->route('expense-type.dashboard');
+        return redirect()->route('transaction-type.dashboard');
     }
 }

@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
     {
 
         $this->call(IdendityDocumentTypeSeeder::class);
+        $this->call(BankAccountSeeder::class);
         $this->call(GenderTableSeeder::class);
         $this->call(RoleTableSeeder::class);
         $this->call(CategorySeeder::class);
@@ -24,7 +25,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ProductPresentationSeeder::class);
         $this->call(ProductSeeder::class);
         $this->call(CustomerTypeSeeder::class);
-        $this->call(ExpenseTypeSeeder::class);
+        $this->call(TransactionTypeSeeder::class);
         $this->call(CustomerSeeder::class);
         $this->call(SettingSeeder::class);
         $this->call(BatchSeeder::class);

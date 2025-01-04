@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Expense;
+namespace App\Http\Livewire\Income;
 
 use App\Models\BankAccount;
 use App\Models\TransactionType;
@@ -9,7 +9,7 @@ use Livewire\Component;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Illuminate\Support\Str;
 
-class ExpenseCreate extends Component
+class IncomeCreate extends Component
 {
     use LivewireAlert;
     public $bank_account_id;
@@ -21,7 +21,11 @@ class ExpenseCreate extends Component
 
     public function mount()
     {
-        $this->transaction_types = TransactionType::all()->where('state', 'ACTIVE')->where('type', 'EGRESO');
+        $this->transaction_types = TransactionType::all()
+        ->where('state', 'ACTIVE')
+        ->where('type', 'INGRESO')
+        ->where('id','!=',1);
+
         $this->bank_accounts = BankAccount::all()->where('state', 'ACTIVE');
 
         if ($this->bank_accounts->isNotEmpty()) {
@@ -34,7 +38,7 @@ class ExpenseCreate extends Component
     }
     public function render()
     {
-        return view('livewire.expense.expense-create');
+        return view('livewire.income.income-create');
     }
 
     protected $rules = [
@@ -50,7 +54,7 @@ class ExpenseCreate extends Component
 
         $bankAccountHistoryService = app(BankAccountHistoryService::class);
 
-        $bankAccountHistoryService->registerExpense(
+        $bankAccountHistoryService->registerIncome(
             Str::uuid(),
             $this->bank_account_id,
             $this->transaction_type_id,
@@ -83,6 +87,6 @@ class ExpenseCreate extends Component
 
     public function confirmed()
     {
-        return redirect()->route('expense.dashboard');
+        return redirect()->route('income.dashboard');
     }
 }

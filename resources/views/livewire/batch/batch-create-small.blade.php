@@ -101,7 +101,7 @@
             <div class="w-full">
                 {{-- wholesale_price --}}
                 <div class="my-2">
-                    Precio
+                    Precio de venta
                 </div>
                 <x-jet-input type="number" step="0.01" placeholder="00.00" wire:model="wholesale_price"
                     class="mt-1 block w-full rounded-md" required />
@@ -198,6 +198,25 @@
             </p>
         @enderror
         {{-- end expiration_date --}}
+        <hr class="my-2">
+        {{-- select bank_account_id --}}
+        <div class="mt-2 text-sm">Cuenta</div>
+        <select wire:model="bank_account_id"
+            class="border-gray-300 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 shadow-sm mt-1 block w-full rounded-fx rounded-md"
+            required>
+            @forelse ($bank_accounts as $item)
+                <option value="{{ $item->id }}">
+                    {{ $item->name }} - {{ $item->number }} - {{ $item->balance }}</option>
+            @empty
+                <option disabled>Sin registros</option>
+            @endforelse
+        </select>
+        @error('bank_account_id')
+            <p class="text-red-500 font-semibold my-2">
+                {{ $message }}
+            </p>
+        @enderror
+        {{-- end bank_account_id --}}
         {{-- purchase_price --}}
         <div class="my-2">
             Precio de compra

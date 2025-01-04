@@ -50,7 +50,7 @@ class BatchImportModel implements ToModel, WithHeadingRow
     public function registerExpense($name, $purchase, $slug)
     {
         Expense::create([
-            'expense_type_id' => 1,
+            'transaction_type_id' => 1,
             'purchase' => $purchase,
             'description' => 'Compra de lote de producto ' . $name,
             'slug' => $slug,

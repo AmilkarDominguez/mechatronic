@@ -2,6 +2,8 @@
 
 namespace App\Http\Livewire\Payment;
 
+use App\Models\BankAccount;
+use App\Models\BankAccountHistory;
 use App\Models\Payment;
 use App\Models\ServiceOrder;
 use Mediconesystems\LivewireDatatables\Column;
@@ -42,9 +44,9 @@ class PaymentDataTable extends LivewireDatatable
     public function columns()
     {
         return [
-            Column::name('service_orders.id')
-                ->searchable()
-                ->label('Código de Orden de Servicio'),
+            // Column::name('service_orders.id')
+            //     ->searchable()
+            //     ->label('Código de Orden de Servicio'),
 
             Column::name('amount')
                 ->searchable()
@@ -92,8 +94,23 @@ class PaymentDataTable extends LivewireDatatable
                 'have' => $this->service_order->have - $Payment->amount,
                 'must' => $this->service_order->must + $Payment->amount,
             ]);
+            $this->delteHistory($Payment->slug, $Payment->amount);
             $Payment->delete();
             return redirect()->route('payment.dashboard', [$this->service_order->slug]);
+        }
+    }
+
+    private function delteHistory($slug, $amount) : void {
+        $BankAccountHistory = BankAccountHistory::where('uuid', $slug)->firstOrFail();
+        if ($BankAccountHistory) {
+            $BankAccount = BankAccount::where('id', $BankAccountHistory->bank_account_id)->firstOrFail();
+            if ($BankAccount) {
+                $new_balance = $BankAccount->balance - $amount;
+                $BankAccount = $BankAccount->update([
+                    'balance' => $new_balance,
+                ]);
+                $BankAccountHistory->delete();
+            }
         }
     }
 }

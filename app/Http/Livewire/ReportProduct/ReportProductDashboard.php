@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\ReportProduct;
 
+use App\Models\BankAccountHistory;
 use App\Models\Batch;
 use App\Models\Expense;
 use App\Models\Industry;
@@ -53,10 +54,13 @@ class ReportProductDashboard extends Component
 
     public function calcTotals()
     {
-        $this->expenses_total = Expense::select('*')
-            ->whereBetween('expenses.created_at', [$this->start_date, $this->end_date])
-            ->where('expenses.state', 'PENDING')
-            ->sum('expenses.purchase');
+        $this->expenses_total = BankAccountHistory::select('*')
+            ->join('transaction_types', function ($join) {
+                $join->on('transaction_types.id', '=', 'bank_account_histories.transaction_type_id');
+            })
+            ->whereBetween('bank_account_histories.created_at', [$this->start_date, $this->end_date])
+            ->where('transaction_types.type', 'EGRESO')
+            ->sum('bank_account_histories.amount');
 
         $this->service_orders_total = ServiceOrder::select('*')
             ->whereBetween('service_orders.created_at', [$this->start_date, $this->end_date])
@@ -64,9 +68,13 @@ class ReportProductDashboard extends Component
             ->sum('service_orders.have');
 
         $this->items = DB::table('service_order_batches')
-            ->select('name', 'product_id', 'batch_id',
+            ->select(
+                'name',
+                'product_id',
+                'batch_id',
                 DB::raw('COUNT(*) as quantity'),
-                DB::raw('SUM(service_order_batches.quantity) as total'))
+                DB::raw('SUM(service_order_batches.quantity) as total')
+            )
             ->join('batches', function ($join) {
                 $join->on('service_order_batches.batch_id', '=', 'batches.id');
             })
@@ -88,6 +96,4 @@ class ReportProductDashboard extends Component
     {
         $this->calcTotals();
     }
-
-
 }

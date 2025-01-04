@@ -13,15 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('expenses', function (Blueprint $table) {
+        Schema::create('transaction_types', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('expense_type_id');
-            $table->decimal('purchase', 8, 2)->nullable();
+            $table->string('name');
             $table->string('description')->nullable();
             $table->string('slug')->inique()->nullable();
+            $table->enum('type', ['INGRESO', 'EGRESO'])->nullable();
             $table->enum('state', ['ACTIVE', 'INACTIVE', 'DELETED'])->default('ACTIVE');
+            $table->boolean('allow_deletion')->default(true);
             $table->timestamps();
-            $table->foreign('expense_type_id')->references('id')->on('expense_types')->onDelete('cascade');
         });
     }
 
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('expenses');
+        Schema::dropIfExists('transaction_types');
     }
 };

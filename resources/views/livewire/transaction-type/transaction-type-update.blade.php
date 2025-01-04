@@ -1,7 +1,7 @@
 <div>
     <x-slot name="header">
         <div class="font-semibold text-xl text-gray-800 leading-tight">
-            Actualizar tipo de egreso
+            Actualizar tipo de transacción
         </div>
     </x-slot>
     <div class="max-w-8xl mx-auto py-10 sm:px-6 lg:px-8">
@@ -22,13 +22,34 @@
             <div class="mt-4 text-sm">
                 Descripción
             </div>
-            <x-textarea placeholder="Descripción" wire:model="description" class="mt-1 block w-full"/>
+            <x-textarea placeholder="Descripción" wire:model="description" class="mt-1 block w-full" />
             @error('description')
                 <p class="text-red-500 font-semibold my-2">
                     {{ $message }}
                 </p>
             @enderror
             {{-- end description --}}
+            {{-- type --}}
+            <div class="mt-4 text-sm">
+                Tipo
+            </div>
+            <div class="mt-4 space-y-2">
+                <div class="flex items-center">
+                    <input wire:model="type" value="INGRESO" type="radio"
+                        class="focus:ring-primary-500 h-4 w-4 text-primary-600 border-gray-300">
+                    <label for="push_everything" class="ml-2 block text-sm font-medium text-gray-700">
+                        INGRESO
+                    </label>
+                </div>
+                <div class="flex items-center">
+                    <input wire:model="type" value="EGRESO" type="radio"
+                        class="focus:ring-primary-500 h-4 w-4 text-primary-600 border-gray-300">
+                    <label for="push_email" class="ml-2 block text-sm font-medium text-gray-700">
+                        EGRESO
+                    </label>
+                </div>
+            </div>
+            {{-- end type --}}
             {{-- state --}}
             <div class="mt-4 text-sm">
                 Estado

@@ -1,23 +1,23 @@
 <?php
 
-namespace App\Http\Livewire\ExpenseType;
+namespace App\Http\Livewire\TransactionType;
 
-use App\Models\ExpenseType;
+use App\Models\TransactionType;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\DateColumn;
 use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 
-class ExpenseTypeDataTable extends LivewireDatatable
+class TransactionTypeDataTable extends LivewireDatatable
 {
-    use LivewireAlert; 
+    use LivewireAlert;
     public $exportable = true;
-    public $model = ExpenseType::class;
+    public $model = TransactionType::class;
     public $hideable = 'select';
-    
+
     public function builder()
     {
-        return ExpenseType::query()->where('state', '!=', 'DELETED');
+        return TransactionType::query()->where('state', '!=', 'DELETED');
     }
 
     public function columns()
@@ -30,6 +30,20 @@ class ExpenseTypeDataTable extends LivewireDatatable
             Column::name('description')
                 ->searchable()
                 ->label('Descripción'),
+
+            Column::callback(['type'], function ($type) {
+                return view('components.datatables.transaction-type-data-table', ['type' => $type]);
+            })
+                ->exportCallback(function ($type) {
+                    $type == 'INGRESO' ? $type = 'INGRESO' : $type = 'EGRESO';
+                    return (string) $type;
+                })
+                ->label('Tipo')
+                ->filterable([
+                    'INGRESO',
+                    'EGRESO'
+                ]),
+
             Column::callback(['state'], function ($state) {
                 return view('components.datatables.state-data-table', ['state' => $state]);
             })
@@ -47,8 +61,16 @@ class ExpenseTypeDataTable extends LivewireDatatable
                 ->format('d/m/Y h:i:s')
                 ->filterable(),
 
-            Column::callback(['id', 'slug', 'name'], function ($id, $slug, $name) {
-                return view('livewire.expense-type.expense-type-table-actions', ['id' => $id, 'slug' => $slug, 'name' => $name]);
+            Column::callback(['id', 'slug', 'name', 'allow_deletion'], function ($id, $slug, $name, $allow_deletion) {
+                return view(
+                    'livewire.transaction-type.transaction-type-table-actions',
+                    [
+                        'id' => $id,
+                        'slug' => $slug,
+                        'name' => $name,
+                        'allow_deletion' => $allow_deletion,
+                    ]
+                );
             })->label('Opciones')
                 ->excludeFromExport()
 
@@ -78,9 +100,9 @@ class ExpenseTypeDataTable extends LivewireDatatable
     public function confirmed()
     {
         if ($this->idDelet) {
-            $ExpenseType = ExpenseType::find($this->idDelet);
-            $ExpenseType->state = "DELETED";
-            $ExpenseType->update();
+            $TransactionType = TransactionType::find($this->idDelet);
+            $TransactionType->state = "DELETED";
+            $TransactionType->update();
         }
     }
 }

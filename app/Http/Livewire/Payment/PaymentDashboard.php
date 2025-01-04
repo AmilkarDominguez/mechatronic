@@ -13,7 +13,6 @@ class PaymentDashboard extends Component
     public function mount($slug)
     {
         $this->service_order = ServiceOrder::where('slug', $slug)->firstOrFail();
-        //dd($this->service_order);
     }
     public function render()
     {

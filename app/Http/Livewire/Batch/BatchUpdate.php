@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Batch;
 
-use App\Models\Expense;
+use App\Models\BankAccountHistory;
 use Livewire\Component;
 use App\Models\Batch;
 use App\Models\Warehouse;
@@ -16,7 +16,6 @@ class BatchUpdate extends Component
     use LivewireAlert;
     //batch
     public $batch;
-    public $expense;
     public $warehouse_id;
     public $product_id;
     public $wholesale_price;
@@ -35,15 +34,14 @@ class BatchUpdate extends Component
     public $suppliers;
     public $industry_id;
     public $industries;
-    public $purchase_price;
+    public $bank_account_history;
 
     public function mount($slug)
     {
         $this->batch = Batch::where('slug', $slug)->firstOrFail();
-        $this->expense = Expense::where('slug', $slug)->firstOrFail();
 
         if ($this->batch) {
-            //cargando datos de la batch
+
             $this->warehouse_id = $this->batch->warehouse_id;
             $this->product_id = $this->batch->product_id;
             $this->supplier_id = $this->batch->supplier_id;
@@ -57,10 +55,9 @@ class BatchUpdate extends Component
             $this->model = $this->batch->model;
             $this->expiration_date = $this->batch->expiration_date;
             $this->state = $this->batch->state;
+            $this->bank_account_history = BankAccountHistory::where('uuid', $slug)->firstOrFail();
         }
-        if ($this->expense) {
-            $this->purchase_price = $this->expense->purchase;
-        }
+
         $this->warehouses = Warehouse::all()->where('state', 'ACTIVE');
         $this->products = Product::all()->where('state', 'ACTIVE');
         $this->suppliers = Supplier::all()->where('state', 'ACTIVE');
@@ -105,10 +102,6 @@ class BatchUpdate extends Component
             'model' => $this->model,
             'expiration_date' => $this->expiration_date,
             'state' => $this->state,
-        ]);
-
-        $this->expense->update([
-            'purchase' => $this->purchase_price,
         ]);
 
         //Llamando Alerta

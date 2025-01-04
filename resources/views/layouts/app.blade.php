@@ -181,14 +181,6 @@
                                     <i class="fa-solid fa-screwdriver"></i> Técnicos
                                 </x-a-sidenav>
 
-                                <hr class=" mt-2">
-
-                                <x-a-sidenav href="{{ route('bank-account.dashboard') }}" :active="request()->routeIs('bank-account.dashboard') ||
-                                    request()->routeIs('bank-account.create') ||
-                                    request()->routeIs('bank-account.update')">
-                                    <i class="fa-solid fa-wallet"></i> Cuentas
-                                </x-a-sidenav>
-
                             </div>
                         </div>
                     </div>
@@ -355,7 +347,7 @@
                 @endif
                 {{-- END VENTAS --}}
 
-                {{-- EGRESOS --}}
+                {{-- CUENTAS --}}
                 @if (Auth::user()->hasAnyRole(['admin', 'sales']))
                     <div @click.away="open = false" class="relative z-10" x-data="{ open: false }">
                         <a @click="open = !open"
@@ -364,8 +356,8 @@
                                 <div class="flex space-x-2 ">
 
                                     <div class="flex h-full items-center">
-                                        <span class="inline-block align-middle"><i class="fas fa-share-square"></i>
-                                            Egresos</span>
+                                        <span class="inline-block align-middle"><i class="fas fa-wallet"></i>
+                                            Cuentas</span>
                                     </div>
 
                                 </div>
@@ -390,22 +382,30 @@
                             x-transition:leave-end="transform opacity-0 scale-95"
                             class=" right-0 w-full mt-2 origin-top-right rounded-md shadow-lg">
                             <div class="px-2 py-2 bg-white rounded-md shadow dark-mode:bg-primary-800">
-
-                                <x-a-sidenav href="{{ route('expense-type.dashboard') }}" :active="request()->routeIs('expense-type.dashboard') ||
-                                    request()->routeIs('expense-type.create') ||
-                                    request()->routeIs('expense-type.update')">
-                                    <i class="fas fa-wallet"></i> Tipo de Egresos
+                                <x-a-sidenav href="{{ route('bank-account.dashboard') }}" :active="request()->routeIs('bank-account.dashboard') ||
+                                    request()->routeIs('bank-account.create') ||
+                                    request()->routeIs('bank-account.update')">
+                                    <i class="fa-solid fa-file-invoice-dollar"></i> Cuentas
+                                </x-a-sidenav>
+                                <hr class=" mt-2">
+                                <x-a-sidenav href="{{ route('transaction-type.dashboard') }}" :active="request()->routeIs('transaction-type.dashboard') ||
+                                    request()->routeIs('transaction-type.create') ||
+                                    request()->routeIs('transaction-type.update')">
+                                    <i class="fa-solid fa-money-bill-transfer"></i> Tipos de transacciones
+                                </x-a-sidenav>
+                                <x-a-sidenav href="{{ route('income.dashboard') }}" :active="request()->routeIs('income.dashboard') ||
+                                    request()->routeIs('income.create')">
+                                    <i class="fa-solid fa-left-long text-green-500"></i> Ingresos
                                 </x-a-sidenav>
                                 <x-a-sidenav href="{{ route('expense.dashboard') }}" :active="request()->routeIs('expense.dashboard') ||
-                                    request()->routeIs('expense.create') ||
-                                    request()->routeIs('expense.update')">
-                                    <i class="fas fa-hand-holding-usd"></i> Egresos
+                                    request()->routeIs('expense.create')">
+                                    <i class="fa-solid fa-right-long text-red-500"></i> Egresos
                                 </x-a-sidenav>
                             </div>
                         </div>
                     </div>
                 @endif
-                {{-- END EGRESOS --}}
+                {{-- END CUENTAS --}}
 
                 {{-- SUPER ADMIN REPORTES --}}
                 @if (Auth::user()->hasAnyRole(['admin']))
@@ -444,8 +444,8 @@
                             class=" right-0 w-full mt-2 origin-top-right rounded-md shadow-lg">
                             <div class="px-2 py-2 bg-white rounded-md shadow dark-mode:bg-primary-800">
 
-                                <x-a-sidenav href="{{ route('service-order-expense.dashboard') }}" :active="request()->routeIs('service-order-expense.dashboard')">
-                                    <i class="fas fa-warehouse"></i> Ventas/Gastos
+                                <x-a-sidenav href="{{ route('utility-report.dashboard') }}" :active="request()->routeIs('utility-report.dashboard')">
+                                    <i class="fas fa-warehouse"></i> Utilidades
                                 </x-a-sidenav>
 
                                 <x-a-sidenav href="{{ route('report-product.dashboard') }}" :active="request()->routeIs('report-product.dashboard')">

@@ -2,24 +2,18 @@
 
 namespace App\Http\Livewire\ReportProduct;
 
-use App\Models\ExpenseType;
-use App\Models\Expense;
-use App\Models\Product;
+
 use App\Models\ServiceOrderBatch;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Mediconesystems\LivewireDatatables\Column;
-use Mediconesystems\LivewireDatatables\DateColumn;
 use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
-use Mediconesystems\LivewireDatatables\NumberColumn;
 
 class ReportProductDataTable extends LivewireDatatable
 {
     use LivewireAlert;
 
     public $exportable = true;
-    public $model = Expense::class;
+    public $model = ServiceOrderBatch::class;
     public $start_date;
     public $end_date;
 

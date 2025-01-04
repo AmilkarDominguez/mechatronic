@@ -197,18 +197,16 @@
                 </p>
             @enderror
             {{-- end expiration_date --}}
-            {{-- purchase_price --}}
-            <div class="my-2">
-                Precio de compra
+            {{-- bank_account --}}
+            <div class="mt-4">
+                Cuenta : <b>{{ $bank_account_history->bank_account->name }}</b>
             </div>
-            <x-jet-input type="number" step="0.01" placeholder="00.00" wire:model="purchase_price"
-                class="mt-1 block w-full rounded-md" required />
-            @error('purchase_price')
-                <p class="text-red-500 font-semibold my-2">
-                    {{ $message }}
-                </p>
-            @enderror
-            {{-- end purchase_price --}}
+            {{-- end bank_account --}}
+            {{-- balance --}}
+            <div class="mt-4">
+                Precio de compra : <b>{{ $bank_account_history->amount }}</b>
+            </div>
+            {{-- end balance --}}
             {{-- state --}}
             <x-jet-label class="mt-2" value="Estado" />
             <div class="mt-4 space-y-2">

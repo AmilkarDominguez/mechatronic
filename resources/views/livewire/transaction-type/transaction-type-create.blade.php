@@ -1,7 +1,7 @@
 <div>
     <x-slot name="header">
         <div class="font-semibold text-xl text-gray-800 leading-tight">
-            Actualizar cuenta bancaria
+            Registrar tipo de transacción
         </div>
     </x-slot>
     <div class="max-w-8xl mx-auto py-10 sm:px-6 lg:px-8">
@@ -18,26 +18,6 @@
                 </p>
             @enderror
             {{-- end name --}}
-
-            {{-- number --}}
-            <div class="mt-4 text-sm">
-                Número
-            </div>
-            <x-jet-input type="text" placeholder="Número" wire:model="number" class="mt-1 block w-full rounded-md"
-                required />
-            @error('number')
-                <p class="text-red-500 font-semibold my-2">
-                    {{ $message }}
-                </p>
-            @enderror
-            {{-- end number --}}
-
-            {{-- balance --}}
-            <div class="mt-4 text-sm">
-                Saldo : <b>{{$balance}}</b>
-            </div>
-            {{-- end balance --}}
-
             {{-- description --}}
             <div class="mt-4 text-sm">
                 Descripción
@@ -49,6 +29,27 @@
                 </p>
             @enderror
             {{-- end description --}}
+            {{-- type --}}
+            <div class="mt-4 text-sm">
+                Tipo
+            </div>
+            <div class="mt-4 space-y-2">
+                <div class="flex items-center">
+                    <input wire:model="type" value="INGRESO" type="radio"
+                        class="focus:ring-primary-500 h-4 w-4 text-primary-600 border-gray-300">
+                    <label for="push_everything" class="ml-2 block text-sm font-medium text-gray-700">
+                        INGRESO
+                    </label>
+                </div>
+                <div class="flex items-center">
+                    <input wire:model="type" value="EGRESO" type="radio"
+                        class="focus:ring-primary-500 h-4 w-4 text-primary-600 border-gray-300">
+                    <label for="push_email" class="ml-2 block text-sm font-medium text-gray-700">
+                        EGRESO
+                    </label>
+                </div>
+            </div>
+            {{-- end type --}}
             {{-- state --}}
             <div class="mt-4 text-sm">
                 Estado

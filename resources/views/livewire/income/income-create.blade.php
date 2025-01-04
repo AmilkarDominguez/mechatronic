@@ -1,7 +1,7 @@
 <div>
     <x-slot name="header">
         <div class="font-semibold text-xl text-gray-800 leading-tight">
-            Registrar egreso
+            Registrar ingreso
         </div>
     </x-slot>
     <div class="max-w-8xl mx-auto py-10 sm:px-6 lg:px-8">
@@ -26,7 +26,7 @@
             {{-- end bank_account_id --}}
 
             {{-- select transaction_type_id --}}
-            <div class="mt-2 text-sm">Tipo egreso</div>
+            <div class="mt-2 text-sm">Tipo ingreso</div>
             <select wire:model="transaction_type_id"
                 class="border-gray-300 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 shadow-sm mt-1 block w-full rounded-fx rounded-md"
                 required>

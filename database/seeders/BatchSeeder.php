@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Batch;
-use App\Models\Expense;
 use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 
@@ -32,13 +31,7 @@ class BatchSeeder extends Seeder
             'slug' => $slug,
             'state' => 'ACTIVE',
         ]);
-        Expense::create([
-            'expense_type_id' => 1,
-            'purchase' => 200,
-            'description' => 'Compra de lote de producto Aceite Motul',
-            'slug' => $slug,
-            'state' => 'ACTIVE',
-        ]);
+
         $slug  = Str::uuid();
         //2
         Batch::create([
@@ -55,13 +48,7 @@ class BatchSeeder extends Seeder
             'slug' => $slug,
             'state' => 'ACTIVE',
         ]);
-        Expense::create([
-            'expense_type_id' => 1,
-            'purchase' => 200,
-            'description' => 'Compra de lote de producto Aceite Motul',
-            'slug' => $slug,
-            'state' => 'ACTIVE',
-        ]);
+
         $slug  = Str::uuid();
         //3
         Batch::create([
@@ -75,13 +62,6 @@ class BatchSeeder extends Seeder
             'retail_price' => 41.00,
             'final_price' => 50.00,
             'stock' => 10,
-            'slug' => $slug,
-            'state' => 'ACTIVE',
-        ]);
-        Expense::create([
-            'expense_type_id' => 1,
-            'purchase' => 200,
-            'description' => 'Compra de lote de producto Aceite Motul',
             'slug' => $slug,
             'state' => 'ACTIVE',
         ]);

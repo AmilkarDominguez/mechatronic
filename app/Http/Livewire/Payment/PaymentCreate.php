@@ -2,9 +2,11 @@
 
 namespace App\Http\Livewire\Payment;
 
+use App\Models\BankAccount;
 use Livewire\Component;
 use App\Models\Payment;
 use App\Models\ServiceOrder;
+use App\Services\BankAccountHistoryService;
 use Illuminate\Support\Str;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
@@ -14,11 +16,17 @@ class PaymentCreate extends Component
     public $amount;
     public $slug;
     public $state = "ACTIVE";
+    public $bank_accounts;
+    public $bank_account_id;
 
     public $service_order;
     public function mount($slug)
     {
         $this->service_order = ServiceOrder::where('slug', $slug)->firstOrFail();
+        $this->bank_accounts = BankAccount::all()->where('state', 'ACTIVE');
+        if ($this->bank_accounts->isNotEmpty()) {
+            $this->bank_account_id = $this->bank_accounts->first()->id;
+        }
     }
     public function render()
     {
@@ -26,30 +34,31 @@ class PaymentCreate extends Component
     }
 
     protected $rules = [
-        'amount' => 'required',
+        'amount' => 'required|numeric|min:1',
         'state' => 'required',
     ];
-    //Metodo que llama el formulario
     public function submit()
     {
-        //Funcion para validar mediante las reglas
-        
         if ($this->checkMust($this->amount)) {
+
             $this->validate();
-            //Creando registro
+            $slug = Str::uuid();
             Payment::create([
                 'amount' => $this->amount,
-                //encriptando slug
-                'slug' => Str::uuid(),
+                'slug' => $slug,
                 'service_order_id' =>  $this->service_order->id,
                 'state' => $this->state,
             ]);
+
             $this->service_order->update([
                 'have' => $this->service_order->have + $this->amount,
                 'must' => $this->service_order->must - $this->amount,
             ]);
+
+            $this->registerIncome($this->amount, $slug, 'service_order_id|'.$this->service_order->id);
+
             $this->cleanInputs();
-    
+
             $this->confirm('Registro creado correctamente', [
                 'icon' => 'success',
                 'toast' => false,
@@ -60,9 +69,8 @@ class PaymentCreate extends Component
                 'confirmButtonText' => 'Aceptar',
                 'onConfirmed' => 'confirmed',
             ]);
-        }
-        else {
-            $this->alert('error', 'El pago <span class=" text-red-500 font-bold text-xl">'.$this->amount. '</span> es superior al a la deuda.', [
+        } else {
+            $this->alert('error', 'El pago <span class=" text-red-500 font-bold text-xl">' . $this->amount . '</span> es superior al a la deuda.', [
                 'position' =>  'top-end',
                 'timer' =>  3000,
                 'toast' =>  true,
@@ -72,31 +80,34 @@ class PaymentCreate extends Component
         }
     }
 
-    //Funcion para limpiar imputs
     public function checkMust($amount)
     {
-        if ($this->service_order->must < $amount) {
-            return false;
-        }
-        else {
-            return true;
-        }
+        return $amount <= $this->service_order->must;
     }
 
-    //Funcion para limpiar imputs
     public function cleanInputs()
     {
         $this->amount = "";
     }
 
-    //Escuchadores para botones de alertas
     protected $listeners = [
         'confirmed',
     ];
 
-    //Funcion que llama la alerta para redigir al dashboar
     public function confirmed()
     {
         return redirect()->route('payment.dashboard', [$this->service_order->slug]);
+    }
+
+    public function registerIncome($amount, $slug, $transaction_reference)
+    {
+        $bankAccountHistoryService = app(BankAccountHistoryService::class);
+        $bankAccountHistoryService->registerIncome(
+            $slug,
+            $this->bank_account_id,
+            5,
+            $amount,
+            $transaction_reference
+        );
     }
 }

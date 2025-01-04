@@ -2,12 +2,13 @@
 
 namespace App\Http\Livewire\Batch;
 
+use App\Models\BankAccount;
 use App\Models\Batch;
-use App\Models\Expense;
 use App\Models\Product;
 use App\Models\Supplier;
 use App\Models\Industry;
 use App\Models\Warehouse;
+use App\Services\BankAccountHistoryService;
 use Livewire\Component;
 use Illuminate\Support\Str;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
@@ -34,6 +35,8 @@ class BatchCreate extends Component
     public $industry_id;
     public $industries;
     public $purchase_price;
+    public $bank_accounts;
+    public $bank_account_id;
 
     public function mount()
     {
@@ -41,6 +44,10 @@ class BatchCreate extends Component
         $this->warehouses = Warehouse::where('state', 'ACTIVE')->orderBy('name', 'ASC')->get();
         $this->suppliers = Supplier::where('state', 'ACTIVE')->orderBy('name', 'ASC')->get();
         $this->industries = Industry::where('state', 'ACTIVE')->orderBy('name', 'ASC')->get();
+        $this->bank_accounts = BankAccount::all()->where('state', 'ACTIVE');
+        if ($this->bank_accounts->isNotEmpty()) {
+            $this->bank_account_id = $this->bank_accounts->first()->id;
+        }
     }
     public function render()
     {
@@ -61,6 +68,7 @@ class BatchCreate extends Component
         'model' => 'nullable',
         'expiration_date' => 'nullable',
         'state' => 'required',
+        'bank_account_id' => 'required',
     ];
     public function submit()
     {
@@ -82,7 +90,8 @@ class BatchCreate extends Component
             'slug' => $slug,
             'state' => $this->state,
         ]);
-        $this->registerExpense($this->batch->product->name, $this->purchase_price, $slug);
+        
+        $this->registerExpense($this->purchase_price, $slug);
 
         $this->cleanInputs();
 
@@ -98,7 +107,6 @@ class BatchCreate extends Component
         ]);
     }
 
-    //Funcion para limpiar imputs
     public function cleanInputs()
     {
         $this->purchase_price = "";
@@ -116,26 +124,25 @@ class BatchCreate extends Component
         $this->expiration_date = "";
         $this->state = "";
     }
-    //Escuchadores para botones de alertas
+
     protected $listeners = [
         'confirmed',
         'selectedCustomer' => 'selectedCustomer'
     ];
 
-    //Funcion que llama la alerta para redigir al dashboar
     public function confirmed()
     {
         return redirect()->route('batch.dashboard');
     }
 
-    public function registerExpense($name, $purchase, $slug)
+    public function registerExpense($amount, $slug)
     {
-        Expense::create([
-            'expense_type_id' => 1,
-            'purchase' => $purchase,
-            'description' => 'Compra de lote de producto ' . $name,
-            'slug' => $slug,
-            'state' => 'ACTIVE',
-        ]);
+        $bankAccountHistoryService = app(BankAccountHistoryService::class);
+        $bankAccountHistoryService->registerExpense(
+            $slug,
+            $this->bank_account_id,
+            4,
+            $amount
+        );
     }
 }

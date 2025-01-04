@@ -1,27 +1,27 @@
 <div>
     <x-slot name="header">
         <div class="font-semibold text-xl text-gray-800 leading-tight">
-            Actualizar tipo de egreso
+            Actualizar egreso
         </div>
     </x-slot>
     <div class="max-w-8xl mx-auto py-10 sm:px-6 lg:px-8">
         <form wire:submit.prevent="submit" class="m-10 mt-0 p-4">
             {{-- select expense_type --}}
             <div class="mt-2 text-sm">Tipo egreso</div>
-            <select wire:model="expense_type_id" wire:change="onChangeSelectExpenseType"
+            <select wire:model="transaction_type_id" wire:change="onChangeSelectTransactionType"
                 class="border-gray-300 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 shadow-sm mt-1 block w-full rounded-fx rounded-md"
                 required>
 
                 <option selected>(Seleccionar)</option>
-                @forelse ($expense_types as $expensetype)
-                    <option value="{{ $expensetype->id }}">
-                        {{ $expensetype->name }}</option>
+                @forelse ($transaction_types as $item)
+                    <option value="{{ $item->id }}">
+                        {{ $item->name }}</option>
                 @empty
                     <option disabled>Sin registros</option>
                 @endforelse
             </select>
 
-            @error('expense_type_id')
+            @error('transaction_type_id')
                 <p class="text-red-500 font-semibold my-2">
                     {{ $message }}
                 </p>

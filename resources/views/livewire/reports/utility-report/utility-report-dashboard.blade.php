@@ -22,16 +22,14 @@
         <section class="bg-white rounded-md shadow-md col-span-5">
             <div class="flex flex-col justify-between gap-2 p-4 h-full">
                 <div class="flex justify-between text-2xl font-bold">
-                    <span>EGRESOS&nbsp;:&nbsp;</span><span class="text-red-500"
-                        id="span_start_date">{{ $expenses_total }}</span>
+                    <span>EGRESOS&nbsp;:&nbsp;</span><span class="text-red-500">{{ $expenses_total }}</span>
                 </div>
                 <div class="flex justify-between text-2xl font-bold">
-                    <span>INGRESOS&nbsp;:&nbsp;</span><span class="text-green-500">{{ $service_orders_total }}</span>
+                    <span>INGRESOS&nbsp;:&nbsp;</span><span class="text-green-500">{{ $incomes_total }}</span>
                 </div>
                 <hr>
                 <div class="flex justify-between text-2xl font-bold">
-                    <span>Utilidad&nbsp;:&nbsp;</span><span class="text-blue-500"
-                        id="span_start_date">{{ $utility }}</span>
+                    <span>Utilidad&nbsp;:&nbsp;</span><span class="text-blue-500">{{ $utility }}</span>
                 </div>
             </div>
         </section>
@@ -50,16 +48,16 @@
 
     <div class="max-w-full mx-auto py-10 sm:px-6 lg:px-8">
         <div class="m-5">
-            <div class="text-2xl font-bold mb-4 text-red-500">
-                EGRESOS
-            </div>
-            <livewire:sale-expense.expense-data-table />
-            <br>
-            <br>
             <div class="text-2xl font-bold mb-4 text-green-500">
                 INGRESOS
             </div>
-            <livewire:sale-expense.sale-data-table />
+            <livewire:reports.utility-report.utility-report-incomes-data-table />
+            <br>
+            <br>
+            <div class="text-2xl font-bold mb-4 text-red-500">
+                EGRESOS
+            </div>
+            <livewire:reports.utility-report.utility-report-expenses-data-table />
         </div>
     </div>
 
@@ -74,7 +72,7 @@
             function buildChart() {
 
                 let expenses_total = @this.expenses_total;
-                let service_orders_total = @this.service_orders_total;
+                let incomes_total = @this.incomes_total;
 
                 // Obtener una referencia al elemento canvas del DOM
                 const $grafica = document.querySelector("#grafica1");
@@ -85,7 +83,7 @@
                 const chartDataSets = {
                     label: `Gráfica`,
                     // La data es un arreglo que debe tener la misma cantidad de valores que la cantidad de etiquetas
-                    data: [expenses_total, service_orders_total],
+                    data: [expenses_total, incomes_total],
                     backgroundColor: [
                         'rgb(239, 68, 68)',
                         'rgb(34, 197, 94)',

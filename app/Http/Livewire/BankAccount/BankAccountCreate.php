@@ -28,7 +28,7 @@ class BankAccountCreate extends Component
         'name' => 'required|max:20|min:2|unique:bank_accounts,name',
         'description' => 'nullable|max:225|min:2',
         'number' => 'nullable|max:225|min:2',
-        'balance' => 'nullable|max:225|min:2',
+        'balance' => 'nullable|numeric|min:0',
         'state' => 'required',
     ];
 
@@ -45,7 +45,7 @@ class BankAccountCreate extends Component
         ]);
 
         $this->registerAccountHistory();
-        
+
         $this->cleanInputs();
 
         $this->confirm('Registro creado correctamente', [
@@ -80,6 +80,12 @@ class BankAccountCreate extends Component
     private function registerAccountHistory(): void
     {
         $bankAccountHistoryService = app(BankAccountHistoryService::class);
-        $bankAccountHistoryService->registerHistory($this->bank_account->id, 0, $this->bank_account->balance);
+        $bankAccountHistoryService->registerHistory(
+            Str::uuid(),
+            $this->bank_account->id,
+            1,
+            0,
+            $this->bank_account->balance
+        );
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Expense;
+namespace App\Http\Livewire\Income;
 
 use App\Models\BankAccountHistory;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
@@ -8,7 +8,7 @@ use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\DateColumn;
 use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 
-class ExpenseDataTable extends LivewireDatatable
+class IncomeDataTable extends LivewireDatatable
 {
     use LivewireAlert;
     public $exportable = true;
@@ -30,7 +30,7 @@ class ExpenseDataTable extends LivewireDatatable
             ->join('people', function ($join) {
                 $join->on('people.id', '=', 'users.person_id');
             })
-            ->where('transaction_types.type', 'EGRESO')
+            ->where('transaction_types.type', 'INGRESO')
         );
     }
 

@@ -78,9 +78,6 @@
 
                         {{-- info customer --}}
                         <div class="text-sm border rounded-md p-4">
-                            <div wire:loading>
-                                Cargando...
-                            </div>
                             @if ($selected_customer)
                                 <span class="text-gray-400">Nombre completo : </span>
                                 <span><strong>{{ $selected_customer->person->name }}</strong></span>

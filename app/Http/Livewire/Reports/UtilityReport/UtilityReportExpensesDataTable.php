@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Expense;
+namespace App\Http\Livewire\Reports\UtilityReport;
 
 use App\Models\BankAccountHistory;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
@@ -8,16 +8,34 @@ use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\DateColumn;
 use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 
-class ExpenseDataTable extends LivewireDatatable
+class UtilityReportExpensesDataTable extends LivewireDatatable
 {
     use LivewireAlert;
-    public $exportable = true;
+
+    public $exportable = false;
     public $model = BankAccountHistory::class;
-    public $hideable = 'select';
+    public $persistSearch = false;
+    public $persistComplexQuery = false;
+    public $persistHiddenColumns = false;
+    public $persistSort = false;
+    public $persistPerPage = false;
+    public $persistFilters = false;
+    public $start_date;
+    public $end_date;
+
+
+    protected $listeners = ['setDates'];
+
+    public function setDates($start, $end)
+    {
+        $this->start_date = $start;
+        $this->end_date = $end;
+    }
 
     public function builder()
     {
         return (BankAccountHistory::query()
+            ->whereBetween('bank_account_histories.created_at', [$this->start_date, $this->end_date])
             ->join('transaction_types', function ($join) {
                 $join->on('transaction_types.id', '=', 'bank_account_histories.transaction_type_id');
             })
@@ -37,7 +55,6 @@ class ExpenseDataTable extends LivewireDatatable
     public function columns()
     {
         return [
-
             Column::name('transaction_types.name')
                 ->searchable()
                 ->label('Tipo')

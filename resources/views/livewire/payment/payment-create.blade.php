@@ -15,9 +15,28 @@
         </section>
         <section class="w-full bg-white mt-5 rounded-md">
             <form wire:submit.prevent="submit" class="m-10 mt-0 py-4">
+                {{-- select bank_account_id --}}
+                <div class="mt-2 text-sm">Cuenta</div>
+                <select wire:model="bank_account_id"
+                    class="border-gray-300 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 shadow-sm mt-1 block w-full rounded-fx rounded-md"
+                    required>
+                    @forelse ($bank_accounts as $item)
+                        <option value="{{ $item->id }}">
+                            {{ $item->name }} - {{ $item->number }} - {{ $item->balance }}</option>
+                    @empty
+                        <option disabled>Sin registros</option>
+                    @endforelse
+                </select>
+                @error('bank_account_id')
+                    <p class="text-red-500 font-semibold my-2">
+                        {{ $message }}
+                    </p>
+                @enderror
+                {{-- end bank_account_id --}}
                 {{-- amount --}}
+                <div class="mt-4 text-sm">Monto</div>
                 <x-jet-input type="number" step="0.01" placeholder="Monto" step="0.01" wire:model="amount"
-                    class="mt-1 block w-full rounded-md" required />
+                    class="mt-2 block w-full rounded-md" required />
                 @error('amount')
                     <p class="text-red-500 font-semibold my-2">
                         {{ $message }}

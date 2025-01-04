@@ -1,7 +1,7 @@
 <div class="flex space-x-1 justify-around">
 
     {{-- edit --}}
-    <a href="{{ route('expense-type.update', $slug) }}"
+    <a href="{{ route('income.update', $slug) }}"
         class="p-1 text-blue-600 hover:bg-blue-600 hover:text-white rounded-full">
         <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
             <path
@@ -10,7 +10,7 @@
     </a>
     {{-- end edit --}}
     {{-- delet --}}
-    <button wire:click="toastConfirmDelet('{{ $name }}',{{ $id }})"
+    <button wire:click="toastConfirmDelet({{ $id }})"
         class="p-1 text-red-600 hover:bg-red-600 hover:text-white rounded-full">
 
         <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
