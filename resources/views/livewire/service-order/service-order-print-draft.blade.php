@@ -32,7 +32,7 @@
             <section class=" flex flex-col justify-center">
                 <div class="flex gap-4">
                     <span class="font-bold w-18 text-left">FECHA:</span>
-                    <span class="text-right">{{ date('Y-m-d') }}</span>
+                    <span class="text-right">{{ date('d/m/Y') }}</span>
                 </div>
             </section>
         </article>
@@ -138,7 +138,7 @@
         </article>
 
         <article class="flex w-full mt-8 flex-col gap-2">
-            <div class="text-sm">VÁLIDO HASTA : {{ $service_order->draft_expiration_date }}</div>
+            <div class="text-sm">VÁLIDO HASTA : {{ $service_order->draft_expiration_date_formatted }}</div>
             <div class="text-lg font-bold">CONTACTO:77877890 - 73246276</div>
             <div class="text-sm font-bold text-red-500">UBICADOS: BARRIO SAN JORGE I, SOBRE AV. PANAMERICANA, CUADRA Y
                 MEDIA ANTES DE LA ROTONDA DE LA COCA COLA AL LADO DE FINNIG CAT</div>

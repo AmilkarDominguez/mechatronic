@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class ServiceOrder extends Model
 {
@@ -33,5 +34,20 @@ class ServiceOrder extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function getDraftExpirationDateFormattedAttribute()
+    {
+        return $this->draft_expiration_date ? Carbon::parse($this->draft_expiration_date)->format('d/m/Y') : null;
+    }
+
+    public function getStartedDateFormattedAttribute()
+    {
+        return $this->started_date ? Carbon::parse($this->started_date)->format('d/m/Y') : null;
+    }
+
+    public function getEndedDateFormattedAttribute()
+    {
+        return $this->ended_date ? Carbon::parse($this->ended_date)->format('d/m/Y') : null;
     }
 }

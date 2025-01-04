@@ -18,7 +18,7 @@
                 </section>
                 <section class="flex h-10 items-center gap-1 text-sm col-span-2">
                     <span class="font-bold w-48 text-right">Fecha Ing:</span>
-                    <span class="bg-blue-100 md:w-48 w-auto text-center md:px-2 px-8">{{ $service_order->started_date }}</span>
+                    <span class="bg-blue-100 md:w-48 w-auto text-center md:px-2 px-8">{{ $service_order->started_date_formatted }}</span>
                 </section>
                 <section class="flex h-10 items-center gap-1 text-sm col-span-3">
                     <span class="font-bold w-20 text-right">Vehículo:</span>
@@ -31,7 +31,7 @@
                 </section>
                 <section class="flex h-10 items-center gap-1 text-sm col-span-2">
                     <span class="font-bold w-48 text-right">Fecha Entrega:</span>
-                    <span class="bg-blue-100 md:w-48 w-auto text-center md:px-2 px-8 ">{{ $service_order->ended_date }}</span>
+                    <span class="bg-blue-100 md:w-48 w-auto text-center md:px-2 px-8 ">{{ $service_order->ended_date_formatted }}</span>
                 </section>
             </section>
             <section class="w-1/5 flex items-center justify-center ">

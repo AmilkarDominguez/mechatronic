@@ -96,7 +96,7 @@ class PaymentCreate extends Component
 
     public function confirmed()
     {
-        return redirect()->route('payment.dashboard', [$this->service_order->slug]);
+        return redirect()->route('service-order.dashboard');
     }
 
     public function registerIncome($amount, $slug, $transaction_reference)
